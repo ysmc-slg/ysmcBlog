@@ -27,15 +27,15 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "1d96cc60d9134ddd1b950082f8df2fef"
+    "revision": "b20bf3ea0f9678f0ef606b1865aff41e"
   },
   {
     "url": "about.html",
-    "revision": "b96c54b129bd72ce4e3f13387758bbaa"
+    "revision": "a75999e37e6a77f041dd35f507d19c8c"
   },
   {
     "url": "about1.html",
-    "revision": "66a7dea9cc8a7cbc8933b3e5b600593e"
+    "revision": "327716e4b5db701b640a76db0fef7861"
   },
   {
     "url": "assets/css/0.styles.158ccfcd.css",
@@ -114,32 +114,32 @@ self.__precacheManifest = [
     "revision": "078a3be0f804f5d4b2724b9708384abe"
   },
   {
-    "url": "assets/js/8.ef3c5dd1.js",
-    "revision": "93c340263f996cbf2d730b6b3b799030"
+    "url": "assets/js/8.883433b7.js",
+    "revision": "b2bf69495092ee63e04d7cb5e3b87e1a"
   },
   {
     "url": "assets/js/9.f0b90b9c.js",
     "revision": "22f7ab516923b9ec961cc0be6b0ceab6"
   },
   {
-    "url": "assets/js/app.9ab022d2.js",
-    "revision": "3d406174af125b34a6cd662feadb97c5"
+    "url": "assets/js/app.39bae9c2.js",
+    "revision": "10087d525f961746f8ae218770d84175"
   },
   {
     "url": "css/c-aaa.html",
-    "revision": "94689ccc89a4c82ce2acbb7603bbfe02"
+    "revision": "7b3abd02ebd289b3fac05df96daa1322"
   },
   {
     "url": "css/c-bbb.html",
-    "revision": "fb8cb285d5063e306284eccf3db1a2b5"
+    "revision": "68ab51cdea0ccb218b5a7b1459a93bce"
   },
   {
     "url": "css/c-ccc.html",
-    "revision": "5ba871c4acae6fe21835e0673a434a43"
+    "revision": "b8f873c649a3d41fa47d2eeaefff2273"
   },
   {
     "url": "css/index.html",
-    "revision": "ccfe3a4c2e1ccdcfa46d43a03d0f0adb"
+    "revision": "e65346fa97ece9a57bf6aa28b506aed3"
   },
   {
     "url": "icons/android-chrome-192x192.png",
@@ -195,23 +195,23 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html",
-    "revision": "4838d118a6e2ab87a1c6975a79f341e1"
+    "revision": "0f44f70efbc9aec40c9b0776cf2cbc1e"
   },
   {
     "url": "javascript/index.html",
-    "revision": "8c42e4c4e7c5d52ad2829d5c11dfc801"
+    "revision": "0ce3c04207834a99d7dd5c5b2fe047bf"
   },
   {
     "url": "javascript/j-aaa.html",
-    "revision": "57a09ceb63ee26a1858abbcbe463fbc0"
+    "revision": "77ac677549dce53e41641a1e06e97a58"
   },
   {
     "url": "javascript/j-bbb.html",
-    "revision": "894f7a27d3dfe721779d8042ad55c47f"
+    "revision": "e9c92bf557beb0a4cd0f210d22c579eb"
   },
   {
     "url": "javascript/j-ccc.html",
-    "revision": "9c0c04bee22126bcdbec1b13d60f04f8"
+    "revision": "b6abd988503e6e297d30a7a748a7120e"
   },
   {
     "url": "lizhi.png",
