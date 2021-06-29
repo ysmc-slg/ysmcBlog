@@ -27,7 +27,7 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "5f8befaa424abccbd5f5bf7618cb32b6"
+    "revision": "00e530f4c8f6d7f602f37769d7aa1edc"
   },
   {
     "url": "assets/css/0.styles.4f331948.css",
@@ -86,16 +86,16 @@ self.__precacheManifest = [
     "revision": "40e579944ce79bc760b35febcffd070e"
   },
   {
-    "url": "assets/js/app.6c822315.js",
-    "revision": "ac97efb32d637a018c618364d5390119"
+    "url": "assets/js/app.2dbf8f4b.js",
+    "revision": "0c8b82cd32e1184e862af871317330fb"
   },
   {
     "url": "database/redis/index.html",
-    "revision": "0c7ac1e51b67245365f8c032337fa182"
+    "revision": "3714c1263d12a7be0903923cbf401841"
   },
   {
     "url": "database/redis/install.html",
-    "revision": "ccd3c0ed7f0aa5d0e4408ed31125993b"
+    "revision": "7ae6809b6244651aa4595302ef4b8113"
   },
   {
     "url": "icons/android-chrome-192x192.png",
@@ -151,7 +151,7 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html",
-    "revision": "d367318826ff8f2e485d094fa42f22ad"
+    "revision": "42c446935d635c138cceec500305bd55"
   },
   {
     "url": "lizhi.png",
@@ -159,7 +159,7 @@ self.__precacheManifest = [
   },
   {
     "url": "preface/index.html",
-    "revision": "6de27f9cf410f84d0a2d8ec73f4b4422"
+    "revision": "3477d856d008d467362fb340b8620ff4"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
