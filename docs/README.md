@@ -5,7 +5,7 @@ heroImage: /lizhi.png
 # heroText: 知行合一
 tagline: 我只横刀向天笑，去留肝胆两昆仑。
 actionText: 开始
-actionLink: /zh/guide/
+actionLink: /preface/
 # features:
 # - title: 简洁至上
 #   details: 以 Markdown 为中心的项目结构，以最少的配置帮助你专注于写作。
