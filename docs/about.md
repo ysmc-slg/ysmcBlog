@@ -1,5 +1,5 @@
 ---
-navbar: false
+navbar: true
 title: 关于我
 ---
 

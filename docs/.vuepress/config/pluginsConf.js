@@ -23,5 +23,6 @@ module.exports = {
       clientSecret: '04045836314d98a2a91cf9aa5533c7339a2ae21a',
       autoCreateIssue: true
     },
-    '@vuepress/back-to-top': true
+    '@vuepress/back-to-top': true,
+    "vuepress-plugin-auto-sidebar": {}
 }

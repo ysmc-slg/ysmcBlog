@@ -1,5 +1,6 @@
 ---
-navbar: false
+navbar: true
+sidebar: auto
 title: 关于我1
 ---
 zhuxuqiang
