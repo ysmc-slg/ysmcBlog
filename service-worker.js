@@ -27,15 +27,15 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "b20bf3ea0f9678f0ef606b1865aff41e"
+    "revision": "1247deaeb28735ee8aa49c27c91efc0c"
   },
   {
     "url": "about.html",
-    "revision": "a75999e37e6a77f041dd35f507d19c8c"
+    "revision": "136f7b677fe59b84418c20455815fda2"
   },
   {
     "url": "about1.html",
-    "revision": "327716e4b5db701b640a76db0fef7861"
+    "revision": "62680449da942853305cb910177c4cb5"
   },
   {
     "url": "assets/css/0.styles.158ccfcd.css",
@@ -122,24 +122,24 @@ self.__precacheManifest = [
     "revision": "22f7ab516923b9ec961cc0be6b0ceab6"
   },
   {
-    "url": "assets/js/app.39bae9c2.js",
-    "revision": "10087d525f961746f8ae218770d84175"
+    "url": "assets/js/app.57739e6e.js",
+    "revision": "215993006a0fe35928798b6a60690237"
   },
   {
     "url": "css/c-aaa.html",
-    "revision": "7b3abd02ebd289b3fac05df96daa1322"
+    "revision": "b65ada61d53185bba2731db25a12f75c"
   },
   {
     "url": "css/c-bbb.html",
-    "revision": "68ab51cdea0ccb218b5a7b1459a93bce"
+    "revision": "bd6469db540172038fd5fdf8d75ec9d3"
   },
   {
     "url": "css/c-ccc.html",
-    "revision": "b8f873c649a3d41fa47d2eeaefff2273"
+    "revision": "c5a7e7dc13ad92e835b74fc0db0c94a3"
   },
   {
     "url": "css/index.html",
-    "revision": "e65346fa97ece9a57bf6aa28b506aed3"
+    "revision": "144b435b58d0edd222f27b99b0dfdbd2"
   },
   {
     "url": "icons/android-chrome-192x192.png",
@@ -195,23 +195,23 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html",
-    "revision": "0f44f70efbc9aec40c9b0776cf2cbc1e"
+    "revision": "885a6fc8fa66620a7a319f968cb57933"
   },
   {
     "url": "javascript/index.html",
-    "revision": "0ce3c04207834a99d7dd5c5b2fe047bf"
+    "revision": "86dbec97b8a707c0c8306749655a1386"
   },
   {
     "url": "javascript/j-aaa.html",
-    "revision": "77ac677549dce53e41641a1e06e97a58"
+    "revision": "f537a363fa55d60477afb925acfb424d"
   },
   {
     "url": "javascript/j-bbb.html",
-    "revision": "e9c92bf557beb0a4cd0f210d22c579eb"
+    "revision": "13d4e9762b6f9698624ca9219e4fc8f6"
   },
   {
     "url": "javascript/j-ccc.html",
-    "revision": "b6abd988503e6e297d30a7a748a7120e"
+    "revision": "d12252e93d3f10a8bce9c960b4c87d60"
   },
   {
     "url": "lizhi.png",
