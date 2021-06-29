@@ -16,9 +16,9 @@ features:
 footer: MIT Licensed | Copyright © 2018-present Evan You
 ---
 
-[![Build Status](https://travis-ci.com/ysmc-slg/docs.svg?branch=master)](https://travis-ci.com/ysmc-slg/docs)
-[![GitHub issues](https://img.shields.io/github/issues/ysmc-slg/docs)](https://github.com/ysmc-slg/docs/issues)
-[![GitHub stars](https://img.shields.io/github/stars/ysmc-slg/docs)](https://github.com/ysmc-slg/docs/stargazers)
+[![Build Status](https://travis-ci.com/ysmc-slg/ysmcBlog.svg?branch=main)](https://travis-ci.com/ysmc-slg/ysmcBlog)
+[![GitHub issues](https://img.shields.io/github/issues/ysmc-slg/ysmcBlog)](https://github.com/ysmc-slg/ysmcBlog/issues)
+[![GitHub stars](https://img.shields.io/github/stars/ysmc-slg/ysmcBlog)](https://github.com/ysmc-slg/ysmcBlog/stargazers)
 测试自动化部署
 > 测试pwa更新
 测试pwa
