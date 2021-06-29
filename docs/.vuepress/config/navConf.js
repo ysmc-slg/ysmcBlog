@@ -1,46 +1,16 @@
 module.exports = [
-  // { text: 'Home', link: '/' },
-  // { text: 'Guide', link: '/about' },
-  // { text: 'External', link: 'https://google.com' },
-  // {
-  //   text: 'Languages',
-  //   ariaLabel: 'Language Menu',
-  //   items: [
-  //     { text: 'Chinese', link: '/language/chinese/' },
-  //     { text: 'Japanese', link: '/language/japanese/' }
-  //   ]
-  // }
-
   {
-    text: 'Home',
+    text: '首页',
     link: '/'
   },
   {
-    text: 'Languages',
-    items: [{
-      text: 'Group1',
-      items: [{
-        text: 'Guide',
-        link: '/about'
-      },
-      {
-        text: 'External',
-        link: 'https://google.com'
-      }
-      ]
-    },
-    {
-      text: '前端',
-      items: [{
-        text: 'css',
-        link: '/css/c-aaa/'
-      },
-      {
-        text: 'javascript',
-        link: '/javascript/j-aaa/'
-      }
-      ]
-    }
+    text: '前言',
+    link: '/preface/'
+  },
+  {
+    text: '数据库',
+    items: [
+      { text: 'Redis', link: '/database/redis/' },
     ]
   }
 ]
