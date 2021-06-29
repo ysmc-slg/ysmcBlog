@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: http://img.zxqs.top/20210628153450.png
+heroImage: /lizhi.png
 
 heroText: 知行合一
 tagline: 未有知而不行者，知而不行，只是未知。

@@ -6,7 +6,6 @@ const navConf = require('./config/navConf')
 
 
 module.exports = {
-  base: "/docs/",
   title: "余生慢尝",
   description: '余生慢尝的笔记',
   head: headConf,
