@@ -1,12 +1,12 @@
-const moment = require('moment');
+// const moment = require('moment');
 
 module.exports = {
-    '@vuepress/last-updated': {
-      transformer: (timestamp) => {
-        moment.locale("zh-cn")
-        moment(timestamp).format('lll');
-      }
-    },
+    // '@vuepress/last-updated': {
+    //   transformer: (timestamp) => {
+    //     moment.locale("zh-cn")
+    //     moment(timestamp).format('lll');
+    //   }
+    // },
     '@vuepress/pwa': {
       serviceWorker: true,
       updatePopup: {
