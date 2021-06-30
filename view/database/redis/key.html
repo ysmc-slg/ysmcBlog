@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>redis键(key)常用命令 | 余生慢尝</title>
+    <meta name="generator" content="VuePress 1.8.2">
+    <link rel="icon" href="/favicon.ico">
+    <link name="author" content="余生慢尝">
+    <link name="keywords" content="余生慢尝">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon-152x152.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#3eaf7c">
+    <meta name="description" content="余生慢尝的笔记">
+    <meta name="theme-color" content="#3eaf7c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="msapplication-TileImage" content="/icons/msapplication-icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#000000">
+    
+    <link rel="preload" href="/assets/css/0.styles.4f331948.css" as="style"><link rel="preload" href="/assets/js/app.3889e047.js" as="script"><link rel="preload" href="/assets/js/2.428f67e7.js" as="script"><link rel="preload" href="/assets/js/11.46736fdd.js" as="script"><link rel="preload" href="/assets/js/3.d8c87093.js" as="script"><link rel="prefetch" href="/assets/js/10.76333f16.js"><link rel="prefetch" href="/assets/js/12.c2c5ac6c.js"><link rel="prefetch" href="/assets/js/13.62f94199.js"><link rel="prefetch" href="/assets/js/14.481e1109.js"><link rel="prefetch" href="/assets/js/4.4db0290c.js"><link rel="prefetch" href="/assets/js/5.91ce0b45.js"><link rel="prefetch" href="/assets/js/6.9b0dfd80.js"><link rel="prefetch" href="/assets/js/7.fc11477b.js"><link rel="prefetch" href="/assets/js/8.29e85975.js"><link rel="prefetch" href="/assets/js/9.b27016d3.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.4f331948.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/assets/img/hero.png" alt="余生慢尝" class="logo"> <span class="site-name can-hide">余生慢尝</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/view/preface/" class="nav-link">
+  前言
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="数据库" class="dropdown-title"><span class="title">数据库</span> <span class="arrow down"></span></button> <button type="button" aria-label="数据库" class="mobile-dropdown-title"><span class="title">数据库</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/database/redis/" class="nav-link router-link-active">
+  Redis
+</a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/view/preface/" class="nav-link">
+  前言
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="数据库" class="dropdown-title"><span class="title">数据库</span> <span class="arrow down"></span></button> <button type="button" aria-label="数据库" class="mobile-dropdown-title"><span class="title">数据库</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/database/redis/" class="nav-link router-link-active">
+  Redis
+</a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Redis</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/view/database/redis/" aria-current="page" class="sidebar-link">前言</a></li><li><a href="/view/database/redis/install.html" class="sidebar-link">redis6安装</a></li><li><a href="/view/database/redis/key.html" aria-current="page" class="active sidebar-link">redis键(key)常用命令</a></li><li><a href="/view/database/redis/string.html" class="sidebar-link">String数据类型常用命令</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><div class="language-redis line-numbers-mode"><pre class="language-text"><code>keys *                     查看库中所有的key
+exists &lt;key&gt;               判断某个key是否存在
+expire &lt;key&gt; &lt;秒钟&gt;        为给定的key设置过期时间
+ttl &lt;key&gt;                  查看还有多少秒过期，-1表示永不过期，-2表示已经过期
+type &lt;key&gt;                 查看key是什么类型  
+del &lt;key&gt;                  删除指定的key数据
+unlink &lt;key&gt;               根据value选择非阻塞删除
+dbsize                     查看当前数据库的key数量
+flushdb                    清空数据库
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><p><img src="/blogImg/20210526121800.png" alt="20210526121800.png"></p> <p><img src="/blogImg/20210526122014.png" alt="20210526122014.png"></p> <div class="language-redis line-numbers-mode"><pre class="language-text"><code>setex &lt;key&gt; &lt;num&gt; &lt;value&gt;     添加一个key 赋值，并且指定存活时间
+setnx &lt;key&gt; &lt;value&gt;          再添加时先判断key是否存在，存在返回0，不存在就添加
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><p><img src="/blogImg/20210526122914.png" alt="20210526122914.png"></p> <div class="language-redis line-numbers-mode"><pre class="language-text"><code>同时设置一个或多个 key-value对
+mset  &lt;key1&gt; &lt;value1&gt; &lt;key2&gt; &lt;value2&gt;  .....          
+
+
+同时获取一个或多个 value  
+mget  &lt;key1&gt; &lt;key2&gt; &lt;key3&gt;  .....                      
+
+
+同时设置一个或多个 key-value 对，当且仅当所有给定 key 都不存在。
+msetnx &lt;key1&gt; &lt;value1&gt; &lt;key2&gt; &lt;value2&gt;  .....   
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">更新时间:</span> <span class="time">6/30/2021, 6:44:27 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/view/database/redis/install.html" class="prev">
+        redis6安装
+      </a></span> <span class="next"><a href="/view/database/redis/string.html">
+        String数据类型常用命令
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"><!----><!----></div></div>
+    <script src="/assets/js/app.3889e047.js" defer></script><script src="/assets/js/2.428f67e7.js" defer></script><script src="/assets/js/11.46736fdd.js" defer></script><script src="/assets/js/3.d8c87093.js" defer></script>
+  </body>
+</html>
