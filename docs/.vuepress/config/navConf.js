@@ -5,12 +5,12 @@ module.exports = [
   },
   {
     text: '前言',
-    link: '/preface/'
+    link: '/view/preface/'
   },
   {
     text: '数据库',
     items: [
-      { text: 'Redis', link: '/database/redis/' },
+      { text: 'Redis', link: '/view/database/redis/' },
     ]
   }
 ]

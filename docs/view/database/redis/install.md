@@ -9,4 +9,4 @@ title: 'redis6安装'
 
 下载地址：https://redis.io/
 
-<img :src="$withBase('http://img.zxqs.top/20210519105652.png')" alt="mixureSecure">
+<img src='http://img.zxqs.top/20210519105652.png'>
