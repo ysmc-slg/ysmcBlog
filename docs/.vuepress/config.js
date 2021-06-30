@@ -15,6 +15,11 @@ module.exports = {
     lastUpdated: '更新时间',
     logo: '/assets/img/hero.png',
     sidebar: sidebarConf,
-    nav: navConf
+    nav: navConf,
+  },
+
+  markdown:{
+    // 代码块显示行号
+    lineNumbers: true
   }
 }
