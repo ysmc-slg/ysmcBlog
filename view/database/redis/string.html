@@ -18,7 +18,7 @@
     <meta name="msapplication-TileImage" content="/icons/msapplication-icon-144x144.png">
     <meta name="msapplication-TileColor" content="#000000">
     
-    <link rel="preload" href="/assets/css/0.styles.4f331948.css" as="style"><link rel="preload" href="/assets/js/app.3889e047.js" as="script"><link rel="preload" href="/assets/js/2.428f67e7.js" as="script"><link rel="preload" href="/assets/js/12.c2c5ac6c.js" as="script"><link rel="preload" href="/assets/js/3.d8c87093.js" as="script"><link rel="prefetch" href="/assets/js/10.76333f16.js"><link rel="prefetch" href="/assets/js/11.46736fdd.js"><link rel="prefetch" href="/assets/js/13.62f94199.js"><link rel="prefetch" href="/assets/js/14.481e1109.js"><link rel="prefetch" href="/assets/js/4.4db0290c.js"><link rel="prefetch" href="/assets/js/5.91ce0b45.js"><link rel="prefetch" href="/assets/js/6.9b0dfd80.js"><link rel="prefetch" href="/assets/js/7.fc11477b.js"><link rel="prefetch" href="/assets/js/8.29e85975.js"><link rel="prefetch" href="/assets/js/9.b27016d3.js">
+    <link rel="preload" href="/assets/css/0.styles.4f331948.css" as="style"><link rel="preload" href="/assets/js/app.a0355a12.js" as="script"><link rel="preload" href="/assets/js/2.428f67e7.js" as="script"><link rel="preload" href="/assets/js/12.aed0a3ad.js" as="script"><link rel="preload" href="/assets/js/3.d8c87093.js" as="script"><link rel="prefetch" href="/assets/js/10.76333f16.js"><link rel="prefetch" href="/assets/js/11.efaf3828.js"><link rel="prefetch" href="/assets/js/13.62f94199.js"><link rel="prefetch" href="/assets/js/14.481e1109.js"><link rel="prefetch" href="/assets/js/4.4db0290c.js"><link rel="prefetch" href="/assets/js/5.91ce0b45.js"><link rel="prefetch" href="/assets/js/6.9b0dfd80.js"><link rel="prefetch" href="/assets/js/7.fc11477b.js"><link rel="prefetch" href="/assets/js/8.29e85975.js"><link rel="prefetch" href="/assets/js/9.b27016d3.js">
     <link rel="stylesheet" href="/assets/css/0.styles.4f331948.css">
   </head>
   <body>
@@ -44,11 +44,23 @@ incrby &lt;key&gt; &lt;步长&gt;      增加key中存储的数字，自定义�
 decrby &lt;key&gt; &lt;步长&gt;      获取值的长度
 </code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><p>**注意：**这里所有key的值必须都是数字</p> <div class="language-redis line-numbers-mode"><pre class="language-text"><code>getrange &lt;key&gt; &lt;num&gt; &lt;num&gt;       获取指定区间范围内的值，类似between....and的关系。
 setrange &lt;key&gt; &lt;num&gt; &lt;value&gt;     设置指定区间范围内的值
-</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">更新时间:</span> <span class="time">6/30/2021, 6:44:27 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><p><img src="/blogImg/20210526121800.png" alt="20210526121800.png"></p> <p><img src="/blogImg/20210526122014.png" alt="20210526122014.png"></p> <div class="language-redis line-numbers-mode"><pre class="language-text"><code>setex &lt;key&gt; &lt;num&gt; &lt;value&gt;     添加一个key 赋值，并且指定存活时间
+setnx &lt;key&gt; &lt;value&gt;          再添加时先判断key是否存在，存在返回0，不存在就添加
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><p><img src="/blogImg/20210526122914.png" alt="20210526122914.png"></p> <div class="language-redis line-numbers-mode"><pre class="language-text"><code>同时设置一个或多个 key-value对
+mset  &lt;key1&gt; &lt;value1&gt; &lt;key2&gt; &lt;value2&gt;  .....          
+
+
+同时获取一个或多个 value  
+mget  &lt;key1&gt; &lt;key2&gt; &lt;key3&gt;  .....                      
+
+
+同时设置一个或多个 key-value 对，当且仅当所有给定 key 都不存在。
+msetnx &lt;key1&gt; &lt;value1&gt; &lt;key2&gt; &lt;value2&gt;  .....   
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">更新时间:</span> <span class="time">6/30/2021, 6:47:54 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
       ←
       <a href="/view/database/redis/key.html" class="prev">
         redis键(key)常用命令
       </a></span> <!----></p></div> </main></div><div class="global-ui"><!----><!----></div></div>
-    <script src="/assets/js/app.3889e047.js" defer></script><script src="/assets/js/2.428f67e7.js" defer></script><script src="/assets/js/12.c2c5ac6c.js" defer></script><script src="/assets/js/3.d8c87093.js" defer></script>
+    <script src="/assets/js/app.a0355a12.js" defer></script><script src="/assets/js/2.428f67e7.js" defer></script><script src="/assets/js/12.aed0a3ad.js" defer></script><script src="/assets/js/3.d8c87093.js" defer></script>
   </body>
 </html>
