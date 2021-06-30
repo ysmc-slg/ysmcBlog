@@ -27,7 +27,7 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "2e913268320b3e677bafb5ede8d0451b"
+    "revision": "d846de238e7cab6e7dd6e0c83407c476"
   },
   {
     "url": "assets/css/0.styles.4f331948.css",
@@ -42,11 +42,11 @@ self.__precacheManifest = [
     "revision": "83621669651b9a3d4bf64d1a670ad856"
   },
   {
-    "url": "assets/js/10.d581a827.js",
-    "revision": "9546f97f7e5cd835a8a186d7243c9fbe"
+    "url": "assets/js/10.09565f5c.js",
+    "revision": "b9aac67d4467ba02ebbee1623f13403b"
   },
   {
-    "url": "assets/js/11.d4a9e7a7.js",
+    "url": "assets/js/11.c7950f56.js",
     "revision": "7a460f675735cd8bc6c460e469d7afb9"
   },
   {
@@ -78,24 +78,20 @@ self.__precacheManifest = [
     "revision": "078a3be0f804f5d4b2724b9708384abe"
   },
   {
-    "url": "assets/js/8.6af619c6.js",
+    "url": "assets/js/8.372b62e8.js",
     "revision": "781dab0ab7221902c9791f84480701bf"
   },
   {
-    "url": "assets/js/9.36678214.js",
+    "url": "assets/js/9.30e6a8c4.js",
     "revision": "40e579944ce79bc760b35febcffd070e"
   },
   {
-    "url": "assets/js/app.fc11ced6.js",
-    "revision": "338e1ebfefa9c003d4b9a00168a59403"
+    "url": "assets/js/app.79b764fc.js",
+    "revision": "8cf4ce56aab50eaf601b14b80bd13ffa"
   },
   {
-    "url": "database/redis/index.html",
-    "revision": "a9b8c5f26233750e2469c304374f0b8e"
-  },
-  {
-    "url": "database/redis/install.html",
-    "revision": "aa5b15a5e6cd14b447741ba8d6014021"
+    "url": "blogImg/20210519105652.png",
+    "revision": "2db600da386daa028a4b3faf8f06d6fc"
   },
   {
     "url": "icons/android-chrome-192x192.png",
@@ -151,15 +147,23 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html",
-    "revision": "0a9ca807717823133bee76b489ed4ae4"
+    "revision": "9c76c8c2d69a23a8a87b3b08d87564ba"
   },
   {
     "url": "lizhi.png",
     "revision": "bb610baaf40f9679244e06f1909457f5"
   },
   {
-    "url": "preface/index.html",
-    "revision": "a087b5766711d7e19cca7dc658c983cf"
+    "url": "view/database/redis/index.html",
+    "revision": "29b433f0a63c6a6c95e9644275d6a64b"
+  },
+  {
+    "url": "view/database/redis/install.html",
+    "revision": "9badd209b50e53bc5db0263649583345"
+  },
+  {
+    "url": "view/preface/index.html",
+    "revision": "e5625ca2dac9748c661ebffb224ecf0c"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
