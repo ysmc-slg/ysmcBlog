@@ -12,5 +12,11 @@ module.exports = [
     items: [
       { text: 'Redis', link: '/view/database/redis/' },
     ]
+  },
+  {
+    text: 'java系',
+    items: [
+      { text: 'Java8新特性', link: '/view/java/jdk8/' },
+    ]
   }
 ]
