@@ -27,7 +27,7 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "e5c3a625dc9ed8eddeeaaf2995ea224b"
+    "revision": "a95117be84049c8fb869d272489f1339"
   },
   {
     "url": "assets/css/0.styles.b42adf48.css",
@@ -98,8 +98,8 @@ self.__precacheManifest = [
     "revision": "c65ce1977ccd50868152c82e962fac0b"
   },
   {
-    "url": "assets/js/app.d5d492f9.js",
-    "revision": "8caae392bbd5ba1def42eefd9098e8cc"
+    "url": "assets/js/app.ade2b086.js",
+    "revision": "656ec9f5d1f750fb80a217f7662c8230"
   },
   {
     "url": "blogImg/20210519105652.png",
@@ -199,7 +199,7 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html",
-    "revision": "347fd71c8018a9ea935b5b775c840a67"
+    "revision": "90342a03b290202fb5ad63cd5f24c6e3"
   },
   {
     "url": "lizhi.png",
@@ -207,27 +207,27 @@ self.__precacheManifest = [
   },
   {
     "url": "view/database/redis/index.html",
-    "revision": "a1c437e17fd490fd32e720f003c5ae51"
+    "revision": "15f467e270f7874a59795aa8609d3489"
   },
   {
     "url": "view/database/redis/install.html",
-    "revision": "0775d4e54d78606da75a59bc185415e1"
+    "revision": "b900fa7a0e29acc8608edf38cbf77a03"
   },
   {
     "url": "view/database/redis/key.html",
-    "revision": "a533f817aa1c68de5a8ce3ca35b12e1e"
+    "revision": "4c57dacc3e99404aa049a204150233ba"
   },
   {
     "url": "view/database/redis/list.html",
-    "revision": "d0b8801467ac87e715de96c217dffd29"
+    "revision": "35c73a8e126f0a2675b40799296c94e3"
   },
   {
     "url": "view/database/redis/string.html",
-    "revision": "1c4c7a4ee4abfeaf9fb8190f97bfb374"
+    "revision": "1ceaf00ec2b786a0430cd9591579850b"
   },
   {
     "url": "view/preface/index.html",
-    "revision": "43510ee540f797a3fb43815b38e516ab"
+    "revision": "05d875d1d915f71efa94100b73bf1fcb"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
