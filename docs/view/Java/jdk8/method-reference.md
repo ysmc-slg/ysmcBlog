@@ -71,7 +71,7 @@ public static int max(int a, int b) {
 }
 ```
 
-我们知道`Integer`中的`compare`静态方法也可以比较大小，同时返回一个int值，大于返回1 小于返回-1 等于返回0。参数也是两个。所以可以使用这个方法体大上面的`max`方法。这就是`静态方法引用`
+我们知道`Integer`中的`compare`静态方法也可以比较大小，同时返回一个int值，大于返回1 小于返回-1 等于返回0。参数也是两个。所以可以使用这个方法替代上面的`max`方法。这就是`静态方法引用`
 
 ```java
 @Test
@@ -122,7 +122,7 @@ public void test1() {
 
 方法体中比较两个字符串是否相同，而String类中的equals也可以比较。
 
-但是`BiPredicate`中的`boolean test(T t1, T t2)`需要两个参数，而`String`中的`boolean t1.equals(t2)`只需要一个参数，为什么也可以使用方法引用呢？上面两个例子返回值和参数个数都是相同的。
+但是`BiPredicate`中的`boolean test(T t1, T t2)`需要两个参数，而`String`中的`boolean t1.equals(t2)`只需要一个参数，为什么也可以使用方法引用呢（上面两个例子返回值和参数个数都是相同的）？
 :::
 
 ```java
