@@ -263,4 +263,98 @@ Employee{id=1010, name='谢广坤', age=41, salary=8000.0}
 |  mapToDouble(ToDoubleFunction f)  |   接收一个函数作为参数，<br>该函数会被应用到每个元素上，<br>产生一个新的 DoubleStream。    |
 | mapToInt(ToIntFunction f) | 接收一个函数作为参数，<br>该函数会被应用到每个元素上，<br>产生一个新的 IntStream。 |
 | mapToLong(ToLongFunction f) | 接收一个函数作为参数，<br>该函数会被应用到每个元素上，<br>产生一个新的 LongStream。 |
-| flatMap(Function f) | 接收一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流 |
+| flatMap(Function f) | 接收一个函数作为参数，<br>将流中的每个值都换成另一个流，<br>然后把所有流连接成一个流 |
+
+**map(Function f)**
+```java
+public void test(){
+  // 获取姓名大于3的员工姓名
+  List<Employee> employees = EmployeeData.getEmployees();
+  employees.stream().map(Employee::getName).filter(name -> name.length() > 3).forEach(System.out :: println);
+
+  // mapToDouble
+  List<String> stringList = Arrays.asList("33.5", "55", "546.33");
+  stringList.stream().mapToDouble(d -> Double.parseDouble(d)).forEach(System.out :: println);
+
+  // mapToInt
+  stringList.stream().mapToInt(s -> Integer.parseInt(s)).forEach(System.out :: println);
+}
+```
+```java
+// 结果
+比尔盖茨
+扎克伯格
+33.0
+55.0
+546.0
+
+33
+55
+546
+```
+**flatMap(Function f)**：
+```java
+public void test(){
+  List<String> strings = Arrays.asList("a", "b", "c");
+  Stream<Character> characterStream = strings.stream().flatMap(StreamAPITest1::fromStringToStream);
+}
+
+//将字符串中的多个字符构成的集合转换为对应的Stream的实例
+public static Stream<Character> fromStringToStream(String str){
+    ArrayList<Character> list = new ArrayList<>();
+    for(Character c : str.toCharArray()){
+        list.add(c);
+    }
+    return list.stream();
+
+}
+```
+
+### 3. 排序 <Badge text="重要" type="error"/>
+
+|     方法     |    描述    |
+|:------------:|:----------:|
+|   sorted()   |  产生一个新流，其中按自然顺序排序 |
+| sorted(Comparator com) | 产生一个新流，其中按比较器顺序排序 |
+
+**sorted()**：
+```java
+public void test(){
+  List<Double> doubles = Arrays.asList(12.32, 10.0, 23.56, 87.56, 34.6, 765.3, 786.5);
+  List<Double> doubleList = doubles.stream().sorted().collect(Collectors.toList());
+  System.out.println(doubleList);
+}
+```
+结果：
+[10.0, 12.32, 23.56, 34.6, 87.56, 765.3, 786.5]
+
+
+**sorted(Comparator com)**：
+```java
+// 按照年龄排序，年龄相等根据薪资倒序排
+public void test(){
+  List<Employee> employees = EmployeeData.getEmployees();
+  employees.stream().sorted( (e1,e2) -> {
+      // Integer.compare 比较两个值的大小，大于返回 1 ，小于返回 -1 ，等于返回 0，默认从小到大排序
+      int ageValue = Integer.compare(e1.getAge(),e2.getAge());
+      if(ageValue != 0){
+          return ageValue;
+      }else{
+          // "-"：薪资倒序排列
+          return -Double.compare(e1.getSalary(),e2.getSalary());
+      }
+
+  }).forEach(System.out::println);
+}
+```
+结果：
+```java {2,3}
+Employee{id=1002, name='李四', age=12, salary=9876.12}
+Employee{id=1004, name='赵六', age=26, salary=7657.37}
+Employee{id=1007, name='库克', age=26, salary=4333.32}
+Employee{id=1003, name='王五', age=33, salary=3000.82}
+Employee{id=1001, name='张三', age=34, salary=6000.38}
+Employee{id=1008, name='扎克伯格', age=35, salary=2500.32}
+Employee{id=1006, name='比尔盖茨', age=42, salary=9500.43}
+Employee{id=1005, name='赵四', age=65, salary=5555.32}
+```
