@@ -27,16 +27,17 @@ public interface MyFunctionalInterface {
 ## 系统内置常用的函数式接口
 | 函数式接口          | 参数类型 | 返回类型  |  用途   |
 | :-----------------:|:-------:| :--------:| :------:|
-| `Consumer<T>`消费型 |    T    |   void   | 对类型为T的对象应用操作，包含方法：`void accept(T t)` |
+| `Consumer<T>`消费型 |    T    |   void   | 对类型为T的对象应用操作，<br>包含方法：`void accept(T t)` |
 | `Supplier<T>`供给型 |   无    |     T    | 对类型为T的对象，包含方法：`T get()` |
-| `Function<T,R>`函数型|   T    |     R    | 对类型为T的对象应用操作，并返回结果。结果是R类型的对象。包含方法：`R apply(T t)` |
-| `Predicate<T>`断定型 |   T    |  boolean | 确定类型为T的对象是否满足某约束，并返回boolean值。包含方法`boolean test(T t)` |
+| `Function<T,R>`函数型|   T    |     R    | 对类型为T的对象应用操作，<br>并返回结果。结果是R类型的对象。<br>包含方法：`R apply(T t)` |
+| `Predicate<T>`断定型 |   T    |  boolean | 确定类型为T的对象是否满足某约束，<br>并返回boolean值。<br>包含方法`boolean test(T t)` |
+
 
 | 函数式接口          | 参数类型 | 返回类型  |  用途   |
 | :-----------------:|:-------:| :--------:| :------:|
-| BiFunction<T, U, R>| T,U | R | 对类型为 T, U 参数应用操作，返回 R 类型的结 果。包含方法为: R apply(T t, U u);|
-| UnaryOperator (Function子接口) | T | T | 对类型为T的对象进行一元运算，并返回T类型的 结果。包含方法为:T apply(T t); |
-| BinaryOperator (BiFunction 子接口)| T,T | T | 对类型为T的对象进行二元运算，并返回T类型的 结果。包含方法为: T apply(T t1, T t2); |
+| BiFunction<T, U, R>| T,U | R | 对类型为 T, U 参数应用操作，返回 R 类型的结 果。<br>包含方法为: R apply(T t, U u);|
+| UnaryOperator(Function子接口) | T | T | 对类型为T的对象进行一元运算，<br>并返回T类型的结果。<br>包含方法为:T apply(T t); |
+| BinaryOperator(BiFunction 子接口)| T,T | T | 对类型为T的对象进行二元运算，<br>并返回T类型的结果。<br>包含方法为: T apply(T t1, T t2); |
 | BiConsumer<T, U> | T,U | void | 对类型为T, U 参数应用操作。 包含方法为: void accept(T t, U u)|
 | BiPredicate<T,U> | T,U | bollean | 包含方法为: boolean test(T t,U u)|
 | ToIntFunction< T > ToLongFunction< T > ToDoubleFunction< T > | T | int long double | 分别计算int、long、double值的函数|
