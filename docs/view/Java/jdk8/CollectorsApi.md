@@ -5,7 +5,7 @@ autoPrev: StreamAPI
 
 ## Collectors常用的20个方法
 
-**返回List集合: toList()**
+**返回List集合: toList()** <Badge text="重要" type="error"/>
 
 用于将元素累积到`List`集合中。它将创建一个新`List`集合（不会更改当前集合）。
 
@@ -15,7 +15,7 @@ List<Integer> newList = integers.stream().map(x -> x*x).collect(Collectors.toLis
 // 结果: [1,4,9,16,25,36,36]
 ```
 
-**返回Set集合: toSet()**
+**返回Set集合: toSet()** <Badge text="重要" type="error"/>
 
 用于将元素累积到`Set`集合中。<font color=red>它会删除重复元素。</font>
 
@@ -49,7 +49,7 @@ Long collect = integers.stream().filter(x -> x <4).collect(Collectors.counting()
 // 结果: 3
 ```
 
-**求最小值: minBy()**：
+**求最小值: minBy()**：<Badge text="重要" type="error"/>
 
 用于返回列表中存在的最小值。
 ```java
@@ -87,7 +87,7 @@ strings
 // 结果: gamma
 ```
 
-**求最大值: maxBy()**：
+**求最大值: maxBy()**：<Badge text="重要" type="error"/>
 
 和最小值方法类似，使用`maxBy()`方法来获得最大值。
 
@@ -137,7 +137,7 @@ Set<String> readOnlySet = strings
 // 结果: ["alpha","beta","gamma"]
 ```
 
-**连接元素：Joining()**
+**连接元素：Joining()** <Badge text="重要" type="error"/>
 
 用指定的字符串链接集合内的元素。
 ```java
@@ -149,7 +149,7 @@ String collect3 = strings
 
 结果：alpha-beta-gamma
 ```
-**Long类型集合的平均值：averagingLong()**
+**Long类型集合的平均值：averagingLong()** <Badge text="重要" type="error"/>
 
 查找`Long`类型集合的平均值。
 
@@ -161,7 +161,7 @@ Double d1 = longValues
         .collect(Collectors.averagingLong(x -> x * 2));
 // 结果: 400.0
 ```
-**Integer类型集合的平均值：averagingInt()**
+**Integer类型集合的平均值：averagingInt()** <Badge text="重要" type="error"/>
 
 查找Integer类型集合的平均值。
 
@@ -175,7 +175,7 @@ Double d2 = integers
 
 结果：3.857142857142857
 ```
-**Double类型集合的平均值：averagingDouble()**
+**Double类型集合的平均值：averagingDouble()** <Badge text="重要" type="error"/>
 
 查找`Double`类型集合的平均值。
 ```java
@@ -186,7 +186,7 @@ Double d3 = doubles
 // 结果: 3.35
 ```
 
-**整数求和:summingInt ()**
+**整数求和:summingInt ()** <Badge text="重要" type="error"/>
 
 查找集合中所有整数的和。它并不总是初始集合的和，就像我们在下面的例子中使用的是字符串列表，首先我们把每个字符串转换成一个等于它的长度的整数，然后把所有的长度相加。
 ```java
@@ -205,7 +205,7 @@ Integer sum = integers
 // output: 27
 ```
 
-**double求和:summingDouble ()**
+**double求和:summingDouble ()** <Badge text="重要" type="error"/>
 
 类似于整数求和，只是它用于双精度值
 ```java
@@ -215,7 +215,7 @@ Double sum = doubleValues
      .collect(Collectors.summingDouble(x ->x));
 // 结果: 20.1
 ```
-**Long求和:summingLong ()**
+**Long求和:summingLong ()** <Badge text="重要" type="error"/>
 
 与前两个相同，用于添加`long`值或`int`值。<font color="red">可以对`int`值使用`summinglong()`，但不能对`long`值使用`summingInt()`。</font>
 ```java
@@ -225,7 +225,7 @@ Long sum = longValues
     .collect(Collectors.summingLong(x ->x));
 // 结果: 600
 ```
-**汇总整数:summarizingInt ()**
+**汇总整数:summarizingInt ()** <Badge text="重要" type="error"/>
 
 它给出集合中值的所有主要算术运算值，如所有值的平均值、最小值、最大值、所有值的计数和总和。
 ```java
