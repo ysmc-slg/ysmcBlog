@@ -1,6 +1,6 @@
 ---
 title: Collectors其他方法
-autoPrev: StreamAPI.md
+autoPrev: StreamAPI
 ---
 
 ## Collectors常用的20个方法
@@ -265,3 +265,5 @@ Map<Integer, LinkedList<String>> collect1 = strings
 // 结果: {4=[beta, beta], 5=[alpha, gamma]}
 ```
 这里指定了Map中需要的列表类型(Libkedlist)。
+
+文章来源：[Java-Collectors常用的20个方法](https://www.cnblogs.com/merryyou/p/13977493.html)
