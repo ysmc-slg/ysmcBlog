@@ -1,6 +1,6 @@
 ---
 title: 日期和时间
-autoPrev: StreamAPI
+autoPrev: CollectorsApi
 ---
 
 Java 8通过发布新的Date-Time API (JSR 310)来进一步加强对日期与时间的处理。在旧版的 Java 中，日期时间 API 存在诸多问题，其中有：
@@ -109,12 +109,28 @@ public void test(){
 以下是整理的常用的一些方法。
 
 
-| 方法 | 返回值 | 那些类中有 | 用途 | 使用方法 |
-|:----:|:----:|:----------:|:-----:|:-------:|
-| now () | `LocalDate`，`LocalTime`，`LocalDateTime` | 三个类中都有 | 获取当前日期，时间，日期和时间 | 类名.now() |
-| of () | `LocalDate`，`LocalTime`，`LocalDateTime` | 都有 | 构造指定的日期，时间，日期和时间 | 类名.of() |
-| equals(Object object) | boolean | 都有 | 比较两个日期是否相等 | 对象.equals(对象) |
-| plusYears(long years) | `LocalDate`，`LocalTime` | LocalDateTime没有 | 增加几年 | 对象.plusYears(long years) |
+| 方法 | 返回值 | 用途 |
+|:----:|:----:|:-----:|
+| now () | `LocalDate`，<br>`LocalTime`，<br>`LocalDateTime`  | 获取当前日期，<br>时间，<br>日期和时间 |
+| of () | `LocalDate`，<br>`LocalTime`，<br>`LocalDateTime`  | 构造指定的日期，<br>时间，<br>日期和时间 |
+| equals(Object object) | boolean | 比较两个日期是否相等 | 
+| plusYears(long years) | `LocalDate`，<br>`LocalDateTime` | 增加年份 |
+| plusMonths(long months) | `LocalDate`，<br>`LocalDateTime`  | 增加月份 |
+| plusDays(long days) | `LocalDate`，<br>`LocalDateTime` | 增加天数 |
+| plusHours(long hours) | `LocalDate`，<br>`LocalTime`，<br>`LocalDateTime` | 增加小时 |
+| plusMinute(long minute) | `LocalDate`，<br>`LocalTime`，<br>`LocalDateTime` | 增加分钟 |
+| plusSeconds(long seconds) | `LocalDate`，<br>`LocalTime`，<br>`LocalDateTime` | 增加秒 |
+| minusYears(long years) | `LocalDate`，<br>`LocalDateTime` | 减去年份 |
+| minusMonths(long months) | `LocalDate`，<br>`LocalDateTime` | 减去月份 |
+| getYear() | `int` | 获取年份，LocalTime只获取时间，<br>所以没有这个方法 |
+| getMonthValue() | `int` | 获取月份，LocalTime实例没有这个方法 |
+| getDayOfYear() | `int` | 当前时间是一年中的第几天,LocalTime实例没有这个方法|
+| getDayOfMonth() | `int` | 一个月中的第几天,LocalTime实例没有这个方法 |
+| getDayOfWeek() | `DayOfWeek` | 获取周几，直接打印返回值是英文周几，返回的`DayOfWeek`对象中有getValue()方法可以获取数字周几，同时还有puls()和minus()方法|
+| compareTo(ChronoLocalDateTime<?> other) | `int` | 比较两个`LocalDateTime`的大小，大于返回`正数`，等于返回`0`，小于返回`负数` |
+| compareTo(ChronoLocalDate other) | int | 比较两个`LocalDate`的大小，大于返回`正数`，等于返回`0`，小于返回`负数` |
+| equals(Object ob) | boolean | 判断日期是否相同 |
+| toSecondOfDay() | `int` | 将时间提取为秒，从0到24 * 60 * 60 - 1。|
 
 
 
