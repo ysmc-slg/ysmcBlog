@@ -109,7 +109,7 @@ public void test(){
 以下是整理的常用的一些方法。
 
 
-| 方法 | 返回值 | 用途 |
+| 方法 | 返回值 | 描述 |
 |:----:|:----:|:-----:|
 | now () | `LocalDate`，<br>`LocalTime`，<br>`LocalDateTime`  | 获取当前日期，<br>时间，<br>日期和时间 |
 | of () | `LocalDate`，<br>`LocalTime`，<br>`LocalDateTime`  | 构造指定的日期，<br>时间，<br>日期和时间 |
@@ -124,13 +124,138 @@ public void test(){
 | minusMonths(long months) | `LocalDate`，<br>`LocalDateTime` | 减去月份 |
 | getYear() | `int` | 获取年份，LocalTime只获取时间，<br>所以没有这个方法 |
 | getMonthValue() | `int` | 获取月份，LocalTime实例没有这个方法 |
+| getDayOfMonth() | `int` | 一个月中的第几天，也就是日。LocalTime实例没有这个方法 |
+| getHour() | `int` | 获取小时 |
+| getMinute() | `int` | 获取分钟 |
+| getSecond() | `int` | 获取秒 |
 | getDayOfYear() | `int` | 当前时间是一年中的第几天,LocalTime实例没有这个方法|
-| getDayOfMonth() | `int` | 一个月中的第几天,LocalTime实例没有这个方法 |
 | getDayOfWeek() | `DayOfWeek` | 获取周几，直接打印返回值是英文周几，返回的`DayOfWeek`对象中有getValue()方法可以获取数字周几，同时还有puls()和minus()方法|
 | compareTo(ChronoLocalDateTime<?> other) | `int` | 比较两个`LocalDateTime`的大小，大于返回`正数`，等于返回`0`，小于返回`负数` |
 | compareTo(ChronoLocalDate other) | int | 比较两个`LocalDate`的大小，大于返回`正数`，等于返回`0`，小于返回`负数` |
 | equals(Object ob) | boolean | 判断日期是否相同 |
 | toSecondOfDay() | `int` | 将时间提取为秒，从0到24 * 60 * 60 - 1。|
 
+## Duration
+计算两个时间的时间差
 
+::: tip
 
+Duration.between(开始时间,结束时间);
+
+返回值是一个Duration
+
+:::
+
+```java
+public void test(){
+    LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime now1 = LocalDateTime.of(2021, 7, 24, 21, 59, 12);
+
+        // 计算两个时间之间的间隔
+        Duration between = Duration.between(now1,now);
+
+        // 间隔几分钟
+        long l = between.toMinutes();
+        System.out.println(l);
+}
+
+```
+
+| 方法 | 返回值 | 描述 |
+|:----:|:----:|:-----:|
+|  Duration.between(Temporal startInclusive, Temporal endExclusive) | Duration | 计算两个时间之间的间隔 |
+| toDays() | long | 间隔天数 |
+| toHours() | long | 间隔小时数 |
+| toMinutes() | long | 间隔分钟 |
+| getSeconds() | long | 间隔秒数 |
+| toMillis() | long | 间隔毫秒 |
+| toNanos() | long | 间隔纳秒 |
+
+还有计算的方法，和LocalDateTime是一样的，就不说了
+
+::: tip
+
+plusNanos()，plusMillis()，plusSeconds()，plusMinutes()，plusHours()，plusDays()
+
+minusNanos()，minusMillis()，minusSeconds()，minusMinutes()，minusHours()，minusDays()
+
+:::
+
+## TemporalAdjuster(时间校正器)
+
+java 8 引入了新的日期、时间库————即java.time包，TemporalAdjuster 类是其中之一。简而言之，TemporalAdjuster 类是调整Temporal对象的策略。
+
+TemporalAdjuster 是函数接口，在TemporalAdjusters 类中有很多预定义的实现。可以执行复杂的日期操作，例如，可以获得下一个星期日对于日期、当月的最后一天、下一年的第一天。
+
+TemporalAdjusters类有很多预定义的static方法返回TemporalAdjuster对象，使用不同方式调节Temporal对象而与Temporal实现无关。
+
+下面列举部分方法及其定义描述：
+
+| 方法 | 描述 |
+|:-----:|:-----:|
+| dayOfWeekInMonth(int ordinal, DayOfWeek dayOfWeek) |  同一个月中第几个周几的时间 |
+| firstDayOfMonth() | 返回当月的第一天 |
+| firstDayOfNextMonth() | 返回下月的第一天 |
+| firstDayOfNextYear() | 返回下年的第一天 |
+| firstDayOfYear() | 返回本年的第一天 |
+| firstInMonth(DayOfWeek dayOfWeek) | 本月的第一个星期几的时间 |
+| lastDayOfMonth() | 返回当月的最后一天 |
+| lastDayOfNextMonth() | 返回下月的最后一天 |
+| lastDayOfNextYear() | 返回下一年的最后一天 |
+| lastDayOfYear() | 返回本年的最后一天 |
+| lastInMonth(DayOfWeek dayOfWeek) | 返回同一个月中最后一个星期几 |
+| next / previous (DayOfWeek dayOfWeek) | 返回后一个/前一个给定的星期几 |
+| nextOrSame (DayOfWeek dayOfWeek) | 下一个与dayOfWeek相同的时间，包括当前时间 |
+| previousOrSame(DayOfWeek dayOfWeek) | 上一个与dayOfWeek相同的时间，包括当前时间 |
+
+```java
+public void test(){
+    LocalDateTime dateTime = LocalDateTime.now();
+    // 获取这个月的第二个周一的时间
+    LocalDateTime with1 = dateTime.with(TemporalAdjusters.dayOfWeekInMonth(2,DayOfWeek.MONDAY));
+    System.out.println(with1);
+    
+    // 上个月最后一个星期一，第一个参数为0时，是上个月最后的星期几
+    LocalDateTime with2 = dateTime.with(TemporalAdjusters.dayOfWeekInMonth(0,DayOfWeek.MONDAY));
+    System.out.println(with2);
+
+    // 这个月的倒数第二个周日，第一个参数为负数 这个月的倒数星期几
+    LocalDateTime with3 = dateTime.with(TemporalAdjusters.dayOfWeekInMonth(-2, DayOfWeek.SUNDAY));
+    System.out.println(with3);
+}
+
+结果：
+2021-07-12T00:49:22.684
+2021-06-28T00:49:22.684
+2021-07-18T00:49:22.684
+```
+
+```java
+public void test(){
+    LocalDate of = LocalDate.of(2021, 7, 25);
+
+    // 下一个也是周日的日期，包括当前日期。
+    LocalDate with1 = of.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+    System.out.println(with1);
+
+    // 下一个也是周一的日期
+    LocalDate with2 = of.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));
+    System.out.println(with2);
+
+     // 上一个也是周日的日期，包括当前日期。
+    LocalDate with8 = of.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+    System.out.println(with8);
+
+     // 上一个也是周一的日期
+    LocalDate with9 = of.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+    System.out.println(with9);
+    
+}
+
+结果：
+2021-07-25
+2021-07-26
+2021-07-25
+2021-07-19
+```
