@@ -27,7 +27,7 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "e76280f3dd1a1b18f38490b6ca911f52"
+    "revision": "9dfcd909d2b86ddc110998fbce243998"
   },
   {
     "url": "assets/css/0.styles.b42adf48.css",
@@ -42,8 +42,8 @@ self.__precacheManifest = [
     "revision": "83621669651b9a3d4bf64d1a670ad856"
   },
   {
-    "url": "assets/js/10.26a3a004.js",
-    "revision": "902d194aa2af92c47723a3f92f3c1e08"
+    "url": "assets/js/10.ebdfe297.js",
+    "revision": "93002d0abd5376046a0001941a445a6a"
   },
   {
     "url": "assets/js/11.f214ccab.js",
@@ -126,8 +126,8 @@ self.__precacheManifest = [
     "revision": "c92b0f55368cf1fca7e3386a18883d64"
   },
   {
-    "url": "assets/js/app.819bf304.js",
-    "revision": "dee037ce8d58b9b6e84797245b463fe6"
+    "url": "assets/js/app.9b9fcf4f.js",
+    "revision": "d64c85e52eaa31a1953a20574afedcc8"
   },
   {
     "url": "blogImg/20210519105652.png",
@@ -239,7 +239,7 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html",
-    "revision": "1a288a471c72997251c4cda12274b5f5"
+    "revision": "cbb2b41e68fe0c6b05f8f1065ddee1e2"
   },
   {
     "url": "lizhi.png",
@@ -247,55 +247,55 @@ self.__precacheManifest = [
   },
   {
     "url": "view/database/redis/index.html",
-    "revision": "978eccb2a00f67257007f07f6eeaf4d4"
+    "revision": "a8bdd31e4e3c05bd0d6dca25c6871c63"
   },
   {
     "url": "view/database/redis/install.html",
-    "revision": "627dbd30c52502771ad13373f948a826"
+    "revision": "3fb2f06c7874b80bd52151dd486b87b9"
   },
   {
     "url": "view/database/redis/key.html",
-    "revision": "e0e19b63118c2269fe45e6d6692a730b"
+    "revision": "0c23ed8d4d570688faee1436306a9a24"
   },
   {
     "url": "view/database/redis/list.html",
-    "revision": "c6a10eb50e9832cc1a3c8bdfc8409cf7"
+    "revision": "6979f697a2ab65de01d5ee019753ae97"
   },
   {
     "url": "view/database/redis/string.html",
-    "revision": "b30688c572c241a9b5c0742db8895ed3"
+    "revision": "c6b25317420f3717c99b50f818f64abf"
   },
   {
     "url": "view/Java/jdk8/CollectorsApi.html",
-    "revision": "ab2812db9e6b3481644edb176e5fe5b7"
+    "revision": "fb000f53901155c3e767b456a53e15d3"
   },
   {
     "url": "view/Java/jdk8/Date.html",
-    "revision": "5d9fca6b3b3188a731dbbea4c377012c"
+    "revision": "ffefb6315518dc21c3f7816e06c2dec0"
   },
   {
     "url": "view/Java/jdk8/functional.html",
-    "revision": "e001c358fc25034116130cbedb8071bd"
+    "revision": "cd8ea1836317098a9da0e6bf23a37fe0"
   },
   {
     "url": "view/Java/jdk8/index.html",
-    "revision": "631b17ad52346862a00cdabf02ee47b5"
+    "revision": "84ed20962bcf4f9548f266d72af02102"
   },
   {
     "url": "view/Java/jdk8/Lambda.html",
-    "revision": "e5115bde67e7de0dbe0b895c981bd882"
+    "revision": "ae3ae73bf81215a2e5010c1f58be5dd5"
   },
   {
     "url": "view/Java/jdk8/method-reference.html",
-    "revision": "f7cb114167f6cc04e3426e1c389ca243"
+    "revision": "c012bbc625c0b451452cad17d9bb61bd"
   },
   {
     "url": "view/Java/jdk8/StreamAPI.html",
-    "revision": "e986932eec0a4e1f952525cdcac7bdf0"
+    "revision": "f3649625aa14154f2fc31122c2e21f90"
   },
   {
     "url": "view/preface/index.html",
-    "revision": "3d089474f11db2a1d44993a276d06dff"
+    "revision": "f03417c4f00a74f25822c9a3ed6ade7d"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
