@@ -259,3 +259,96 @@ public void test(){
 2021-07-25
 2021-07-19
 ```
+
+### 自定义
+
+`TemporalAdjuster`是一个函数式接口，所以可以使用lambda表达式，自定义时间校正器
+
+```java
+public void test(){
+    LocalDateTime dateTime = LocalDateTime.now();
+
+    // 自定义校正器：下一个工作日
+    LocalDateTime with2 = dateTime.with(l -> {
+        LocalDateTime l1 = (LocalDateTime) l;
+        DayOfWeek dayOfWeek = l1.getDayOfWeek();
+
+        if (dayOfWeek.equals(DayOfWeek.FRIDAY)) {
+            return l1.plusDays(3);
+        } else if (dayOfWeek.equals(DayOfWeek.SATURDAY)) {
+            return l1.plusDays(2);
+        } else {
+            return l1.plusDays(1);
+        }
+    });
+}
+```
+
+## 格式化时间/日期
+
+上面全是`ISO标准日历`格式的的日期和时间，当我们需要自定义日期和时间的格式时可以使用，`DateTimeFormatter`。
+
+**1.字符串转换成日期时间类型**
+
+类名.parse
+```java
+public void test(){
+    // String --> LocalDate
+    LocalDate localDate = LocalDate.parse("2021-07-25");
+
+    // String --> LocalTime
+    LocalTime localTime = LocalTime.parse("07:43:53");
+
+    // String -->LocalDateTime
+    DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    LocalDateTime parse = LocalDateTime.parse("2021-07-25 15:34:55", formatter2);
+    
+    System.out.println(localDate);
+    System.out.println(localTime);
+    System.out.println(parse);
+}
+
+结果：
+2021-07-25
+07:43:53
+2021-07-25T15:34:55
+```
+
+**2.日期时间类型转换成字符串**
+
+内置格式使用`日期对象.format()`
+
+自定义使用`localDateTime.format`
+```java
+public void test10(){
+    //localDate --> String
+    LocalDate localDate = LocalDate.now();
+    String format1 = localDate.format(DateTimeFormatter.BASIC_ISO_DATE);    //yyyyMMdd
+    String format2 = localDate.format(DateTimeFormatter.ISO_DATE);            //yyyy-MM-dd
+
+
+    //2.LocalTime  --> String
+    LocalTime localTime = LocalTime.now();
+    String format3 = localTime.format(DateTimeFormatter.ISO_TIME);            //20:19:22.42
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss");
+    String format4 = localTime.format(formatter);
+
+    //3.LocalDateTime  --> String
+    LocalDateTime localDateTime = LocalDateTime.now();
+    DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm:ss");
+    String format5 = localDateTime.format(formatter2);
+
+    System.out.println(format1);
+    System.out.println(format2);
+    System.out.println(format3);
+    System.out.println(format4);
+    System.out.println(format5);
+}
+
+结果：
+20210725
+2021-07-25
+15:43:45.551
+03:43:45
+2021年07月25日 15:43:45
+```
