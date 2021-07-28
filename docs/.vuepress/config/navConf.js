@@ -11,6 +11,7 @@ module.exports = [
     text: '数据库',
     items: [
       { text: 'Redis', link: '/view/database/redis/' },
+      { text: 'Mysql', link: '/view/database/mysql/' },
     ]
   },
   {
