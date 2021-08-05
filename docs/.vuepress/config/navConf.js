@@ -25,15 +25,6 @@ module.exports = [
             text: 'rabbitMQ',
             link: '/view/mq/rabbitmq/'
           },
-          // {
-          //   text: 'MQ',
-          //   items: [
-          //     {
-          //       text: 'rabbitMQ',
-          //       link: '/view/mq/rabbitmq/'
-          //     }
-          //   ]
-          // },
         ]
       }
     ],
