@@ -18,6 +18,21 @@ module.exports = [
     text: 'java系',
     items: [
       { text: 'Java8新特性', link: '/view/java/jdk8/' },
-    ]
+      { 
+        text: 'MQ',
+        items: [
+          {
+            text: 'MQ',
+            items: [
+              {
+                text: 'rabbitMQ',
+                link: '/view/mq/rabbitmq/'
+              }
+            ]
+          },
+        ]
+      }
+    ],
+    
   }
 ]
