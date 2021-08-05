@@ -22,14 +22,18 @@ module.exports = [
         text: 'MQ',
         items: [
           {
-            text: 'MQ',
-            items: [
-              {
-                text: 'rabbitMQ',
-                link: '/view/mq/rabbitmq/'
-              }
-            ]
+            text: 'rabbitMQ',
+            link: '/view/mq/rabbitmq/'
           },
+          // {
+          //   text: 'MQ',
+          //   items: [
+          //     {
+          //       text: 'rabbitMQ',
+          //       link: '/view/mq/rabbitmq/'
+          //     }
+          //   ]
+          // },
         ]
       }
     ],
