@@ -9,12 +9,12 @@ autoPrev: rabbitmq
 
 因为`rabbitmq`是基于`erlang`语言的，所以还得安装`erlang`环境。本文在centos7上使用rabbitmq的3.8.8版本。
 
-`rabbitmq安装包下载`：![rabbitmq](/assets/file/rabbitmq-server-3.8.8-1.el7.noarch.rpm)
+`rabbitmq安装包下载`：[rabbitmq](/assets/file/rabbitmq-server-3.8.8-1.el7.noarch.rpm)
 
-`erlang安装包下载`：![erlang](/assets/file/erlang-21.3-1.el7.x86_64.rpm)
+`erlang安装包下载`：[erlang](/assets/file/erlang-21.3-1.el7.x86_64.rpm)
 
 ## 安装步骤
-::: danger
+::: tip
 
 1. 将下载好的文件上传到 `/daata/`目录下。
 2. 安装文件(分别按照以下顺序安装)
@@ -48,5 +48,6 @@ autoPrev: rabbitmq
 
    rabbitmqctl set_permissions -p "/" admin ".*" ".*" ".*"      设置权限
 
-   此时就能进行登录了。
 :::
+
+此时访问 http://47.115.185.244:15672 使用新创建的用户，就可以进入rabbitmq的web管理界面。
