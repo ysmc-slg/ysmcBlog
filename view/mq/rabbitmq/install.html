@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>rabbitmq安装 | 余生慢尝</title>
+    <meta name="generator" content="VuePress 1.8.2">
+    <link rel="icon" href="/favicon.ico">
+    <link name="author" content="余生慢尝">
+    <link name="keywords" content="余生慢尝">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon-152x152.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#3eaf7c">
+    <meta name="description" content="余生慢尝的笔记">
+    <meta name="theme-color" content="#3eaf7c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="msapplication-TileImage" content="/icons/msapplication-icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#000000">
+    
+    <link rel="preload" href="/assets/css/0.styles.b42adf48.css" as="style"><link rel="preload" href="/assets/js/app.322cb7f7.js" as="script"><link rel="preload" href="/assets/js/2.9f0304db.js" as="script"><link rel="preload" href="/assets/js/23.9e9b320b.js" as="script"><link rel="preload" href="/assets/js/3.5bf914f4.js" as="script"><link rel="prefetch" href="/assets/js/10.ebdfe297.js"><link rel="prefetch" href="/assets/js/11.f214ccab.js"><link rel="prefetch" href="/assets/js/12.6e8e0715.js"><link rel="prefetch" href="/assets/js/13.b6d8622d.js"><link rel="prefetch" href="/assets/js/14.8ecbaacd.js"><link rel="prefetch" href="/assets/js/15.2f338fa0.js"><link rel="prefetch" href="/assets/js/16.609fc6f6.js"><link rel="prefetch" href="/assets/js/17.4ada27f7.js"><link rel="prefetch" href="/assets/js/18.9694ee06.js"><link rel="prefetch" href="/assets/js/19.dd867fe5.js"><link rel="prefetch" href="/assets/js/20.f07b7d11.js"><link rel="prefetch" href="/assets/js/21.f1ff82f4.js"><link rel="prefetch" href="/assets/js/22.1e98bb9e.js"><link rel="prefetch" href="/assets/js/24.a044dcc9.js"><link rel="prefetch" href="/assets/js/25.65d0247d.js"><link rel="prefetch" href="/assets/js/26.70ef1afe.js"><link rel="prefetch" href="/assets/js/4.6e7700c1.js"><link rel="prefetch" href="/assets/js/5.1cb9dfee.js"><link rel="prefetch" href="/assets/js/6.f87a66d5.js"><link rel="prefetch" href="/assets/js/7.4aa75368.js"><link rel="prefetch" href="/assets/js/8.ce2d3850.js"><link rel="prefetch" href="/assets/js/9.09a5ce7f.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.b42adf48.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/assets/img/hero.png" alt="余生慢尝" class="logo"> <span class="site-name can-hide">余生慢尝</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/view/preface/" class="nav-link">
+  前言
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="数据库" class="dropdown-title"><span class="title">数据库</span> <span class="arrow down"></span></button> <button type="button" aria-label="数据库" class="mobile-dropdown-title"><span class="title">数据库</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/database/redis/" class="nav-link">
+  Redis
+</a></li><li class="dropdown-item"><!----> <a href="/view/database/mysql/" class="nav-link">
+  Mysql
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="java系" class="dropdown-title"><span class="title">java系</span> <span class="arrow down"></span></button> <button type="button" aria-label="java系" class="mobile-dropdown-title"><span class="title">java系</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/java/jdk8/" class="nav-link">
+  Java8新特性
+</a></li><li class="dropdown-item"><h4>
+          MQ
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/mq/rabbitmq/" class="nav-link router-link-active">
+  rabbitMQ
+</a></li></ul></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/view/preface/" class="nav-link">
+  前言
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="数据库" class="dropdown-title"><span class="title">数据库</span> <span class="arrow down"></span></button> <button type="button" aria-label="数据库" class="mobile-dropdown-title"><span class="title">数据库</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/database/redis/" class="nav-link">
+  Redis
+</a></li><li class="dropdown-item"><!----> <a href="/view/database/mysql/" class="nav-link">
+  Mysql
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="java系" class="dropdown-title"><span class="title">java系</span> <span class="arrow down"></span></button> <button type="button" aria-label="java系" class="mobile-dropdown-title"><span class="title">java系</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/java/jdk8/" class="nav-link">
+  Java8新特性
+</a></li><li class="dropdown-item"><h4>
+          MQ
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/mq/rabbitmq/" class="nav-link router-link-active">
+  rabbitMQ
+</a></li></ul></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Rabbitmq</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/view/mq/rabbitmq/" aria-current="page" class="sidebar-link">MQ引言</a></li><li><a href="/view/mq/rabbitmq/rabbitmq.html" class="sidebar-link">RabbitMQ</a></li><li><a href="/view/mq/rabbitmq/install.html" aria-current="page" class="active sidebar-link">rabbitmq安装</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/view/mq/rabbitmq/install.html#下载" class="sidebar-link">下载</a></li><li class="sidebar-sub-header"><a href="/view/mq/rabbitmq/install.html#安装步骤" class="sidebar-link">安装步骤</a></li></ul></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="下载"><a href="#下载" class="header-anchor">#</a> 下载</h2> <p><code>官网下载地址</code>：https://www.rabbitmq.com/download.html</p> <p>因为<code>rabbitmq</code>是基于<code>erlang</code>语言的，所以还得安装<code>erlang</code>环境。本文在centos7上使用rabbitmq的3.8.8版本。</p> <p><code>rabbitmq安装包下载</code>：<img src="/assets/file/rabbitmq-server-3.8.8-1.el7.noarch.rpm" alt="rabbitmq"></p> <p><code>erlang安装包下载</code>：<img src="/assets/file/erlang-21.3-1.el7.x86_64.rpm" alt="erlang"></p> <h2 id="安装步骤"><a href="#安装步骤" class="header-anchor">#</a> 安装步骤</h2> <div class="custom-block danger"><p class="custom-block-title">WARNING</p> <ol><li><p>将下载好的文件上传到 <code>/daata/</code>目录下。</p></li> <li><p>安装文件(分别按照以下顺序安装)</p> <p>rpm -ivh erlang-21.3-1.el7.x86_64.rpm</p> <p>yum install socat -y</p> <p>rpm -ivh rabbitmq-server-3.8.8-1.el7.noarch.rpm</p></li> <li><p>常用命令</p> <p>chkconfig rabbitmq-server on   添加开机启动 RabbitMQ 服务</p> <p>/sbin/service rabbitmq-server start   启动服务</p> <p>/sbin/service rabbitmq-server status   查看服务状态</p> <p>/sbin/service rabbitmq-server stop    停止服务(选择执行)</p> <p>rabbitmq-plugins enable rabbitmq_management     开启 web 管理插件</p></li> <li><p>设置服务器放开 <code>15672</code>和<code>5672</code>端口</p></li> <li><p>此时访问 http://47.115.185.244:15672/ 用默认账号<code>guest</code>登陆失败，需要添加一个新的用户</p></li> <li><p>添加一个新的用户</p> <p>rabbitmqctl add_user admin 123456     创建账号，设置密码</p> <p>rabbitmqctl set_user_tags admin administrator     设置用户角色</p> <p>set_permissions [-p <vhostpath>] <user><conf><write><read></read></write></conf></user></vhostpath></p> <p>rabbitmqctl set_permissions -p &quot;/&quot; admin &quot;.<em>&quot; &quot;.</em>&quot; &quot;.*&quot;      设置权限</p> <p>此时就能进行登录了。</p></li></ol></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">更新时间:</span> <span class="time">8/6/2021, 4:20:46 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/view/mq/rabbitmq/rabbitmq.html" class="prev">
+        RabbitMQ
+      </a></span> <!----></p></div> </main></div><div class="global-ui"><!----><!----></div></div>
+    <script src="/assets/js/app.322cb7f7.js" defer></script><script src="/assets/js/2.9f0304db.js" defer></script><script src="/assets/js/23.9e9b320b.js" defer></script><script src="/assets/js/3.5bf914f4.js" defer></script>
+  </body>
+</html>
