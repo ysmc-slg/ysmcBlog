@@ -13,8 +13,8 @@ autoPrev: HelloWorld
 角色：
 
 - P：生产者：任务的发布者
-- C1：消费者-1，领取任务并且完成任务，假设完成速度较慢
-- C2：消费者-2：领取任务并完成任务，假设完成速度快
+- C1：消费者-1
+- C2：消费者-2
 
 ## 操作代码
 首先，创建一个工具类，将每次都要写的代码封装起来
@@ -76,7 +76,7 @@ public class Worker01 {
             System.out.println(new String(body));
         };
 
-        System.out.println("C2等待接受消息。。。");
+        System.out.println("C1等待接受消息。。。");
         // 取消订阅时的回调
         CancelCallback callback = consumerTag -> System.out.println("消息消费被中断");
         // 接收消息
@@ -110,3 +110,8 @@ public class Worker02 {
     }
 }
 ```
+
+### 结果展示
+通过程序执行发现生产者总共发送 4 个消息，C1 和 C2 分别分得两个消息，并且是按照有序的一个接收一次消息。
+
+![结果展示](/blogImg/rabbitmq/20210807124514.png)
