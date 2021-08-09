@@ -1,5 +1,5 @@
 ---
-title: fanout模型
+title: fanout模式
 autoPrev: workquene
 ---
 
@@ -156,5 +156,10 @@ public class EmitLog {
 
 channel.basicPublish()：第一个参数是往哪个交换机发送信息，此时要和消费者代码中的交换机相同
 
-** 结果**：
+Logs 和临时队列的绑定关系如下图:
+
+![haha](/blogImg/rabbitmq/binding2.png)
+
+**结果**：
+
 ![haha](/blogImg/rabbitmq/haha.png)
