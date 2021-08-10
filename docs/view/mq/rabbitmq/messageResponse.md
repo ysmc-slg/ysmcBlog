@@ -66,3 +66,83 @@ public class Worker1 {
 未发送 ACK 确认，RabbitMQ 将了解到消息未完全处理，并将对其重新排队。如果此时其他消费者可以处理，它将很快将其重新分发给另一个消费者。这样，即使某个消费者偶尔死亡，也可以确保不会丢失任何消息。
 
 ![topic](/blogImg/rabbitmq/tag2.png)
+
+### 实现代码
+消息重新入队是自动完成的，所以我们用`work模式`看一下就好了
+
+**生产者**
+
+```java
+public class Task01 {
+  // 队列名称
+  public static final String QUEUE_NAME = "hello";
+
+  public static void main(String[] args) throws IOException, TimeoutException {
+      Channel channel = RabbitMqUtils.getChannel();
+
+      channel.queueDeclare(QUEUE_NAME,false,false,false,null);
+
+      Scanner scanner = new Scanner(System.in);
+
+      while (scanner.hasNext()) {
+          String message = scanner.next();
+          channel.basicPublish("",QUEUE_NAME,null,message.getBytes());
+          System.out.println("消息发送完毕："+message);
+      }
+  }
+
+}
+```
+
+**消费者1**
+```java
+public class Worker01 {
+  // 队列名称
+  public static final String QUEUE_NAME = "hello";
+
+  public static void main(String[] args) throws IOException, TimeoutException {
+
+      Channel channel = RabbitMqUtils.getChannel();
+
+      // 当一个消息发送过来后的回调接口
+      DeliverCallback deliverCallback = (consumerTag, message) -> {
+          byte[] body = message.getBody();
+          System.out.println(new String(body));
+      };
+
+      System.out.println("C2等待接受消息。。。");
+      // 取消订阅时的回调
+      CancelCallback callback = consumerTag -> System.out.println("消息消费被中断");
+      
+      channel.basicConsume(QUEUE_NAME,true,deliverCallback,callback);
+  }
+}
+```
+
+**消费者2**: 休眠10秒，模拟处理速度慢
+```java
+public class Worker02 {
+  // 队列名称
+  public static final String QUEUE_NAME = "hello";
+
+  public static void main(String[] args) throws Exception {
+
+      Channel channel = RabbitMqUtils.getChannel();
+
+      // 当一个消息发送过来后的回调接口
+      DeliverCallback deliverCallback = (consumerTag, message) -> {
+          byte[] body = message.getBody();
+          System.out.println(new String(body));
+      };
+
+      System.out.println("C2等待接受消息。。。");
+      // 取消订阅时的回调
+      CancelCallback callback = consumerTag -> System.out.println("消息消费被中断");
+
+      // 休眠 10秒
+      Thread.sleep(10000);
+
+      channel.basicConsume(QUEUE_NAME,true,deliverCallback,callback);
+  }
+}
+```
