@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>rabbitmq高级之持久化 | 余生慢尝</title>
+    <meta name="generator" content="VuePress 1.8.2">
+    <link rel="icon" href="/favicon.ico">
+    <link name="author" content="余生慢尝">
+    <link name="keywords" content="余生慢尝">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon-152x152.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#3eaf7c">
+    <meta name="description" content="余生慢尝的笔记">
+    <meta name="theme-color" content="#3eaf7c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="msapplication-TileImage" content="/icons/msapplication-icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#000000">
+    
+    <link rel="preload" href="/assets/css/0.styles.b42adf48.css" as="style"><link rel="preload" href="/assets/js/app.aa9867f0.js" as="script"><link rel="preload" href="/assets/js/2.9f0304db.js" as="script"><link rel="preload" href="/assets/js/31.10e60c30.js" as="script"><link rel="preload" href="/assets/js/3.5bf914f4.js" as="script"><link rel="prefetch" href="/assets/js/10.ebdfe297.js"><link rel="prefetch" href="/assets/js/11.f214ccab.js"><link rel="prefetch" href="/assets/js/12.6e8e0715.js"><link rel="prefetch" href="/assets/js/13.b6d8622d.js"><link rel="prefetch" href="/assets/js/14.8ecbaacd.js"><link rel="prefetch" href="/assets/js/15.2f338fa0.js"><link rel="prefetch" href="/assets/js/16.609fc6f6.js"><link rel="prefetch" href="/assets/js/17.4ada27f7.js"><link rel="prefetch" href="/assets/js/18.9694ee06.js"><link rel="prefetch" href="/assets/js/19.dd867fe5.js"><link rel="prefetch" href="/assets/js/20.f07b7d11.js"><link rel="prefetch" href="/assets/js/21.f1ff82f4.js"><link rel="prefetch" href="/assets/js/22.f1b583d0.js"><link rel="prefetch" href="/assets/js/23.a31ee6e7.js"><link rel="prefetch" href="/assets/js/24.2889a0e9.js"><link rel="prefetch" href="/assets/js/25.e976e075.js"><link rel="prefetch" href="/assets/js/26.1141ceaf.js"><link rel="prefetch" href="/assets/js/27.26405e40.js"><link rel="prefetch" href="/assets/js/28.7a085394.js"><link rel="prefetch" href="/assets/js/29.b571359a.js"><link rel="prefetch" href="/assets/js/30.06d811fe.js"><link rel="prefetch" href="/assets/js/32.ce0e903f.js"><link rel="prefetch" href="/assets/js/33.c310f741.js"><link rel="prefetch" href="/assets/js/34.247b062f.js"><link rel="prefetch" href="/assets/js/35.56c34601.js"><link rel="prefetch" href="/assets/js/36.ed7a6c7b.js"><link rel="prefetch" href="/assets/js/37.862f68cc.js"><link rel="prefetch" href="/assets/js/4.59841d1a.js"><link rel="prefetch" href="/assets/js/5.1cb9dfee.js"><link rel="prefetch" href="/assets/js/6.f87a66d5.js"><link rel="prefetch" href="/assets/js/7.4aa75368.js"><link rel="prefetch" href="/assets/js/8.ce2d3850.js"><link rel="prefetch" href="/assets/js/9.09a5ce7f.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.b42adf48.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/assets/img/hero.png" alt="余生慢尝" class="logo"> <span class="site-name can-hide">余生慢尝</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/view/preface/" class="nav-link">
+  前言
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="数据库" class="dropdown-title"><span class="title">数据库</span> <span class="arrow down"></span></button> <button type="button" aria-label="数据库" class="mobile-dropdown-title"><span class="title">数据库</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/database/redis/" class="nav-link">
+  Redis
+</a></li><li class="dropdown-item"><!----> <a href="/view/database/mysql/" class="nav-link">
+  Mysql
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="java系" class="dropdown-title"><span class="title">java系</span> <span class="arrow down"></span></button> <button type="button" aria-label="java系" class="mobile-dropdown-title"><span class="title">java系</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/java/jdk8/" class="nav-link">
+  Java8新特性
+</a></li><li class="dropdown-item"><h4>
+          MQ
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/mq/rabbitmq/" class="nav-link router-link-active">
+  rabbitMQ
+</a></li></ul></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/view/preface/" class="nav-link">
+  前言
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="数据库" class="dropdown-title"><span class="title">数据库</span> <span class="arrow down"></span></button> <button type="button" aria-label="数据库" class="mobile-dropdown-title"><span class="title">数据库</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/database/redis/" class="nav-link">
+  Redis
+</a></li><li class="dropdown-item"><!----> <a href="/view/database/mysql/" class="nav-link">
+  Mysql
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="java系" class="dropdown-title"><span class="title">java系</span> <span class="arrow down"></span></button> <button type="button" aria-label="java系" class="mobile-dropdown-title"><span class="title">java系</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/java/jdk8/" class="nav-link">
+  Java8新特性
+</a></li><li class="dropdown-item"><h4>
+          MQ
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/mq/rabbitmq/" class="nav-link router-link-active">
+  rabbitMQ
+</a></li></ul></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Rabbitmq</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/view/mq/rabbitmq/" aria-current="page" class="sidebar-link">MQ引言</a></li><li><a href="/view/mq/rabbitmq/rabbitmq.html" class="sidebar-link">RabbitMQ</a></li><li><a href="/view/mq/rabbitmq/install.html" class="sidebar-link">rabbitmq安装</a></li><li><a href="/view/mq/rabbitmq/web.html" class="sidebar-link">web管理界面介绍</a></li><li><a href="/view/mq/rabbitmq/pattern.html" class="sidebar-link">RabbitMQ支持的消息模型</a></li><li><a href="/view/mq/rabbitmq/HelloWorld.html" class="sidebar-link">Hello World模式</a></li><li><a href="/view/mq/rabbitmq/workquene.html" class="sidebar-link">work quene模式</a></li><li><a href="/view/mq/rabbitmq/fanout.html" class="sidebar-link">fanout模式</a></li><li><a href="/view/mq/rabbitmq/direct.html" class="sidebar-link">Direct模式</a></li><li><a href="/view/mq/rabbitmq/topic.html" class="sidebar-link">topci模式</a></li><li><a href="/view/mq/rabbitmq/messageResponse.html" class="sidebar-link">rabbitmq高级之消息应答</a></li><li><a href="/view/mq/rabbitmq/persistence.html" aria-current="page" class="active sidebar-link">rabbitmq高级之持久化</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/view/mq/rabbitmq/persistence.html#前言" class="sidebar-link">前言</a></li><li class="sidebar-sub-header"><a href="/view/mq/rabbitmq/persistence.html#持久化队列" class="sidebar-link">持久化队列</a></li><li class="sidebar-sub-header"><a href="/view/mq/rabbitmq/persistence.html#持久化消息" class="sidebar-link">持久化消息</a></li></ul></li><li><a href="/view/mq/rabbitmq/messageDistribution.html" class="sidebar-link">rabbitmq高级之消息分发</a></li><li><a href="/view/mq/rabbitmq/messageConfirmation.html" class="sidebar-link">rabbitmq高级之消息确认</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="前言"><a href="#前言" class="header-anchor">#</a> 前言</h2> <p>上一节我们已经看到了如何处理任务不丢失的情况，但是如何保障当 RabbitMQ 服务停掉以后消息生产者发送过来的消息不丢失。默认情况下 RabbitMQ 退出或由于某种原因崩溃时，它忽视队列和消息，除非告知它不要这样做。确保消息不会丢失需要做两件事：<strong>我们需要将队列和消息都标记为持久化</strong>。</p> <h2 id="持久化队列"><a href="#持久化队列" class="header-anchor">#</a> 持久化队列</h2> <p>之前我们创建的队列都是非持久化的，rabbitmq 如果重启的化，该队列就会被删除掉，如果
+要队列实现持久化 需要在声明队列的时候把 durable 参数设置为持久化</p> <p><img src="/blogImg/rabbitmq/durable.png" alt="durable"></p> <p>但是需要注意的就是如果之前声明的队列不是持久化的，需要把原先队列先删除，或者重新
+创建一个持久化的队列，不然就会出现错误</p> <p>以下为控制台中持久化与非持久化队列的 UI 显示区：</p> <p><img src="/blogImg/rabbitmq/ui.png" alt="durable2"></p> <p>这个时候即使重启 rabbitmq 队列也依然存在</p> <h2 id="持久化消息"><a href="#持久化消息" class="header-anchor">#</a> 持久化消息</h2> <p>要想让消息实现持久化需要在消息<code>生产者</code>修改代码，在props参数上添加，<code>MessageProperties.PERSISTENT_TEXT_PLAIN</code></p> <p><img src="/blogImg/rabbitmq/props.png" alt="durable2"></p> <p>将消息标记为持久化并不能完全保证不会丢失消息。尽管它告诉 RabbitMQ 将消息保存到磁盘，但是
+这里依然存在当消息刚准备存储在磁盘的时候 但是还没有存储完，消息还在缓存的一个间隔点。此时并没
+有真正写入磁盘。持久性保证并不强，但是对于我们的简单任务队列而言，这已经绰绰有余了。如果需要
+更强有力的持久化策略，参考后边课件<code>发布确认</code>章节。</p></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">更新时间:</span> <span class="time">8/10/2021, 6:03:47 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/view/mq/rabbitmq/messageResponse.html" class="prev">
+        rabbitmq高级之消息应答
+      </a></span> <span class="next"><a href="/view/mq/rabbitmq/messageDistribution.html">
+        rabbitmq高级之消息分发
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"><!----><!----></div></div>
+    <script src="/assets/js/app.aa9867f0.js" defer></script><script src="/assets/js/2.9f0304db.js" defer></script><script src="/assets/js/31.10e60c30.js" defer></script><script src="/assets/js/3.5bf914f4.js" defer></script>
+  </body>
+</html>
