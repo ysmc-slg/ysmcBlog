@@ -54,4 +54,18 @@ redis-cli：客户端，操作入口
   2. 修改redis.conf文件将里面的daemonize no 改成 yes
   3.   使用`redis-server /etc/redis.conf`启动redis，使用redis-cli客户端访问 
 
-  :::   
+  :::  
+
+## 设置密码
+
+如果是本地虚拟机安装，可以不需要设置密码，但如果是阿里云或腾讯云这种安装在云上的话，还是有必要设置一下密码的，之前我没设置，经常有数据被莫名其妙被设置成乱码的情况。设置密码也很简单。
+
+1. 找到`redis.conf`文件
+2. 找到`requirepass`在后面添加你的密码，如
+   ```java
+   // 指定密码为 123
+   requirepass 123
+   ```
+3. 重新启动,`redis-server /etc/redis.conf`，然后输入命令`auth 123`。
+
+   
