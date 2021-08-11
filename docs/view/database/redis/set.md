@@ -16,3 +16,4 @@ Redis的Set是string类型的无序集合。它底层其实是一个value为null
 // 将一个或多个 member 元素加入到集合 key 中，已经存在的 member 元素将被忽略
 sadd <key><value1><value2> ..... 
 ```
+![sadd](http://img.zxqs.top/20210528101002.png)
