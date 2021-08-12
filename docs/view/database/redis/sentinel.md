@@ -30,7 +30,7 @@ sentinel可以让redis实现主从复制，当一个集群中的master失效之�
 * 当哨兵监测到master宕机，会自动将slave切换成master，然后通过`发布订阅模式`通知其他的从服务器，修改配置文件，让它们切换主机。
 
 ## Sentinel的工作方式
-1. 每个Sentinel以`每秒钟一次`的频率向它所知的Master，Slave以及其他 Sentinel 实例发送一个PING命令。
+1. 每个Sentinel以`每10秒钟一次`的频率向它所知的Master，Slave以及其他 Sentinel 实例发送一个PING命令。
 2. 如果一个实例（instance）距离最后一次有效回复PING命令的时间超过 down-after-milliseconds 选项所指定的值，则这个实例会被Sentinel标记为`主观下线`。
 3. 如果一个Master被标记为主观下线，则正在监视这个Master的所有 Sentinel 要以每秒一次的频率确认Master的确进入了主观下线状态。 
 4. 当有足够数量的Sentinel（大于等于配置文件指定的值）在指定的时间范围内确认Master的确进入了主观下线状态，则Master会被标记为`客观下线`。
