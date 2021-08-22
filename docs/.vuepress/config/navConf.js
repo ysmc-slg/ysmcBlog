@@ -29,5 +29,14 @@ module.exports = [
       }
     ],
     
+  },
+  {
+    text: '常用工具',
+    items: [
+      { text: ':orangutan elementUI', link: 'https://element.eleme.cn/#/zh-CN/component/table' },
+      { text: 'Vue文档', link: 'https://cn.vuejs.org/v2/guide/' },
+      { text: ':clock1 momentjs', link: 'http://momentjs.cn/docs/'},
+      { text: 'EasyPoi文档', link: 'http://easypoi.mydoc.io/'}
+    ]
   }
 ]
