@@ -17,6 +17,7 @@ module.exports = [
   {
     text: 'java系',
     items: [
+      { text: 'java基础', link: '/view/java/basics/' },
       { text: 'Java8新特性', link: '/view/java/jdk8/' },
       { 
         text: 'MQ',
