@@ -32,6 +32,9 @@ module.exports = [
     
   },
   {
+    text: 'SpringBoot',link: '/view/springboot/'
+  },
+  {
     text: '常用工具',
     items: [
       { text: 'elementUI', link: 'https://element.eleme.cn/#/zh-CN/component/table', icon: ':tada:'},
