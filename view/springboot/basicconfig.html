@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>SpringBoot基本配置 | 余生慢尝</title>
+    <meta name="generator" content="VuePress 1.8.2">
+    <link rel="icon" href="/favicon.ico">
+    <link name="author" content="余生慢尝">
+    <link name="keywords" content="余生慢尝">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon-152x152.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#3eaf7c">
+    <meta name="description" content="余生慢尝的笔记">
+    <meta name="theme-color" content="#3eaf7c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="msapplication-TileImage" content="/icons/msapplication-icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#000000">
+    
+    <link rel="preload" href="/assets/css/0.styles.b42adf48.css" as="style"><link rel="preload" href="/assets/js/app.dd17c250.js" as="script"><link rel="preload" href="/assets/js/2.3a807b85.js" as="script"><link rel="preload" href="/assets/js/49.f719f755.js" as="script"><link rel="preload" href="/assets/js/3.dcc3d320.js" as="script"><link rel="prefetch" href="/assets/js/10.d0995cad.js"><link rel="prefetch" href="/assets/js/11.c341184e.js"><link rel="prefetch" href="/assets/js/12.3ad3ed48.js"><link rel="prefetch" href="/assets/js/13.69637e18.js"><link rel="prefetch" href="/assets/js/14.51399e31.js"><link rel="prefetch" href="/assets/js/15.dc053f1e.js"><link rel="prefetch" href="/assets/js/16.3cdf495d.js"><link rel="prefetch" href="/assets/js/17.2e879e03.js"><link rel="prefetch" href="/assets/js/18.eec58b10.js"><link rel="prefetch" href="/assets/js/19.4e7d006d.js"><link rel="prefetch" href="/assets/js/20.eb977df5.js"><link rel="prefetch" href="/assets/js/21.2a1b845a.js"><link rel="prefetch" href="/assets/js/22.df3b169d.js"><link rel="prefetch" href="/assets/js/23.481e12cd.js"><link rel="prefetch" href="/assets/js/24.2ca6ae73.js"><link rel="prefetch" href="/assets/js/25.e8fa3ec9.js"><link rel="prefetch" href="/assets/js/26.614d1b9e.js"><link rel="prefetch" href="/assets/js/27.01c5bcb2.js"><link rel="prefetch" href="/assets/js/28.1027d439.js"><link rel="prefetch" href="/assets/js/29.f9f908e5.js"><link rel="prefetch" href="/assets/js/30.0be2b8fa.js"><link rel="prefetch" href="/assets/js/31.c2592d48.js"><link rel="prefetch" href="/assets/js/32.aa877b60.js"><link rel="prefetch" href="/assets/js/33.3ea7450b.js"><link rel="prefetch" href="/assets/js/34.848be2d5.js"><link rel="prefetch" href="/assets/js/35.6837983e.js"><link rel="prefetch" href="/assets/js/36.366689df.js"><link rel="prefetch" href="/assets/js/37.1d8d6db9.js"><link rel="prefetch" href="/assets/js/38.7a6a2d2c.js"><link rel="prefetch" href="/assets/js/39.d1a91e8a.js"><link rel="prefetch" href="/assets/js/4.c6662a6e.js"><link rel="prefetch" href="/assets/js/40.4c1ffd44.js"><link rel="prefetch" href="/assets/js/41.24fdc8cf.js"><link rel="prefetch" href="/assets/js/42.5fb8d307.js"><link rel="prefetch" href="/assets/js/43.1d0b846a.js"><link rel="prefetch" href="/assets/js/44.de15d24c.js"><link rel="prefetch" href="/assets/js/45.5d20b5b9.js"><link rel="prefetch" href="/assets/js/46.6b62a400.js"><link rel="prefetch" href="/assets/js/47.e945db6d.js"><link rel="prefetch" href="/assets/js/48.22ef6c83.js"><link rel="prefetch" href="/assets/js/5.851d534f.js"><link rel="prefetch" href="/assets/js/50.a7805825.js"><link rel="prefetch" href="/assets/js/6.0a2e90c4.js"><link rel="prefetch" href="/assets/js/7.1cc9bea6.js"><link rel="prefetch" href="/assets/js/8.2247b01d.js"><link rel="prefetch" href="/assets/js/9.d3ebcdcf.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.b42adf48.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/assets/img/hero.png" alt="余生慢尝" class="logo"> <span class="site-name can-hide">余生慢尝</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/view/preface/" class="nav-link">
+  前言
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="数据库" class="dropdown-title"><span class="title">数据库</span> <span class="arrow down"></span></button> <button type="button" aria-label="数据库" class="mobile-dropdown-title"><span class="title">数据库</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/database/redis/" class="nav-link">
+  Redis
+</a></li><li class="dropdown-item"><!----> <a href="/view/database/mysql/" class="nav-link">
+  Mysql
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="java系" class="dropdown-title"><span class="title">java系</span> <span class="arrow down"></span></button> <button type="button" aria-label="java系" class="mobile-dropdown-title"><span class="title">java系</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/java/basics/" class="nav-link">
+  java基础
+</a></li><li class="dropdown-item"><!----> <a href="/view/java/jdk8/" class="nav-link">
+  Java8新特性
+</a></li><li class="dropdown-item"><h4>
+          MQ
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/mq/rabbitmq/" class="nav-link">
+  rabbitMQ
+</a></li></ul></li></ul></div></div><div class="nav-item"><a href="/view/springboot/" class="nav-link router-link-active">
+  SpringBoot
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="常用工具" class="dropdown-title"><span class="title">常用工具</span> <span class="arrow down"></span></button> <button type="button" aria-label="常用工具" class="mobile-dropdown-title"><span class="title">常用工具</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://element.eleme.cn/#/zh-CN/component/table" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  elementUI
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="https://cn.vuejs.org/v2/guide/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Vue文档
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="http://momentjs.cn/docs/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  momentjs
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="http://easypoi.mydoc.io/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  EasyPoi文档
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/view/preface/" class="nav-link">
+  前言
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="数据库" class="dropdown-title"><span class="title">数据库</span> <span class="arrow down"></span></button> <button type="button" aria-label="数据库" class="mobile-dropdown-title"><span class="title">数据库</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/database/redis/" class="nav-link">
+  Redis
+</a></li><li class="dropdown-item"><!----> <a href="/view/database/mysql/" class="nav-link">
+  Mysql
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="java系" class="dropdown-title"><span class="title">java系</span> <span class="arrow down"></span></button> <button type="button" aria-label="java系" class="mobile-dropdown-title"><span class="title">java系</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/java/basics/" class="nav-link">
+  java基础
+</a></li><li class="dropdown-item"><!----> <a href="/view/java/jdk8/" class="nav-link">
+  Java8新特性
+</a></li><li class="dropdown-item"><h4>
+          MQ
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/mq/rabbitmq/" class="nav-link">
+  rabbitMQ
+</a></li></ul></li></ul></div></div><div class="nav-item"><a href="/view/springboot/" class="nav-link router-link-active">
+  SpringBoot
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="常用工具" class="dropdown-title"><span class="title">常用工具</span> <span class="arrow down"></span></button> <button type="button" aria-label="常用工具" class="mobile-dropdown-title"><span class="title">常用工具</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://element.eleme.cn/#/zh-CN/component/table" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  elementUI
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="https://cn.vuejs.org/v2/guide/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Vue文档
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="http://momentjs.cn/docs/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  momentjs
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="http://easypoi.mydoc.io/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  EasyPoi文档
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Springboot</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/view/springboot/" aria-current="page" class="sidebar-link">前言</a></li><li><a href="/view/springboot/basicconfig.html" aria-current="page" class="active sidebar-link">SpringBoot基本配置</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/view/springboot/basicconfig.html#web容器基本配置" class="sidebar-link">Web容器基本配置</a></li><li class="sidebar-sub-header"><a href="/view/springboot/basicconfig.html#tomcat-日志配置" class="sidebar-link">tomcat 日志配置</a></li><li class="sidebar-sub-header"><a href="/view/springboot/basicconfig.html#配置文件名称和路径" class="sidebar-link">配置文件名称和路径</a></li></ul></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="web容器基本配置"><a href="#web容器基本配置" class="header-anchor">#</a> Web容器基本配置</h2> <div class="language-xml line-numbers-mode"><pre class="language-xml"><code># 设置端口
+server.port=8081 
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><p>有三种情况：</p> <ol><li>值为 1 代表关闭所有的http端点</li> <li>0 代表随机生成端口</li> <li>自定义端口</li></ol> <h3 id="获取服务端口"><a href="#获取服务端口" class="header-anchor">#</a> 获取服务端口</h3> <p>由于随机生成端口我们不知道端口是多少，可以使用过滤器获取服务端口</p> <div class="language-java line-numbers-mode"><pre class="language-java"><code><span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyApplicationListener</span> <span class="token keyword">implements</span> <span class="token class-name">ApplicationListener</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">WebServerInitializedEvent</span><span class="token punctuation">&gt;</span></span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onApplicationEvent</span><span class="token punctuation">(</span><span class="token class-name">WebServerInitializedEvent</span> event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;event.getWebServer().getPort() = &quot;</span> <span class="token operator">+</span> event<span class="token punctuation">.</span><span class="token function">getWebServer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getPort</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br></div></div><p>开发中一般不会这么写，也不会关闭所有端点和随机生成端口。</p> <p><strong>设置请求压缩</strong></p> <div class="language-xml line-numbers-mode"><pre class="language-xml"><code># 开启请求压缩，默认关闭
+server.compression.enabled=true
+
+# 如果server.compression.enabled中没有想要的，可以手动设置需要压缩的格式
+# server.compression.mime-types=
+
+# 返回数据超过多少进行压缩，默认2KB
+#server.compression.min-response-size=2KB
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br></div></div><p><img src="/blogImg/java/Screenshot_1.png" alt="d"></p> <h2 id="tomcat-日志配置"><a href="#tomcat-日志配置" class="header-anchor">#</a> tomcat 日志配置</h2> <div class="language-xml line-numbers-mode"><pre class="language-xml"><code># 开启访问日志，默认的日志位置在项目运行的临时目录中，默认生成的日志格式 access_log.yyyy-MM-dd.log
+server.tomcat.accesslog.enabled=true
+
+# 设置生成的访问日志在该目录下
+server.tomcat.basedir=D:/Users/IDEAworkspace/new_springboot/tomcat-log
+# 生成日志文件的前缀，默认是 access_log
+server.tomcat.accesslog.prefix=zxqs_log
+# 生成日志文件的后缀
+server.tomcat.accesslog.suffix=.log
+
+# 日志文件中的日期格式
+server.tomcat.accesslog.file-date-format=.yyyyMMdd
+
+# 生成的日志文件内容格式也是可以调整的
+# %h 请求的客户端IP
+# %l 用户的身份
+# %u 用户名
+# %t 请求时间
+# %r 请求地址
+# %s 响应的状态码
+# %b 响应的大小
+server.tomcat.accesslog.pattern=%h %l %u %t \&quot;%r\&quot; %s %b
+
+# 服务器内部日志开启
+logging.level.org.apache.tomcat=debug
+logging.level.org.apache.catalina=debug
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br></div></div><h2 id="配置文件名称和路径"><a href="#配置文件名称和路径" class="header-anchor">#</a> 配置文件名称和路径</h2></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">更新时间:</span> <span class="time">8/29/2021, 4:07:59 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/view/springboot/" class="prev router-link-active">
+        前言
+      </a></span> <!----></p></div> </main></div><div class="global-ui"><!----><!----></div></div>
+    <script src="/assets/js/app.dd17c250.js" defer></script><script src="/assets/js/2.3a807b85.js" defer></script><script src="/assets/js/49.f719f755.js" defer></script><script src="/assets/js/3.dcc3d320.js" defer></script>
+  </body>
+</html>
