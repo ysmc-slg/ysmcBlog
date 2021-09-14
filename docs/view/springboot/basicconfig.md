@@ -305,4 +305,248 @@ spring:
 
 ![java2](/blogImg/java/java2.png)
 
+## 日志使用
+
+说到 Java 日志，很多初学者可能都比较懵，因为这里涉及到太多东西了：Apache Commons Logging、Slf4j、Log4j、Log4j2、Logback、Java Util Logging 等等，这些框架各自有什么作用？他们之间有什么区别？本文主要介绍Logback
+
+Java 中的日志框架主要分为两大类：日志门面和日志实现。
+
+### 日志门面
+日志门面定义了一组日志的接口规范，它并不提供底层具体的实现逻辑。Apache Commons Logging 和 Slf4j 就属于这一类。
+
+### 日志实现
+日志实现则是日志具体的实现，包括日志级别控制、日志打印格式、日志输出形式（输出到数据库、输出到文件、输出到控制台等）。Log4j、Log4j2、Logback 以及 Java Util Logging 则属于这一类。
+
+将日志门面和日志实现分离其实是一种典型的门面模式，这种方式可以让具体业务在不同的日志实现框架之间自由切换，而不需要改动任何代码，开发者只需要掌握日志门面的 API 即可。
+
+日志门面是不能单独使用的，它必须和一种具体的日志实现框架相结合使用。
+
+### Spring Boot 日志实现
+Spring Boot 使用 Apache Commons Logging 作为内部的日志框架门面，它只是一个日志接口，在实际应用中需要为该接口来指定相应的日志实现。
+
+Spring Boot 默认的日志实现是 Logback。
+
+在 Spring Boot 项目中，只要添加了如下 web 依赖，日志依赖就自动添加进来了：
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+如果不是springboot项目，也可以直接引入依赖
+```xml
+<dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-core</artifactId>
+    <version>1.2.3</version>
+</dependency>
+<dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+    <version>1.2.3</version>
+</dependency>
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+    <version>1.7.30</version>
+</dependency>
+```
+### Logback日志级别
+Logback 日志级别比较简单，从严重到普通依次是：
+* ERROR
+* WARN
+* INFO
+* DEBUG
+* TRACE
+
+### springboot 日志配置
+springboot默认使用logback，所以做了一些自动化配置。
+
+如果开发者需要修改日志配置，只需要在 application.properties 文件中通过命令配置即可。
+
+**修改日志级别**：
+```properties
+logging.level.org.springframework.web=debug
+logging.level.org.hibernate=error
+```
+**日志输出到文件**：
+```properties
+# info.log：输出文件的名称
+logging.file.name=info.log
+```
+**指定日志文件全路径**
+```properties
+logging.file.name=/Users/sang/Documents/logs/info.log
+```
+**只定义输出日志文件的路径**
+```properties
+logging.file.path=/Users/sang/Documents/logs
+```
+
+如果想对输出到文件中的日志进行精细化管理，还有如下一些属性可以配置：
+
+
+* logging.logback.rollingpolicy.file-name-pattern：日志归档的文件名，日志文件达到一定大小之后，自动进行压缩归档。
+* logging.logback.rollingpolicy.clean-history-on-start：是否在应用启动时进行归档管理。
+* logging.logback.rollingpolicy.max-file-size：日志文件大小上限，达到该上限后，会自动压缩。
+* logging.logback.rollingpolicy.total-size-cap：日志文件被删除之前，可以容纳的最大大小。
+* logging.logback.rollingpolicy.max-history：日志文件保存的天数。
+
+### Logback 配置
+在 application.properties 中只能实现对日志一些非常简单的配置，如果想实现更加细粒度的日志配置，那就需要使用日志实现的原生配置，例如 Logback 的 classpath:logback.xml，Log4j 的 classpath:log4j.xml 等。如果这些日志配置文件存在于 classpath 下，那么默认情况下，Spring Boot 就会自动加载这些配置文件。
+
+默认的 Logback 配置文件名有两种：
+
+* logback.xml：这种配置文件会直接被日志框架加载。
+* logback-spring.xml：这种配置文件不会被日志框架直接加载，而是由 Spring Boot 去解析日志配置，可以使用 Spring Boot 的高级 Profile 功能。
+
+Spring Boot 中为 Logback 提供了四个默认的配置文件，位置在 `org/springframework/boot/logging/logback/`，分别是：
+
+* defaults.xml：提供了公共的日志配置，日志输出规则等。
+* console-appender.xml：使用 CONSOLE_LOG_PATTERN 添加一个ConsoleAppender。
+* file-appender.xml：添加一个 RollingFileAppender。
+* base.xml：为了兼容旧版 Spring Boot 而提供的。
+
+
+如果需要自定义 logback.xml 文件，可以在自定义时使用这些默认的配置文件，也可以不使用。一个典型的 `logback.xml` 文件如下（resources/logback.xml）：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+    <logger name="org.springframework.web" level="DEBUG"/>
+</configuration>
+```
+
+### 手动配置
+
+下面自己手动配置一个日志文件，以后开发中可以直接引用。
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--
+        输出文件的位置 
+        property属性：定义常量
+        name为常量名，value为常量的值
+
+     -->
+	<property name="log.path" value="logs" />
+    <!-- 
+        日志输出格式 ：
+        %d{yyyy-MM-dd HH:mm:ss.SSS} 日志的时间
+        %thread 执行日志的线程名称
+        %-5level  空出5个空格，然后显示日志级别
+        %logger{20}  表示在哪个类（全限定类名）里面记录的日志，后面的{20} 表示展示的最大长度是20
+        %method %line 那个方法第几行记录
+        %msg    记录日志内容
+        %n      换行
+    -->
+	<property name="log.pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n" />
+
+	<!--
+        appender：日志输出的媒介 
+        控制台输出 
+    -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+            <!-- 日志输出的格式 -->
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 系统日志输出 -->
+	<appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 文件输出路径 -->
+	    <file>${log.path}/sys-info.log</file>
+        <!-- 循环政策：基于时间创建日志文件 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 
+                日志文件名格式 
+                如果文件名是用.gz结尾的，会自动压缩日志文件
+            -->
+			<fileNamePattern>${log.path}/sys-info.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- 日志最大的历史 60天 -->
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+        <!-- 定义日志格式 -->
+		<encoder>
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 过滤的级别 -->
+            <level>INFO</level>
+            <!-- 匹配时的操作：接收（记录） -->
+            <onMatch>ACCEPT</onMatch>
+            <!-- 不匹配时的操作：拒绝（不记录） -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+	</appender>
+	
+	<appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	    <file>${log.path}/sys-error.log</file>
+        <!-- 循环政策：基于时间创建日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>${log.path}/sys-error.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- 日志最大的历史 60天 -->
+			<maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 过滤的级别 -->
+            <level>ERROR</level>
+			<!-- 匹配时的操作：接收（记录） -->
+            <onMatch>ACCEPT</onMatch>
+			<!-- 不匹配时的操作：拒绝（不记录） -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+	
+	<!-- 用户访问日志输出  -->
+    <appender name="sys-user" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.path}/sys-user.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log.path}/sys-user.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 日志最大的历史 60天 -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+    </appender>
+	
+    <!-- 自定义的日志记录器
+            name：写对应的包名，表示对应包里面的代码生成的日志才会被记录
+     -->
+	<!-- 系统模块日志级别控制  -->
+	<logger name="com.ruoyi" level="info" />
+	<!-- Spring日志级别控制  -->
+	<logger name="org.springframework" level="warn" />
+
+    <!-- 根日志记录器，所有包下面的日志都会被记录。必须有 -->
+	<root level="info">
+		<appender-ref ref="console" />
+	</root>
+	
+	<!--系统操作日志-->
+    <root level="info">
+        <appender-ref ref="file_info" />
+        <appender-ref ref="file_error" />
+    </root>
+    
+	<!--系统用户操作日志-->
+    <logger name="sys-user" level="info">
+        <appender-ref ref="sys-user"/>
+    </logger>
+</configuration> 
+```
+
 
