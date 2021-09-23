@@ -1,6 +1,6 @@
 ---
-title: rabbitmq高级之消息确认
-autoPrev: messageDistribution
+title: rabbitmq确保消息发送可靠性
+autoPrev: integrationspringboot
 ---
 
 ## 前言
