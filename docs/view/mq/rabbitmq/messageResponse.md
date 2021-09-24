@@ -39,7 +39,9 @@ public class Worker1 {
           /**
             * 手动应答
             * long deliveryTag: 消息的标记
-            * boolean multiple：是否批量应答消息
+            * boolean multiple：
+                  true表示，当前消息之前，所有未被当前消费者确认的消息都消费成功。
+                  false，表示仅确认当前消息消费成功
             */
           channel.basicAck(message.getEnvelope().getDeliveryTag(),false);
       };
