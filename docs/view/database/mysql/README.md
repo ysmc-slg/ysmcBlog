@@ -99,8 +99,25 @@ select CURDATE();
 SELECT YEAR(NOW()) 年
 SELECT YEAR('2021-07-26') 年
 SELECT MONTH(NOW()) 月
+
 # 英文月
 SELECT MONTHNAME(NOW()) 月
+
+# QUARTER(date) 返回日期的季度
+SELECT QUARTER("2021-10-08"); 
+# 结果：4
+
+# 给定一个日期date，返回一个日期号码（自0年以来的天数）。
+TO_DAYS(date)
+
+# week（date,mode） 获取指定的时间是本年的第几个周,mode是周数的计算方法，可选，详情参考下方表格`mode的值`
+select WEEK(NOW()) as 周
+
+# YEARWEEK(date,mode) 获取年份和周数，mode是周数的计算方法，可选，详情参考下方表格`mode的值`
+# 结果：202140
+SELECT YEARWEEK(CURDATE());
+
+
 
 # str_to_date 将日期格式的字符转换成指定格式的日期
 select STR_TO_DATE('2021-07-26','%Y-%m-%d') out_put
@@ -111,6 +128,13 @@ SELECT DATE_FORMAT('2021-07-26','%Y-%m-%d') out_put
 # DATE_SUB(date,INTERVAL expr type) 函数从日期减去指定的时间间隔。
 select DATE_SUB(NOW(),INTERVAL 1 HOUR) out_put
 # 结果：2021-07-28 11:37:15
+
+# DATEDIFF(date1,date2) 函数返回两个日期之间的天数。
+SELECT DATEDIFF('2008-12-30','2008-12-29') AS DiffDate
+
+# PERIOD_DIFF(period1, period2) 返回两日期之间的差异。结果以月份计算。日期格式为`YYMM或YYYYMM`
+SELECT PERIOD_DIFF(201803, 201801); 
+# 结果： 2
 ```
 | 格式符 | 功能 |
 |:-----:|:----:|
@@ -124,6 +148,101 @@ select DATE_SUB(NOW(),INTERVAL 1 HOUR) out_put
 |   %i  | 分钟（00,01…59） |
 |   %s  | 秒（00,01,…59） |
 
+**mode的值**
+| 参数值 | 一周的第一天 | 范围 | 第一周是怎么计算的 |
+|:-----:|:----:|:----:|:----:|
+|   0  | 星期日 | 0-53 | 从本年的第一个`星期日`开始，是第一周。<br>前面的计算为第0周 |
+|   1  | 星期一 | 0-53 | 假如1月1日到第一个`周一`的天数超过3天，<br>则计算为本年的第一周，否则为第0周 |
+|   2  | 星期日 | 1-53 | 从本年的第一个星期日开始，是第一周。<br>前面的计算为上年度的5X周 |
+|   3  | 星期一 | 1-53 | 假如1月1日到第一个`周一`的天数超过3天，<br>计算为本年的第一周，否则为上年度的第5X周 |
+|   4  | 星期日 | 0-53 | 假如1月1日到第一个`周日`的天数超过3天，<br>计算为本年的第一周，否则为第0周 |
+|   5  | 星期一 | 0-53 | 从本年度第一个`星期一`开始，是第一周。<br>前面的计算为第0周 |
+|   6  | 星期日 | 1-53 | 假如1月1日到第一个`周日`的天数超过3天，<br>计算为本年的第一周，否则为上年度的第5X周 |
+|   7  | 星期一 | 1-53 | 从本年的第一个`星期一`开始，是第一周。<br>前面的计算为上年度的5X周 |
+
+## 日期常用查询
+```sql
+-- mysql 查询当天、本周，本月，上一个月的数据
+-- 今天
+select * from 表名 where to_days(时间字段名) = to_days(now());
+
+-- 昨天
+SELECT * FROM 表名 WHERE TO_DAYS( NOW( ) ) - TO_DAYS( 时间字段名) <= 1
+
+-- 近7天
+SELECT * FROM 表名 where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(时间字段名)
+
+-- 近30天
+SELECT * FROM 表名 where DATE_SUB(CURDATE(), INTERVAL 30 DAY) <= date(时间字段名)
+
+-- 本月
+SELECT * FROM 表名 WHERE DATE_FORMAT( 时间字段名, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+
+-- 上一月
+SELECT * FROM 表名 WHERE PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( 时间字段名, '%Y%m' ) ) =1
+
+-- 查询本季度数据
+select * from 表名 where QUARTER(时间字段名)=QUARTER(now());
+
+-- 查询上季度数据
+select * from 表名 where QUARTER(时间字段名)=QUARTER(DATE_SUB(now(),interval 1 QUARTER));
+
+--查询本年数据
+select * from 表名 where YEAR(时间字段名)=YEAR(NOW());
+
+-- 查询上年数据
+select * from 表名 where year(时间字段名)=year(date_sub(now(),interval 1 year));
+
+--查询当前这周的数据
+SELECT name,submittime FROM enterprise WHERE YEARWEEK(date_format(submittime,'%Y-%m-%d')) = YEARWEEK(now());
+
+--查询上周的数据
+SELECT name,submittime FROM enterprise WHERE YEARWEEK(date_format(submittime,'%Y-%m-%d')) = YEARWEEK(now())-1;
+
+```
+## Case函数
+```sql
+--Case函数:
+--有两种格式：
+--     1.简单Case函数。
+--     2.Case搜索函数。
+--1.简单Case函数：
+--    CASE [COLUMN_NAME] 
+--        WHEN ['条件参数'] THEN ['COLUMN_NAME/显示内容']
+--        WHEN ['条件参数'] THEN ['COLUMN_NAME/显示内容']
+--        ......
+--        ELSE ['COLUMN_NAME/显示内容']
+--        END
+--2.Case搜索函数：
+--    CASE WHEN [COLUMN_NAME] = ['COLUMN_NAME/显示内容/表达式'] THEN [''COLUMN_NAME/显示内容'']
+--         WHEN [COLUMN_NAME] = ['COLUMN_NAME/显示内容/表达式'] THEN [''COLUMN_NAME/显示内容'']
+--         ......
+--         ELSE ['COLUMN_NAME/显示内容']
+--         END
+--说明：两种方式可以实现相同的功能。简单CASE函数较CASE搜索函数语法简洁，但功能方面有所限制。
+--比如说写判断式。同时还需要注意一点：CASE函数只返回第一个符合条件的值，剩下达到CASE部分将会被自动忽略。
+--另外：使用CASE()函数一方面可以在查询时灵活的组织语法结构，另外一方面可以避免对同一张或多张表的多次访问。
+--重点说明：在case 函数中else部分可以没有，如果没有else，默认值为NULL , 这点是需要注意的地方 .
+```
+```sql
+# 简单Case函数
+SELECT  CASE sex 
+WHEN '0' THEN '男'
+WHEN '1' THEN '女'
+ELSE '未知' 
+END
+FROM sys_user
+```
+
+```sql
+# Case搜索函数 
+SELECT  CASE 
+WHEN sex = '0' THEN '男' 
+WHEN sex = '1' THEN '女' 
+ELSE '未知' 
+END
+FROM sys_user
+```
 ## 分组函数
 ### sum 求和、avg 平均值、max 最大值、min 最小值、count 计算个数
 
