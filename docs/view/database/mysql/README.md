@@ -113,7 +113,10 @@ TO_DAYS(date)
 # week（date,mode） 获取指定的时间是本年的第几个周,mode是周数的计算方法，可选，详情参考下方表格`mode的值`
 select WEEK(NOW()) as 周
 
-# YEARWEEK(date,mode) 获取年份和周数，mode是周数的计算方法，可选，详情参考下方表格`mode的值`
+# 返回日期用数字表示的范围是从1到53的日历周。WEEKOFYEAR()是一个兼容性函数，它等效于WEEK(date,3)。
+SELECT WEEKOFYEAR(NOW());
+
+# YEARWEEK(date,mode) 获取年份和周数，mode是周数的计算方法，可选，但是和WEEK中的mode计算方法是不同的
 # 结果：202140
 SELECT YEARWEEK(CURDATE());
 

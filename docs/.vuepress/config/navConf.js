@@ -19,6 +19,7 @@ module.exports = [
     items: [
       { text: 'java基础', link: '/view/java/basics/' },
       { text: 'Java8新特性', link: '/view/java/jdk8/' },
+      { text: 'java反射', link: '/view/java/reflection/' },
       { 
         text: 'MQ',
         items: [
