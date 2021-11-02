@@ -35,9 +35,9 @@ module.exports = [
   {
     text: 'SSM',
     items: [
-      { text: 'Redis', link: '/view/ssm/spring/' },
-      { text: 'Mysql', link: '/view/ssm/springmvc/' },
-      { text: 'Mysql', link: '/view/ssm/mybatis/' }
+      { text: 'Spring', link: '/view/ssm/spring/' },
+      { text: 'SpringMVC', link: '/view/ssm/springmvc/' },
+      { text: 'Mybatis', link: '/view/ssm/mybatis/' }
     ]
   },
   {

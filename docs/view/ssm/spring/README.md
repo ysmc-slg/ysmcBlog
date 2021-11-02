@@ -17,4 +17,15 @@ title: Spring简介
 * 事务
 * JDBCTemplate
 
+## 下载
+后面所有我都使用 `Mavenue` 来添加依赖，如果需要单独下载`jar`，地址如下：
+
+https://repo.spring.io/ui/native/libs-release-local/org/springframework/spring/5.2.1.RELEASE/
+
+下载成功后，Spring中的组件，大致上提供了如下功能：
+
+![图1](/blogImg/ssm/spring1.png)
+
+
+
 
