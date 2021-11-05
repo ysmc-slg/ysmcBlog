@@ -2,6 +2,12 @@
 title: 属性注入
 autoPrev: IOC
 ---
+在 `Spring` 中，想要将一个 `Bean` 注册到 `Spring` 容器中，整体上来说，有三种不同的方式。
+1. XML 注入
+2. java 配置（通过 Java 代码将 Bean 注册到 Spring 容器中）
+3. 自动化扫描
+
+我们先来说 `XML` 注入
 
 ## 构造方法注入
 通过 `Bean` 的构造方法给 `Bean` 的属性注入值。
@@ -105,7 +111,7 @@ public class TestOkHttp {
 首先提供一个 `OkHttpClient` 静态工厂：
 
 ```java
-public class OkHttpFactory {
+public class OkHttpStaticFactory {
     private static OkHttpClient okHttpClient;
 
     // 方法必须是静态
@@ -147,4 +153,161 @@ public class TestOkHttp {
         });
     }
 }
+```
+
+### 实例工厂注入
+实例工厂就是工厂方法是一个实例方法，这样，工厂类必须实例化之后才可以调用工厂方法
+
+这次的工厂类如下：
+```java
+public class OkHttpFactory {
+    private static OkHttpClient okHttpClient;
+
+    public OkHttpClient getInstance(){
+        if(okHttpClient == null){
+            okHttpClient = new OkHttpClient.Builder().build();
+        }
+        return okHttpClient;
+    }
+}
+```
+
+此时，在 `xml` 文件中，需要首先提供工厂方法的实例，然后才可以调用工厂方法：
+
+```xml
+<bean class="top.zxqs.ioc.OkHttpFactory" id="okHttpFactory"/>
+<bean class="okhttp3.OkHttpClient" factory-bean="okHttpFactory" factory-method="getInstance" id="okHttpClient"/>
+```
+自己写的 `Bean` 一般不会使用这两种方式注入，但是，如果需要引入外部 `jar`，外部 `jar` 类的初始化，有可能需要使用这两种方式。
+
+## 复杂属性注入
+### 对象注入
+
+我们经常遇到，一个对象里面引用了另一个对象。这时我们应该怎样注入呢？代码如下：
+```java
+public class User {
+    private String name;
+    private int age;
+    private Cat cat;
+    // ...省略setter/getter方法
+}
+```
+```java
+public class Cat {
+    private Integer age;
+    private String name;
+    private String color;
+    // ...省略setter/getter方法
+}
+```
+
+可以通过 `xml` 注入对象，通过 `ref` 来引用一个对象。
+```xml
+<bean class="top.zxqs.ioc.model.Cat" id="cat">
+    <property name="age" value="3"/>
+    <property name="name" value="小白"/>
+    <property name="color" value="white"/>
+</bean>
+
+<bean class="top.zxqs.ioc.model.User" id="user4">
+    <property name="name" value="张三"/>
+    <property name="age" value="33"/>
+    <property name="cat" ref="cat"/>
+</bean>
+```
+如果你不想引用，还可以这么写
+```xml
+<bean class="top.zxqs.ioc.model.User" id="user4">
+    <property name="name" value="张三"/>
+    <property name="age" value="33"/>
+    <property name="cat">
+        <bean class="top.zxqs.ioc.model.Cat" id="cat">
+            <property name="age" value="3"/>
+            <property name="name" value="小白"/>
+            <property name="color" value="white"/>
+        </bean>
+    </property>
+</bean>
+```
+
+## 数组和集合注入
+```java
+public class User {
+    private String name;
+    private int age;
+    private Cat[] cats;
+    private List<String> hobbies;
+    // ...省略setter/getter方法
+}
+```
+Cat对象代码不变。
+
+数组注入和集合注入在 `xml` 中的配置是一样的。如下：
+```xml
+<bean class="top.zxqs.ioc.model.User" id="user4">
+    <property name="name" value="张三"/>
+    <property name="age" value="33"/>
+    <!--数组-->
+    <property name="cats">
+        <array>
+            <!--可以使用 ref 引用，也可以定义一个Bean-->
+            <ref bean="cat"/>
+            <bean class="top.zxqs.ioc.model.Cat" id="cat2">
+                <property name="name" value="小黑"/>
+                <property name="color" value="black"/>
+                <property name="age" value="2"/>
+            </bean>
+        </array>
+    </property>
+    <!--集合-->
+    <property name="hobbies">
+        <list>
+            <value>篮球</value>
+            <value>足球</value>
+        </list>
+    </property>
+</bean>
+```
+**注意**：
+
+`array` 节点，也可以被 `list` 节点代替。
+
+当然，`array` 或者 `list` 节点中也可以是对象。节点中既可以通过 `ref` 使用外部定义好的 `Bean`，也可以直接在 `list` 或者 `array` 节点中定义 `bean`
+
+### Map 注入
+```java
+public class User {
+    private String name;
+    private int age;
+    private Map<String,Object> map;
+
+    // ...省略setter/getter方法
+}
+```
+
+```xml
+<property name="map">
+    <map>
+        <entry key="age" value="99"/>
+        <entry key="name" value="ysmc"/>
+    </map>
+</property>
+```
+
+## Properties 注入
+```java
+public class User {
+    private String name;
+    private int age;
+    private Properties info;
+    // ...省略setter/getter方法
+}
+```
+```xml
+<property name="info">
+    <props>
+        <prop key="age">99</prop>
+        <prop key="name">ysmc</prop>
+    </props>
+</property>
 ```
