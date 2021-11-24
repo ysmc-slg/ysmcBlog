@@ -140,3 +140,34 @@ public class Main {
     ```
 
     此时除了`@Service`其他注解都不会被扫描。
+
+## 对象注入
+
+自动扫描时的对象的注入有三种方式：
+1. @Autowired
+2. @Resources
+3. @Injected
+
+
+`@Autowired` 是根据类型去查找，然后赋值，这就有一个要求，这个类型只可以有一个对象了，否则就会报错。`@Resources` 是根据名称去查找，默认情况下，定义的变量名，就是查找的名称。当然开发者也可以在 `@Resources` 注解中手动指定。所以，如果一个类存在多个实例，那么就应该使用 `@Resources` 去注入，如果非要使用 `@Autowired` ，也是可以的，此时需要配合另外一个注解，`@Qualifier` 在 `@Qualifier` 中可以指定变量名，两个一起用就可以实现通过变量名查找到变量。
+
+```java
+@Service
+public class UserService {
+
+    @Autowired
+    private UserDao userDao;
+
+    public List<String> getAllUser(){
+        List<String> users = new ArrayList<String>();
+        for (int i=0; i< 10; i++){
+            users.add("ysmc:"+i);
+        }
+        System.out.println(userDao.hello());
+        return users;
+
+    }
+
+}
+```
+
