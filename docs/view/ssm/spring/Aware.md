@@ -9,7 +9,7 @@ autoPrev: beanScope
 
 `Aware` 是一个空接口，有很多实现类。
 
-![Aware](/public/blogImg/spring/Aware.png)
+![Aware](/blogImg/spring/Aware.png)
 
 这些实现的接口，有一些公共特性：
 1. 都是以 Aware 结尾
