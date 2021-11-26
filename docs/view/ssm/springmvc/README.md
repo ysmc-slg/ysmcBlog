@@ -114,23 +114,8 @@ Spring Web MVC 也是服务到工作者模式的实现，但进行可优化。�
     </html>
 
    ```
-5. 在 `resource` 目录下，创建两个配置文件`applicationContext.xml`和 `spring-servlet.xml`，分别为spring和springmvc的配置文件。
+5. 在 `resource` 目录下，创建springmvc的配置文件 `spring-servlet.xml`。
 
-  applicationContext.xml
-  ```xml
-    <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xmlns:context="http://www.springframework.org/schema/context"
-          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
-
-        <context:component-scan base-package="top.zxqs" use-default-filters="true">
-            <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-        </context:component-scan>
-    </beans>
-  ```
-
-  spring-servlet.xml
   ```java
   <?xml version="1.0" encoding="UTF-8"?>
   <beans xmlns="http://www.springframework.org/schema/beans"
@@ -140,11 +125,7 @@ Spring Web MVC 也是服务到工作者模式的实现，但进行可优化。�
 
     <bean class="top.zxqs.controller.MyController" name="/hello"/>
 
-    <context:component-scan base-package="top.zxqs" use-default-filters="false">
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
-
-    <!--这个是处理器映射器，这种方式，请求地址其实就是一个 Bean 的名字，然后根据这个 bean 的名字查找对应的处理器-->
+    <!--这个是处理器映射器，根据请求的路径找到对应的 bean，这里 value 要和上面 bean 中的name名一致-->
     <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" id="handlerMapping">
         <property name="beanName" value="/hello"/>
     </bean>
@@ -163,7 +144,7 @@ Spring Web MVC 也是服务到工作者模式的实现，但进行可优化。�
   </beans>
   ```
 
-6. 加载spring和springmvc配置文件
+6. 加载配置文件
 
    在 web 项目启动时，加载 springmvc 配置文件，这个配置是在 web.xml 中完成的。
    ```xml
@@ -172,14 +153,6 @@ Spring Web MVC 也是服务到工作者模式的实现，但进行可优化。�
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
             version="4.0">
-        <!--扫描spring配置文件-->
-        <context-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:applicationContext.xml</param-value>
-        </context-param>
-        <listener>
-            <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-        </listener>
         <!--spring-mvc配置文件-->
         <servlet>
             <servlet-name>springmvc</servlet-name>
