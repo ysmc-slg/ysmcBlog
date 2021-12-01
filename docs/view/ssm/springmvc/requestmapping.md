@@ -133,9 +133,363 @@ Model 中，放我们的数据，然后在 ModelAndView 中指定视图名称。
   public void hello4(HttpServletRequest req, HttpServletResponse resp) throws IOException {
       resp.setContentType("text/html;charset=utf-8");
       PrintWriter out = resp.getWriter();
-      out.write("hello javaboy!");
+      out.write("hello ysmc!");
       out.flush();
       out.close();
   }
   ```
   这种方式，既可以返回 JSON，也可以返回普通字符串。
+
+### 返回字符串
+* 返回逻辑视图名
+  前面的 ModelAndView 可以拆分为两个部分，Model 和 View，在 SpringMVC 中，Model 我们可以直接在参数中指定，然后返回值是逻辑视图名。
+  ```java
+    @RequestMapping("/hello5")
+    public String hello5(Model model) {
+        model.addAttribute("username", "ysmc");//这是数据模型
+        return "hello";//表示去查找一个名为 hello 的视图
+    }
+  ```
+* 服务端跳转
+  ```java
+  @RequestMapping("/hello5")
+  public String hello5() {
+    return "forward:/jsp/hello.jsp";
+  } 
+  ```
+  forward 后面跟上跳转的路径
+
+* 客户端跳转
+  ```java
+  @RequestMapping("/hello5")
+  public String hello5() {
+    return "redirect:/user/hello";
+  }
+  ```
+  本质上就是浏览器重定向。
+
+* 真的返回一个字符串
+  上面三个返回的字符串，都是有特殊含义的，如果一定要返回一个字符串，需要额外添加一个注解 `@ResponseBody`，这个注解表示当前方法的返回值是展示出来的返回值，没有特殊含义。
+
+  ```java
+  @RequestMapping("/hello5")
+  @ResponseBody
+  public String hello5() {
+    return "redirect:/user/hello";
+  }
+  ```
+  上面代码表示就是想返回一段内容为 `redirect:/user/hello` 的字符串，如果没有`@ResponseBody`注解，会去 `user` 目录下找 `hello.js` 页面。注意，这里如果单纯的返回一个中文字符串，是会乱码的，可以在 `@RequestMapping` 中添加 `produces` 属性来解决：
+  
+  ```java
+  @RequestMapping(value = "/hello5",produces = "text/html;charset=utf-8")
+  @ResponseBody
+  public String hello5() {
+    return "Java 语言程序设计";
+  }
+  ```
+
+## 参数绑定
+
+### 默认支持的参数类型
+默认支持的参数类型，就是直接写在 `@RequestMapping` 所注解的方法中的参数类型，一共有四类：
+* HttpServletRequest
+* HttpServletResponse
+* HttpSession
+* Model/ModelMap
+
+这几个例子参考上一小结。
+
+在请求的方法中，默认的参数就是这几个，如果在方法中，刚好需要这几个参数，那么就可以把这几个参数加入到方法中。
+
+### 简单数据类型
+
+Integer、Boolean、Double 等等简单数据类型也都是支持的。例如添加一本书：
+
+首先，在 /jsp/ 目录下创建 book.jsp 作为图书添加页面：
+
+```html
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<form action="/doAdd" method="post">
+    <table>
+        <tr>
+            <td>书名：</td>
+            <td><input type="text" name="name"></td>
+        </tr>
+        <tr>
+            <td>作者：</td>
+            <td><input type="text" name="author"></td>
+        </tr>
+        <tr>
+            <td>价格：</td>
+            <td><input type="text" name="price"></td>
+        </tr>
+        <tr>
+            <td>是否上架：</td>
+            <td>
+                <input type="radio" value="true" name="ispublic">是
+                <input type="radio" value="false" name="ispublic">否
+            </td>
+        </tr>
+        <tr>
+           <td colspan="2">
+               <input type="submit" value="添加">
+           </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
+```
+创建控制器，提供两个功能，一个是访问jsp页面，另一个是提供添加接口：
+
+```java
+@Controller
+public class BookController {
+    @RequestMapping("/book")
+    public String addBook() {
+        return "book";
+    }
+
+    @PostMapping(value = "/doAdd",produces = "text/html;charset=utf-8")
+    @ResponseBody
+    public void doAdd(String name,String author,Double price,Boolean ispublic) {
+        System.out.println(name);
+        System.out.println(author);
+        System.out.println(price);
+        System.out.println(ispublic);
+    }
+}
+```
+
+**注意:**
+
+由于 doAdd 方法确实不想返回任何值，所以需要给该方法添加 `@ResponseBody` 注解，表示这个方法到此为止，不用再去查找相关视图了。另外， `POST 请求传上来的中文会乱码，所以，我们在 web.xml 中再额外添加一个编码过滤器`：
+
+```xml
+<filter>
+    <filter-name>encoding</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+        <param-name>encoding</param-name>
+        <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+        <param-name>forceRequestEncoding</param-name>
+        <param-value>true</param-value>
+    </init-param>
+    <init-param>
+        <param-name>forceResponseEncoding</param-name>
+        <param-value>true</param-value>
+    </init-param>
+</filter>
+<filter-mapping>
+    <filter-name>encoding</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
+```
+最后，浏览器中输入 http://localhost:8080/book ，就可以执行添加操作，服务端会打印出来相应的日志。
+
+在上面的绑定中，有一个要求，表单中`字段的 name 属性要和接口中的变量名一一对应`，才能映射成功，否则服务端接收不到前端传来的数据。有一些特殊情况，我们的服务端的接口变量名可能和前端不一致，这个时候我们可以通过 `@RequestParam` 注解来解决。
+
+* @RequestParam
+这个注解的功能主要有三方面：
+1. 给变量取别名
+2. 设置变量是否必填
+3. 给变量设置默认值
+
+如下：
+```java
+@PostMapping(value = "/doAdd",produces = "text/html;charset=utf-8")
+@ResponseBody
+public void doAdd(@RequestParam("name") String bookname, String author, Double price, Boolean ispublic) {
+    System.out.println(bookname);
+    System.out.println(author);
+    System.out.println(price);
+    System.out.println(ispublic);
+}
+```
+注解中的 “name” 表示给 bookname 这个变量取的别名，也就是说，bookname 将接收前端传来的 name 这个变量的值。在这个注解中，还可以添加 `required` 属性和 `defaultValue` 属性，如下：
+```java
+@PostMapping(value = "/doAdd",produces = "text/html;charset=utf-8")
+@ResponseBody
+public void doAdd(@RequestParam(value = "name",required = true,defaultValue = "三国演义") String bookname, String author, Double price, Boolean ispublic) {
+    System.out.println(bookname);
+    System.out.println(author);
+    System.out.println(price);
+    System.out.println(ispublic);
+}
+```
+
+::: tip 提示
+
+required 属性默认为 true，即<font color='red'>只要添加了 @RequestParam 注解，这个参数默认就是必填的</font>，如果不填，请求无法提交，会报 400 错误，如果这个参数不是必填项，可以手动把 required 属性设置为 false。但是，<font color='red'>如果同时设置了 defaultValue，这个时候，前端不传该参数到后端，即使 required 属性为 true，它也不会报错</font>。
+
+:::
+
+
+### 实体类
+参数除了是简单数据类型之外，也可以是实体类。实际上，在开发中，大部分情况下，都是实体类。
+
+还是上面的例子，我们改用一个 Book 对象来接收前端传来的数据：
+```java
+public class Book {
+    private String name;
+    private String author;
+    private Double price;
+    private Boolean ispublic;
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "name='" + name + '\'' +
+                ", author='" + author + '\'' +
+                ", price=" + price +
+                ", ispublic=" + ispublic +
+                '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Boolean getIspublic() {
+        return ispublic;
+    }
+
+    public void setIspublic(Boolean ispublic) {
+        this.ispublic = ispublic;
+    }
+}
+
+```
+
+服务端接收数据方式如下：
+
+```java
+@PostMapping(value = "/doAdd",produces = "text/html;charset=utf-8")
+@ResponseBody
+public String doAdd(Book book) {
+    System.out.println(book);
+
+    return book.getAuthor()+">>>"+book.getName();
+}
+```
+前端页面传值的时候和上面的一样，只需要写属性名就可以了，不需要写 book 对象名。
+
+当然，对象中可能还有对象。我们在 book 对象中添加一个 `Author` 对象。
+
+首先创建 Author 对象
+```java
+public class Author {
+    private String name;
+    private Integer age;
+
+    // 省略 setter/getter 和 toString 方法
+}
+
+```
+
+Book：
+```java
+public class Book {
+    private String name;
+    private Double price;
+    private Boolean ispublic;
+    private Author author;
+
+    // 省略 setter/getter 和 toString 方法
+}
+```
+
+Book 对象中，有一个 Author 属性，如何给 Author 属性传值呢？前端写法如下：
+```html
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<form action="/doAdd" method="post">
+    <table>
+        <tr>
+            <td>书名：</td>
+            <td><input type="text" name="name"></td>
+        </tr>
+        <tr>
+            <td>作者姓名：</td>
+            <td><input type="text" name="author.name"></td>
+        </tr>
+        <tr>
+            <td>作者年龄：</td>
+            <td><input type="text" name="author.age"></td>
+        </tr>
+        <tr>
+            <td>价格：</td>
+            <td><input type="text" name="price"></td>
+        </tr>
+        <tr>
+            <td>是否上架：</td>
+            <td>
+                <input type="radio" value="true" name="ispublic">是
+                <input type="radio" value="false" name="ispublic">否
+            </td>
+        </tr>
+        <tr>
+           <td colspan="2">
+               <input type="submit" value="添加">
+           </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
+```
+
+Controller 和上面的没有区别，将作者姓名打印出来就好了。
+```java
+@Controller
+public class BookController {
+    @RequestMapping("/book")
+    public String addBook() {
+        return "book";
+    }
+
+    @PostMapping(value = "/doAdd",produces = "text/html;charset=utf-8")
+    @ResponseBody
+    public String doAdd(Book book) {
+        System.out.println(book);
+
+        return "书名："+book.getName()+">>>作者："+book.getAuthor().getName()+">>>>金额："+book.getPrice()+">>>作者年龄："+book.getAuthor().getAge();
+    }
+}
+```
+这样在后端直接用 Book 对象就可以接收到所有数据了。
+
+### 自定义参数绑定
+
+前面的转换，都是系统自动转换的，这种转换仅限于基本数据类型。特殊的数据类型，系统无法自动转换，例如日期。例如前端传一个日期到后端，后端不是用字符串接收，而是使用一个 Date 对象接收，这个时候就会出现参数类型转换失败。这个时候，需要我们手动定义参数类型转换器，将日期字符串手动转为一个 Date 对象。

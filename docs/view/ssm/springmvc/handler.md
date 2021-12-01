@@ -101,7 +101,7 @@ public class MyController3 implements HttpRequestHandler {
   ```xml
   <context:component-scan base-package="org.sang"/>
   ```
-  具体的在[spring自动化配置](../spring/authConfigure.html#XML 配置自动化扫描)中有详细说明。
+  具体的在[spring自动化配置](../spring/authConfigure.html#XML配置自动化扫描)中有详细说明。
 
 * HandlerMapping
   正常情况下，我们在项目中使用的是 `RequestMappingHandlerMapping`，这个是根据处理器中的注解，来匹配请求（即 @RequestMapping 注解中的 url 属性）。因为在上面我们都是通过实现类来开发接口的，相当于还是一个类一个接口，所以，我们可以通过 `RequestMappingHandlerMapping` 来做处理器映射器，这样我们可以在一个类中开发出多个接口。
@@ -137,7 +137,7 @@ public class MyController3 implements HttpRequestHandler {
 
   <!--视图解析器-->
   <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="viewResolver">
-      <property name="prefix" value="/"/>
+      <property name="prefix" value="/jsp/"/>
       <property name="suffix" value=".jsp"/>
   </bean>
   ```
@@ -161,7 +161,7 @@ public class MyController3 implements HttpRequestHandler {
 
   <!--视图解析器-->
   <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="viewResolver">
-      <property name="prefix" value="/"/>
+      <property name="prefix" value="/jsp/"/>
       <property name="suffix" value=".jsp"/>
   </bean>
   ```
