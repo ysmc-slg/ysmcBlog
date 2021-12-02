@@ -492,4 +492,175 @@ public class BookController {
 
 ### 自定义参数绑定
 
-前面的转换，都是系统自动转换的，这种转换仅限于基本数据类型。特殊的数据类型，系统无法自动转换，例如日期。例如前端传一个日期到后端，后端不是用字符串接收，而是使用一个 Date 对象接收，这个时候就会出现参数类型转换失败。这个时候，需要我们手动定义参数类型转换器，将日期字符串手动转为一个 Date 对象。
+前面的转换，都是系统自动转换的，这种转换仅限于基本数据类型。特殊的数据类型，系统无法自动转换，例如日期。例如前端传一个日期到后端，后端不是用字符串接收，而是使用一个 Date 对象接收，这个时候就会出现参数类型转换失败。这个时候，需要我们手动定义`参数类型转换器`，将日期字符串手动转为一个 Date 对象。
+
+```java
+@Component
+public class DateConverter implements Converter<String, Date> {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    @Override
+    public Date convert(String source) {
+        try {
+            return sdf.parse(source);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
+```
+
+在自定义的参数类型转换器中，将一个 String 转为 Date 对象，同时，将这个转换器注册为一个 Bean。
+
+接下来，在 SpringMVC 的配置文件中，配置该 Bean，使之生效。
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    
+    <context:component-scan base-package="top.zxqs.springmvc02" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+
+    <mvc:annotation-driven conversion-service="conversionService"/>
+
+    <!-- 使参数转换器生效 -->
+    <bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean" id="conversionService">
+        <property name="converters">
+            <set>
+                <ref bean="dateConverter"/>
+            </set>
+        </property>
+    </bean>
+
+    <!--视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="viewResolver">
+        <property name="prefix" value="/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+</beans>
+```
+自定义参数转换器 `DateConverter` 通过 `@Component` 注解扫描到 Spring 容器中，所以在 set 中可以直接引用。
+
+在前端页面上传一个时间
+
+```html
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<form action="/doAdd" method="post">
+    <table>
+        <tr>
+            <td>书名：</td>
+            <td><input type="text" name="name"></td>
+        </tr>
+        <tr>
+            <td>作者姓名：</td>
+            <td><input type="text" name="author.name"></td>
+        </tr>
+        <tr>
+            <td>作者年龄：</td>
+            <td><input type="text" name="author.age"></td>
+        </tr>
+        <tr>
+            <td>出生日期：</td>
+            <td><input type="date" name="author.birthday"></td>
+        </tr>
+        <tr>
+            <td>价格：</td>
+            <td><input type="text" name="price"></td>
+        </tr>
+        <tr>
+            <td>是否上架：</td>
+            <td>
+                <input type="radio" value="true" name="ispublic">是
+                <input type="radio" value="false" name="ispublic">否
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="添加">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
+```
+
+配置完成后，在服务端就可以接收前端传来的日期参数了。
+
+
+### 集合类的参数
+
+**String 数组**
+String 数组可以直接用数组去接收，前端传递的时候，数组的传递其实就是多个相同的 key ，这种一般用在 checkbox 中较多。
+
+例如前端增加兴趣爱好一项
+```xml
+<form action="/doAdd" method="post">
+    <table>
+        <tr>
+            <td>书名：</td>
+            <td><input type="text" name="name"></td>
+        </tr>
+        <tr>
+            <td>作者姓名：</td>
+            <td><input type="text" name="author.name"></td>
+        </tr>
+        <tr>
+            <td>作者年龄：</td>
+            <td><input type="text" name="author.age"></td>
+        </tr>
+        <tr>
+            <td>出生日期：</td>
+            <td><input type="date" name="author.birthday"></td>
+        </tr>
+        <tr>
+            <td>兴趣爱好：</td>
+            <td>
+                <input type="checkbox" name="favorites" value="足球">足球
+                <input type="checkbox" name="favorites" value="篮球">篮球
+                <input type="checkbox" name="favorites" value="乒乓球">乒乓球
+            </td>
+        </tr>
+        <tr>
+            <td>价格：</td>
+            <td><input type="text" name="price"></td>
+        </tr>
+        <tr>
+            <td>是否上架：</td>
+            <td>
+                <input type="radio" value="true" name="ispublic">是
+                <input type="radio" value="false" name="ispublic">否
+            </td>
+        </tr>
+        <tr>
+           <td colspan="2">
+               <input type="submit" value="添加">
+           </td>
+        </tr>
+    </table>
+</form>
+```
+
+在服务端用一个数组去接收 favorites 参数：
+
+```java
+@PostMapping(value = "/doAdd",produces = "text/html;charset=utf-8")
+@ResponseBody
+public void doAdd(Book book,String[] favorites) {
+    System.out.println(Arrays.toString(favorites));
+    System.out.println(book);
+}
+```
+注意，前端传来的数组对象，服务端不可以使用 List 集合去接收。
