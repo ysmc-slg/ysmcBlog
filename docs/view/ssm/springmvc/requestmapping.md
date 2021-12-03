@@ -664,3 +664,299 @@ public void doAdd(Book book,String[] favorites) {
 }
 ```
 注意，前端传来的数组对象，服务端不可以使用 List 集合去接收。
+
+**List 集合**
+
+如果需要使用 List 集合接收到前端传来的数据，List 集合本身需要放在一个封装对象中，这个时候，List中，可以是基本数据类型，也可以是对象。
+
+首先来看集合中是 String 类型。
+
+在 `Author` 对象添加一个爱好集合
+
+```java
+public class Author {
+    private String name;
+    private Integer age;
+    private List<String> favorites;
+
+    // 省略 setter/getter 和 toString方法
+}
+```
+
+Controller
+```java
+@PostMapping(value = "/doAdd",produces = "text/html;charset=utf-8")
+@ResponseBody
+public void doAdd(Book book) {
+    System.out.println(Arrays.toString(favorites));
+    System.out.println(book);
+}
+```
+
+页面和返回数组类似。
+
+```html
+<form action="/doAdd" method="post">
+    <table>
+        <tr>
+            <td>书名：</td>
+            <td><input type="text" name="name"></td>
+        </tr>
+        <tr>
+            <td>作者姓名：</td>
+            <td><input type="text" name="author.name"></td>
+        </tr>
+        <tr>
+            <td>作者年龄：</td>
+            <td><input type="text" name="author.age"></td>
+        </tr>
+        <tr>
+            <td>出生日期：</td>
+            <td><input type="date" name="author.birthday"></td>
+        </tr>
+        <tr>
+            <td>兴趣爱好：</td>
+            <td>
+                <input type="checkbox" name="author.favorites" value="足球">足球
+                <input type="checkbox" name="author.favorites" value="篮球">篮球
+                <input type="checkbox" name="author.favorites" value="乒乓球">乒乓球
+            </td>
+        </tr>
+        <tr>
+            <td>价格：</td>
+            <td><input type="text" name="price"></td>
+        </tr>
+        <tr>
+            <td>是否上架：</td>
+            <td>
+                <input type="radio" value="true" name="ispublic">是
+                <input type="radio" value="false" name="ispublic">否
+            </td>
+        </tr>
+        <tr>
+           <td colspan="2">
+               <input type="submit" value="添加">
+           </td>
+        </tr>
+    </table>
+</form>
+```
+
+使用`author.favorites` 给 `Author` 对象中的集合赋值。如果集合中是对象，就不能这么做了。
+
+例如有一个班级类，班级里边有学生，学生有多个：
+
+```java
+public class MyClass {
+    private Integer id;
+    private List<Student> students;
+
+    @Override
+    public String toString() {
+        return "MyClass{" +
+                "id=" + id +
+                ", students=" + students +
+                '}';
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+}
+```
+
+```java
+public class Student {
+    private Integer id;
+    private String name;
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+```
+
+服务端代码如下：
+
+```java
+@Controller
+public class BookController {
+
+    @RequestMapping("/getClass")
+    public String getMyClass() {
+        return "class";
+    }
+
+    @PostMapping(value = "addclass",produces = "text/html;charset=utf-8")
+    @ResponseBody
+    public String addclass(MyClass myClass){
+        return myClass.toString();
+    }
+}
+```
+
+添加班级的时候，可以传递多个 Student，前端页面写法如下：
+
+```html
+<form action="/addclass" method="post">
+    <table>
+        <tr>
+            <td>班级编号：</td>
+            <td><input type="text" name="id"></td>
+        </tr>
+        <tr>
+            <td>学生编号：</td>
+            <td><input type="text" name="students[0].id"></td>
+        </tr>
+        <tr>
+            <td>学生姓名：</td>
+            <td><input type="text" name="students[0].name"></td>
+        </tr>
+        <tr>
+            <td>学生编号：</td>
+            <td><input type="text" name="students[1].id"></td>
+        </tr>
+        <tr>
+            <td>学生姓名：</td>
+            <td><input type="text" name="students[1].name"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="提交">
+            </td>
+        </tr>
+    </table>
+</form>
+```
+集合中的是 `Student`对象，`students[0].id` 就表示给集合中的第一个 `Student`实例的 id 赋值。因为有多个Student，所以要加上下标。
+
+这样也有一个缺点，第一个学生编号和姓名不填，在集合中也还是占了`下标为0`的空间，所以返回的值就是这样。
+
+```text
+MyClass{id=12, students=[Student{id=null, name=''}, Student{id=1, name='张三'}]}
+```
+前端一般也不会以这种形式传递对象。
+
+**Map：**
+
+相对于实体类而言，Map 是一种比较灵活的方案，但是，Map 可维护性比较差，因此一般不推荐使用。
+
+例如给上面的班级类添加其他属性信息：
+
+```java
+public class MyClass {
+    private Integer id;
+    private List<Student> students;
+    private Map<String, Object> info;
+
+    @Override
+    public String toString() {
+        return "MyClass{" +
+                "id=" + id +
+                ", students=" + students +
+                ", info=" + info +
+                '}';
+    }
+
+    public Map<String, Object> getInfo() {
+        return info;
+    }
+
+    public void setInfo(Map<String, Object> info) {
+        this.info = info;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+}
+```
+在前端，通过如下方式给 info 这个 Map 赋值。
+
+```html
+<form action="/addclass" method="post">
+    <table>
+        <tr>
+            <td>班级编号：</td>
+            <td><input type="text" name="id"></td>
+        </tr>
+        <tr>
+            <td>班级名称：</td>
+            <td><input type="text" name="info['name']"></td>
+        </tr>
+        <tr>
+            <td>班级位置：</td>
+            <td><input type="text" name="info['pos']"></td>
+        </tr>
+        <tr>
+            <td>学生编号：</td>
+            <td><input type="text" name="students[0].id"></td>
+        </tr>
+        <tr>
+            <td>学生姓名：</td>
+            <td><input type="text" name="students[0].name"></td>
+        </tr>
+        <tr>
+            <td>学生编号：</td>
+            <td><input type="text" name="students[1].id"></td>
+        </tr>
+        <tr>
+            <td>学生姓名：</td>
+            <td><input type="text" name="students[1].name"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="提交">
+            </td>
+        </tr>
+    </table>
+</form>
+```
+
+
+
+
