@@ -500,3 +500,101 @@ public void getUserByPage (){
     System.out.println(users);
 }
 ```
+
+### where
+where 用来处理查询参数，例如存在下面一个查询函数
+```java
+List<User> getUserByUsernameAndId(@Param("id") Integer id, @Param("name") String name);
+```
+这个查询的复杂之处在于：每一个参数都是可选的，如果 id 为null，则表示根据 name 查询，name 为null，则表示根据id查询，两个都为null，表示查询所有。
+
+```xml
+<select id="getUserByUsernameAndId" resultMap="MyResultMap">
+    select * from user
+    <where>
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="name != null">
+            and username like concat('%',#{name},'%')
+        </if>
+    </where>
+</select>
+```
+用 where 节点将所有的查询条件包起来，如果有满足的条件 `where` 节点会自动加上，如果没有，`where` 节点也将不存在，在只有一个参数的情况下，`where` 还会自动将 `and` 关键字去掉。
+
+```java
+@Test
+public void getUserByUsernameAndId(){
+    List<User> users = userMapper.getUserByUsernameAndId(12, "广坤");
+    System.out.println(users);
+}
+```
+
+### foreach
+
+`foreach` 用来处理数组/集合参数。
+
+例如，我们有一个批量查询的需求。
+```java
+List<User> getUserByIds(Integer[] ids);
+```
+对应的 XML 如下：
+
+```xml
+<select id="getUserByIds" resultMap="MyResultMap">
+    select * from user where id in
+    <foreach collection="array" open="(" close=")" item="id" separator=",">
+        #{id}
+    </foreach>
+</select>
+```
+
+在 `mapper` 中，通过 `foreach` 节点来遍历数组，`collection` 表示数组变量，`open` 表示循环开始时，左边的符号，`close` 表示循环结束后，右边的符号，`item` 数组中的每一个`id`，`separator`表示循环的元素之间的分隔符。
+
+::: waring 注意
+
+默认情况下，无论你的数组/集合 参数名字是什么，在 XML 中访问的时候，都是 `array`，开发者可以通过 `@Param` 注解给参数重新指定名字。
+
+:::
+
+例如还有一个批量插入的需求
+```java
+Integer batchInsertUser(@Param("users") List<User> users);
+```
+然后，定义该方法对应的 `mapper`：
+
+```xml
+<insert id="batchInsertUser">
+    insert into user (username,address) values 
+    <foreach collection="users" separator="," item="user">
+        (#{user.username},#{user.address})
+    </foreach>
+</insert>
+```
+然后进行测试：
+```java
+@Test
+public void batchInsertUser(){
+    List<User> users = new ArrayList<User>();
+    User user = new User();
+    user.setUsername("ysmc");
+    user.setAddress("www.zxqs.top");
+    users.add(user);
+
+    User user2 = new User();
+    user2.setUsername("zhangsan");
+    user2.setAddress("济南");
+    users.add(user2);
+
+    Integer integer = userMapper.batchInsertUser(users);
+    System.out.println(integer);
+}
+```
+
+### SQL 片段
+大家知道，在 SQL 查询中，一般不建议写 `*`，因为 select `*` 会降低查询效率。但是，每次查询都要把字段名列出来，太麻烦。这种情况，我们可以利用 SQL 片段来解决这个问题。
+
+例如，我们在 mapper 中定义一个 SQL 片段。
+
+
