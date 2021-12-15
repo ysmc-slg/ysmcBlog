@@ -223,6 +223,8 @@ public class SqlSessionFactoryUtils {
     </mappers>
     ```
 
+    此时，UserMapper.xml 和 UserMapper 接口，就可以不在同意目录下。UserMapper.xml在 resources 下的mapper目录中
+
 ## $ 和 # 的区别
 
 这是一个非常高频的面试题，虽然简单。在面试中，如果涉及到 MyBatis，一般情况下，都是这个问题。
@@ -589,6 +591,7 @@ public void batchInsertUser(){
 
     Integer integer = userMapper.batchInsertUser(users);
     System.out.println(integer);
+    SQLSESSION.commit();
 }
 ```
 
@@ -597,4 +600,51 @@ public void batchInsertUser(){
 
 例如，我们在 mapper 中定义一个 SQL 片段。
 
+```xml
+<sql id="baseColumn">
+    select id,username,address from user
+</sql>
+```
+然后，在其他 SQL 中，就可以引用这个变量。修改之前的根据id查询用户的sql。
 
+```xml
+<select id="selectUserById" resultMap="MyResultMap">
+    <include refid="baseColumn"/>
+    where id = #{id};
+</select>
+```
+
+### set
+set 关键字一般用在更新中，因为大部分情况下，更新的字段可能不确定，如果对象中存在改字段的值，就更新该字段，不存在，就不更新。例如如下方法：
+``` java
+Integer updateUser(User user);
+```
+现在，这个方法的需求是，根据用户 id 来跟新用户的其他属性，所以，user 对象中一定存在 id，其他属性则不确定，其他属性要是有值，就更新，没值（也就是为 null 的时候），则不处理该字段。
+
+我们结合 set 节点，写出来的 sql 如下：
+```xml
+<update id="updateUser" parameterType="top.zxqs.mode.User">
+    update user
+    <set>
+        <if test="username != null">username = #{username},</if>
+        <if test="address != null">address = #{address}</if>
+    </set>
+    where id = #{id}
+</update>
+```
+
+测试：
+```java
+@Test
+public void updateUser(){
+    User user = new User();
+    user.setId(12);
+    user.setUsername("lisi");
+    user.setAddress("新疆");
+
+    Integer integer = userMapper.updateUser(user);
+    System.out.println(integer);
+    SQLSESSION.commit();
+
+}
+```
