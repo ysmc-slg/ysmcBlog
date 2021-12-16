@@ -139,7 +139,7 @@ public void updateUserById() {
 
 看完前面的 HelloWorld，接下来我们通过一张网络图片来看下 MyBatis 架构：
 
-![架构图](/plogImg/ssm/mybatis-4-1.png)
+![架构图](/blogImg/ssm/mybatis-4-1.png)
 
 1. mybatis 配置:`mybatis-config.xml`，此文件作为 mybatis 的`全局配置文件`，配置了 mybatis 的运行环境等信息。另一个 `mapper.xml` 文件即 sql 映射文件，文件中配置了操作数据库的 sql 语句。此文件需要在 mybatis-config.xml 中加载。
 2. 通过 mybatis 环境等配置信息构造 SqlSessionFactory 即会话工厂

@@ -324,7 +324,7 @@ public void getUserById(){
 ```
 不调用 Address 属性时，`getAddressById` 方法不会执行
 
-![getAddressById1]{/blogImg/ssm/2021-12-16_16-40-02.png}
+![getAddressById1](/blogImg/ssm/2021-12-16_16-40-02.png)
 
 ```java
 @Test
@@ -335,4 +335,47 @@ public void getUserById(){
 ```
 此时，`getAddressById` 就会执行
 
-![getAddressById2]{/blogImg/ssm/2021-12-16_16-44-40.png}
+![getAddressById2](/blogImg/ssm/2021-12-16_16-44-40.png)
+
+## 一对多查询
+
+一对多查询，也是一个非常典型的使用场景。比如用户和角色的关系，一个用户可以具备多个角色。
+
+用户表继续用一对一的，新建角色表，因为用户和角色是多对多，所以还需要一个`user_role`表
+
+```sql
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE `role`  (
+  `role_id` bigint(0) NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(155) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色名称',
+  PRIMARY KEY (`role_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of role
+-- ----------------------------
+INSERT INTO `role` VALUES (1, '管理员');
+INSERT INTO `role` VALUES (2, '普通角色');
+
+SET FOREIGN_KEY_CHECKS = 1;
+```
+
+```sql
+DROP TABLE IF EXISTS `user_role`;
+CREATE TABLE `user_role`  (
+  `user_id` bigint(0) NOT NULL COMMENT '用户id',
+  `role_id` bigint(0) NOT NULL COMMENT '角色id',
+  PRIMARY KEY (`user_id`, `role_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user_role
+-- ----------------------------
+INSERT INTO `user_role` VALUES (7, 1);
+INSERT INTO `user_role` VALUES (7, 2);
+INSERT INTO `user_role` VALUES (8, 2);
+
+SET FOREIGN_KEY_CHECKS = 1;
+```
+创建`role`表的实体类
+
