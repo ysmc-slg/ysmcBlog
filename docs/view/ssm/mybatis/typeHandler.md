@@ -119,7 +119,28 @@ public class List2VarcharHandler implements TypeHandler<List<String>> {
             <if test="favorites != null">#{favorites,typeHandler = top.zxqs.handler.List2VarcharHandler}</if>
         )
     </insert>
-    
+
 </mapper>
+```
+
+最后进行测试：
+```java
+@Test
+public void insertUser(){
+    User user = new User();
+    user.setUserName("zhangsan");
+    user.setFavorites(Arrays.asList("篮球","足球"));
+    Integer integer = userMapper.insertUser(user);
+
+    sqlSession.commit();
+}
+
+@Test
+public void selectUser(){
+    List<User> users = userMapper.selectUser();
+    for (User user : users) {
+        System.out.println(user);
+    }
+}
 ```
 
