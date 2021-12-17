@@ -377,5 +377,99 @@ INSERT INTO `user_role` VALUES (8, 2);
 
 SET FOREIGN_KEY_CHECKS = 1;
 ```
-创建`role`表的实体类
+创建`role`表的实体类，同时修改 User 类
 
+```java
+public class Role {
+    private Long roleID;
+    private String roleName;
+
+    // 省略setter/geter/toString方法
+}
+```
+
+```java
+public class User {
+    private Long userId;
+    private String userName;
+    private Long addressId;
+
+    private List<Role> roles;
+    // 省略setter/geter/toString方法
+}
+```
+
+在`UserMapper.XML`中进行查询
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.zxqs.mapper.UserMapper">
+    <resultMap id="UserResult" type="top.zxqs.mode.User">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="addressId" column="address_id"/>
+        <collection property="roles" ofType="top.zxqs.mode.Role">
+            <id property="roleId" column="role_id"/>
+            <result property="roleName" column="role_name"/>
+        </collection>
+    </resultMap>
+
+    <select id="getAllUserRole" resultMap="UserResult">
+        select u.*,r.role_name from user u
+            left join user_role ur on u.user_id = ur.user_id
+            left join role r on ur.role_id = r.role_id
+    </select>
+</mapper>
+```
+在 resultMap 中，通过 `collection` 节点来描述集合的映射关系。
+
+在接口中定义方法：
+```java
+public interface UserMapper {
+
+    List<User> getAllUserRole();
+}
+```
+
+最后性质查询方法
+```java
+@Test
+public void getAllUserRole(){
+    List<User> allUserRole = userMapper.getAllUserRole();
+    for(User user : allUserRole){
+        System.out.println(user);
+    }
+}
+```
+
+结果如下：
+
+```java
+10:19:39.740 [main] DEBUG top.zxqs.mapper.UserMapper.getAllUserRole - <==      Total: 7
+User{userId=7, userName='张三', addressId=1, roles=[Role{roleID=null, roleName='管理员'}, Role{roleID=null, roleName='普通角色'}]}
+User{userId=8, userName='李四', addressId=2, roles=[Role{roleID=null, roleName='普通角色'}]}
+User{userId=9, userName='王五', addressId=3, roles=[]}
+User{userId=10, userName='赵六', addressId=4, roles=[]}
+User{userId=11, userName='刘某', addressId=6, roles=[]}
+User{userId=12, userName='lisi', addressId=5, roles=[]}
+```
+
+可以看到执行sql查询返回的个数是7，而打印的 user 有6个，这是因为 mybatis 会将主键相同的两条记录，自动整合成一个对象，前提是 `<resultMap>` 标签下的主键要放到 `<id>` 标签里面。
+
+如：
+```xml
+<resultMap id="UserResult" type="top.zxqs.mode.User">
+    <id property="userId" column="user_id"/>
+    <result property="userName" column="user_name"/>
+    <result property="addressId" column="address_id"/>
+    <collection property="roles" ofType="top.zxqs.mode.Role">
+        <id property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+    </collection>
+</resultMap>
+```
+
+一对多也可以使用 `懒加载` 和一对一是一样的，这里就不多说了。
