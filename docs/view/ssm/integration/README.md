@@ -149,7 +149,7 @@ public interface UserMapper {
 </build>
 ```
 
-具体为什么有两种方式，在上面 mybatis 中有提到，请移步 [mybatis的mapper配置](../mybatis/mapper.html#引入 Mapper)
+具体为什么有两种方式，在 mybatis 文章中有提到，请移步 [mybatis的mapper配置](../mybatis/mapper.html#引入Mapper)
 
 最后在 resources 下创建 `db.propertie` 用来配置数据源
 ```properties
