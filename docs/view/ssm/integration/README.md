@@ -78,7 +78,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 </dependencies>
 ```
 
-然后，创建 `User`实体类，mapper 接口 和 mapper.xml
+然后，创建 `User`实体类 mapper 接口 和 mapper.xml
 
 ```java
 public class User implements Serializable {
@@ -170,6 +170,9 @@ db.minIdle=10
 db.maxIdle=15
 ```
 
+最终层次结构如下：
+
+
 ![结构层次](/blogImg/ssm/Snipaste_2021-12-20_16-35-53.png)
 
 ## 开始整合
@@ -225,7 +228,7 @@ db.maxIdle=15
 
 1. `context:property-placeholder`：加载配置属性文件，这样就能便捷的去修改连接数据库的信息。使用 `${}` 来获取配置文件中的值。
 
-2. `dataSource`：数据源，这里我是用的书 阿里巴巴的 `Druid`
+2. `dataSource`：数据源，这里我是用的是 阿里巴巴的 `Druid`
 
 3. `SqlSessionFactoryBean`：配置 `SqlSessionFactory` 里面的参数很多。
    1. `typeAliasesPackage` 是设置别名，在 mapper.xml 中 resultType 就可以直接写 User，不需要写全类名。 
@@ -303,6 +306,21 @@ springMVC 简单的配置一下就好了。
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 </web-app>
+```
+
+最后创建 `Controller` 进行测试，这里为了省事，就不访问页面了，直接返回 `json` 格式的数据
+
+```java
+@RestController
+public class UserController {
+    @Autowired
+    UserService userService;
+
+    @RequestMapping("/users")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+}
 ```
 
 

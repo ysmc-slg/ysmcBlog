@@ -4,7 +4,7 @@ autoPrev: DispatcherServlet
 ---
 ::: tip
 
-文章引用微信公众号：江南一点雨 《Spring入门》
+文章引用 江南一点雨 [SpringMVC 处理器详解](http://itboyhub.com/2021/01/28/springmvc-handler/)
 
 :::
 

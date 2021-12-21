@@ -3,7 +3,7 @@ title: SpringMVC简介和入门
 ---
 ::: tip
 
-文章引用微信公众号：江南一点雨 《Spring入门》
+文章引用 江南一点雨 [springMVC简介](http://itboyhub.com/2021/01/28/springmvc-introduce/)
 
 :::
 ## SpringMVC简介

@@ -2,6 +2,14 @@
 title: SpringMVC 中 Controller 的各种细节
 autoPrev: handler
 ---
+
+::: tip
+
+文章引用 江南一点雨 [SpringMVC 中 Controller 的各种细节](http://itboyhub.com/2021/01/28/springmvc-controller/)
+
+:::
+
+
 ## @RequestMapping
 这个注解用来标记一个接口，这算是我们开开发中使用最多的注解之一。
 

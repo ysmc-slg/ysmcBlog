@@ -3,7 +3,7 @@ title: DispatcherServlet详解
 ---
 ::: tip
 
-文章引用微信公众号：江南一点雨 《Spring入门》
+文章引用 江南一点雨 [SpringMVC 中央控制器 DispatcherServlet 详解](http://itboyhub.com/2021/01/28/springmvc-dispatcherservlet/)
 
 :::
 ## DispatcherServlet作用
