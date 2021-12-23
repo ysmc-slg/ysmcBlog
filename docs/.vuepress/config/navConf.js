@@ -44,10 +44,10 @@ module.exports = [
         items: [
           {
             text: 'Spring',
-            link: '/view/ssm/ssm-senior/spring'
+            link: '/view/ssm/ssm-senior/spring/'
           },{
             text: 'SpringMVC',
-            link: '/view/ssm/ssm-senior/springmvc'
+            link: '/view/ssm/ssm-senior/springmvc/'
           },
         ]
       }
