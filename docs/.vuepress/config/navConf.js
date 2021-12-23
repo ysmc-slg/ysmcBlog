@@ -38,7 +38,19 @@ module.exports = [
       { text: 'Spring', link: '/view/ssm/spring/' },
       { text: 'SpringMVC', link: '/view/ssm/springmvc/' },
       { text: 'Mybatis', link: '/view/ssm/mybatis/' },
-      { text: 'SSM整合', link: '/view/ssm/integration/' }
+      { text: 'SSM整合', link: '/view/ssm/integration/' },
+      { 
+        text: '高级部分',
+        items: [
+          {
+            text: 'Spring',
+            link: '/view/ssm/ssm-senior/spring'
+          },{
+            text: 'SpringMVC',
+            link: '/view/ssm/ssm-senior/springmvc'
+          },
+        ]
+      }
     ]
   },
   {
