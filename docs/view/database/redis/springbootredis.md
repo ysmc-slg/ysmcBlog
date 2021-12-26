@@ -83,6 +83,63 @@ public class RedisConfig extends CachingConfigurerSupport{
 }
 ```
 
+```java
+public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T>
+{
+    @SuppressWarnings("unused")
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+
+    private Class<T> clazz;
+
+    static
+    {
+        ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+    }
+
+    public FastJson2JsonRedisSerializer(Class<T> clazz)
+    {
+        super();
+        this.clazz = clazz;
+    }
+
+    @Override
+    public byte[] serialize(T t) throws SerializationException
+    {
+        if (t == null)
+        {
+            return new byte[0];
+        }
+        return JSON.toJSONString(t, SerializerFeature.WriteClassName).getBytes(DEFAULT_CHARSET);
+    }
+
+    @Override
+    public T deserialize(byte[] bytes) throws SerializationException
+    {
+        if (bytes == null || bytes.length <= 0)
+        {
+            return null;
+        }
+        String str = new String(bytes, DEFAULT_CHARSET);
+
+        return JSON.parseObject(str, clazz);
+    }
+
+    public void setObjectMapper(ObjectMapper objectMapper)
+    {
+        Assert.notNull(objectMapper, "'objectMapper' must not be null");
+        this.objectMapper = objectMapper;
+    }
+
+    protected JavaType getJavaType(Class<?> clazz)
+    {
+        return TypeFactory.defaultInstance().constructType(clazz);
+    }
+}
+
+```
+
 这样其实已经设置完了，但是我们缓存或者获取的数据类型和个数，有时候是不同的，调用redisTemplate中的方法也是不同的。
 
 我们可以创建一个工具类，在工具类中进行缓存数据和获取数据
@@ -322,5 +379,5 @@ class SpringbootredisApplicationTests {
 
 使用 redis 图形化客户端可以看到，缓存中多了一个 `hello`，并且 30秒 之后自动删除。
 
-![redis23](/blogImg/redis/Snipaste_2021-12-24_15-06-55)
+![redis23](/blogImg/redis/Snipaste_2021-12-24_15-06-55.png)
 
