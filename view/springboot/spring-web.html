@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>springboot 整合web 开发 | 余生慢尝</title>
+    <meta name="generator" content="VuePress 1.8.2">
+    <link rel="icon" href="/favicon.ico">
+    <link name="author" content="余生慢尝">
+    <link name="keywords" content="余生慢尝">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon-152x152.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#3eaf7c">
+    <meta name="description" content="余生慢尝的笔记">
+    <meta name="theme-color" content="#3eaf7c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="msapplication-TileImage" content="/icons/msapplication-icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#000000">
+    
+    <link rel="preload" href="/assets/css/0.styles.b42adf48.css" as="style"><link rel="preload" href="/assets/js/app.59e95152.js" as="script"><link rel="preload" href="/assets/js/2.3a807b85.js" as="script"><link rel="preload" href="/assets/js/57.9fcfe942.js" as="script"><link rel="preload" href="/assets/js/3.dcc3d320.js" as="script"><link rel="prefetch" href="/assets/js/10.d0995cad.js"><link rel="prefetch" href="/assets/js/11.c341184e.js"><link rel="prefetch" href="/assets/js/12.3ad3ed48.js"><link rel="prefetch" href="/assets/js/13.69637e18.js"><link rel="prefetch" href="/assets/js/14.51399e31.js"><link rel="prefetch" href="/assets/js/15.dc053f1e.js"><link rel="prefetch" href="/assets/js/16.3cdf495d.js"><link rel="prefetch" href="/assets/js/17.2e879e03.js"><link rel="prefetch" href="/assets/js/18.eec58b10.js"><link rel="prefetch" href="/assets/js/19.b1a4a89f.js"><link rel="prefetch" href="/assets/js/20.3a4b06d3.js"><link rel="prefetch" href="/assets/js/21.b8c0dd54.js"><link rel="prefetch" href="/assets/js/22.6d786ea0.js"><link rel="prefetch" href="/assets/js/23.e2635fd6.js"><link rel="prefetch" href="/assets/js/24.c30cb4fc.js"><link rel="prefetch" href="/assets/js/25.b42ddd79.js"><link rel="prefetch" href="/assets/js/26.6e0fde4a.js"><link rel="prefetch" href="/assets/js/27.46575ae4.js"><link rel="prefetch" href="/assets/js/28.68b72327.js"><link rel="prefetch" href="/assets/js/29.6b5c99e8.js"><link rel="prefetch" href="/assets/js/30.f00013d1.js"><link rel="prefetch" href="/assets/js/31.afad3a2c.js"><link rel="prefetch" href="/assets/js/32.aff43239.js"><link rel="prefetch" href="/assets/js/33.f11152ab.js"><link rel="prefetch" href="/assets/js/34.5e157511.js"><link rel="prefetch" href="/assets/js/35.6d41f169.js"><link rel="prefetch" href="/assets/js/36.b77aa7bc.js"><link rel="prefetch" href="/assets/js/37.b8b753ad.js"><link rel="prefetch" href="/assets/js/38.b755858d.js"><link rel="prefetch" href="/assets/js/39.ac6cc9d2.js"><link rel="prefetch" href="/assets/js/4.4cf4e55e.js"><link rel="prefetch" href="/assets/js/40.92b3437b.js"><link rel="prefetch" href="/assets/js/41.f5163400.js"><link rel="prefetch" href="/assets/js/42.a20fefb2.js"><link rel="prefetch" href="/assets/js/43.7738c0d4.js"><link rel="prefetch" href="/assets/js/44.7d4edaa4.js"><link rel="prefetch" href="/assets/js/45.a59fcefb.js"><link rel="prefetch" href="/assets/js/46.d505c015.js"><link rel="prefetch" href="/assets/js/47.9ec53c61.js"><link rel="prefetch" href="/assets/js/48.5b9f42d2.js"><link rel="prefetch" href="/assets/js/49.cf8feb8b.js"><link rel="prefetch" href="/assets/js/5.851d534f.js"><link rel="prefetch" href="/assets/js/50.2f3d0ff0.js"><link rel="prefetch" href="/assets/js/51.f509ab23.js"><link rel="prefetch" href="/assets/js/52.94828a56.js"><link rel="prefetch" href="/assets/js/53.e3e8edad.js"><link rel="prefetch" href="/assets/js/54.6f0d57cb.js"><link rel="prefetch" href="/assets/js/55.edf59d85.js"><link rel="prefetch" href="/assets/js/56.07103903.js"><link rel="prefetch" href="/assets/js/58.0b00e92a.js"><link rel="prefetch" href="/assets/js/59.116b9d81.js"><link rel="prefetch" href="/assets/js/6.0a2e90c4.js"><link rel="prefetch" href="/assets/js/60.87e23a87.js"><link rel="prefetch" href="/assets/js/61.4596c31d.js"><link rel="prefetch" href="/assets/js/62.f1374485.js"><link rel="prefetch" href="/assets/js/63.79c91fc4.js"><link rel="prefetch" href="/assets/js/64.ef340e47.js"><link rel="prefetch" href="/assets/js/65.652f1505.js"><link rel="prefetch" href="/assets/js/66.cdb33b50.js"><link rel="prefetch" href="/assets/js/67.504a5e13.js"><link rel="prefetch" href="/assets/js/68.6bc4d9d3.js"><link rel="prefetch" href="/assets/js/69.8f07ef22.js"><link rel="prefetch" href="/assets/js/7.1cc9bea6.js"><link rel="prefetch" href="/assets/js/70.5be88012.js"><link rel="prefetch" href="/assets/js/71.8d6c4664.js"><link rel="prefetch" href="/assets/js/72.6728d31e.js"><link rel="prefetch" href="/assets/js/73.76c58c17.js"><link rel="prefetch" href="/assets/js/74.da426a78.js"><link rel="prefetch" href="/assets/js/75.9695ee87.js"><link rel="prefetch" href="/assets/js/76.483fab1d.js"><link rel="prefetch" href="/assets/js/77.7aec5808.js"><link rel="prefetch" href="/assets/js/78.b2ef3070.js"><link rel="prefetch" href="/assets/js/79.eea1aa52.js"><link rel="prefetch" href="/assets/js/8.2247b01d.js"><link rel="prefetch" href="/assets/js/80.a539b3f5.js"><link rel="prefetch" href="/assets/js/81.f0e9dbbf.js"><link rel="prefetch" href="/assets/js/82.4b43ba11.js"><link rel="prefetch" href="/assets/js/83.f95dfff7.js"><link rel="prefetch" href="/assets/js/84.f877493a.js"><link rel="prefetch" href="/assets/js/85.39aa7e96.js"><link rel="prefetch" href="/assets/js/9.d3ebcdcf.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.b42adf48.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/assets/img/hero.png" alt="余生慢尝" class="logo"> <span class="site-name can-hide">余生慢尝</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/view/preface/" class="nav-link">
+  前言
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="数据库" class="dropdown-title"><span class="title">数据库</span> <span class="arrow down"></span></button> <button type="button" aria-label="数据库" class="mobile-dropdown-title"><span class="title">数据库</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/database/redis/" class="nav-link">
+  Redis
+</a></li><li class="dropdown-item"><!----> <a href="/view/database/mysql/" class="nav-link">
+  Mysql
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="java系" class="dropdown-title"><span class="title">java系</span> <span class="arrow down"></span></button> <button type="button" aria-label="java系" class="mobile-dropdown-title"><span class="title">java系</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/java/basics/" class="nav-link">
+  java基础
+</a></li><li class="dropdown-item"><!----> <a href="/view/java/jdk8/" class="nav-link">
+  Java8新特性
+</a></li><li class="dropdown-item"><!----> <a href="/view/java/reflection/" class="nav-link">
+  java反射
+</a></li><li class="dropdown-item"><h4>
+          MQ
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/mq/rabbitmq/" class="nav-link">
+  rabbitMQ
+</a></li></ul></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="SSM" class="dropdown-title"><span class="title">SSM</span> <span class="arrow down"></span></button> <button type="button" aria-label="SSM" class="mobile-dropdown-title"><span class="title">SSM</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/ssm/spring/" class="nav-link">
+  Spring
+</a></li><li class="dropdown-item"><!----> <a href="/view/ssm/springmvc/" class="nav-link">
+  SpringMVC
+</a></li><li class="dropdown-item"><!----> <a href="/view/ssm/mybatis/" class="nav-link">
+  Mybatis
+</a></li><li class="dropdown-item"><!----> <a href="/view/ssm/integration/" class="nav-link">
+  SSM整合
+</a></li><li class="dropdown-item"><h4>
+          高级部分
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/ssm/ssm-senior/spring/" class="nav-link">
+  Spring
+</a></li><li class="dropdown-subitem"><a href="/view/ssm/ssm-senior/springmvc/" class="nav-link">
+  SpringMVC
+</a></li></ul></li></ul></div></div><div class="nav-item"><a href="/view/springboot/" class="nav-link router-link-active">
+  SpringBoot
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="常用工具" class="dropdown-title"><span class="title">常用工具</span> <span class="arrow down"></span></button> <button type="button" aria-label="常用工具" class="mobile-dropdown-title"><span class="title">常用工具</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://element.eleme.cn/#/zh-CN/component/table" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  elementUI
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="https://cn.vuejs.org/v2/guide/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Vue文档
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="http://momentjs.cn/docs/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  momentjs
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="http://easypoi.mydoc.io/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  EasyPoi文档
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/view/preface/" class="nav-link">
+  前言
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="数据库" class="dropdown-title"><span class="title">数据库</span> <span class="arrow down"></span></button> <button type="button" aria-label="数据库" class="mobile-dropdown-title"><span class="title">数据库</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/database/redis/" class="nav-link">
+  Redis
+</a></li><li class="dropdown-item"><!----> <a href="/view/database/mysql/" class="nav-link">
+  Mysql
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="java系" class="dropdown-title"><span class="title">java系</span> <span class="arrow down"></span></button> <button type="button" aria-label="java系" class="mobile-dropdown-title"><span class="title">java系</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/java/basics/" class="nav-link">
+  java基础
+</a></li><li class="dropdown-item"><!----> <a href="/view/java/jdk8/" class="nav-link">
+  Java8新特性
+</a></li><li class="dropdown-item"><!----> <a href="/view/java/reflection/" class="nav-link">
+  java反射
+</a></li><li class="dropdown-item"><h4>
+          MQ
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/mq/rabbitmq/" class="nav-link">
+  rabbitMQ
+</a></li></ul></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="SSM" class="dropdown-title"><span class="title">SSM</span> <span class="arrow down"></span></button> <button type="button" aria-label="SSM" class="mobile-dropdown-title"><span class="title">SSM</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/ssm/spring/" class="nav-link">
+  Spring
+</a></li><li class="dropdown-item"><!----> <a href="/view/ssm/springmvc/" class="nav-link">
+  SpringMVC
+</a></li><li class="dropdown-item"><!----> <a href="/view/ssm/mybatis/" class="nav-link">
+  Mybatis
+</a></li><li class="dropdown-item"><!----> <a href="/view/ssm/integration/" class="nav-link">
+  SSM整合
+</a></li><li class="dropdown-item"><h4>
+          高级部分
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/ssm/ssm-senior/spring/" class="nav-link">
+  Spring
+</a></li><li class="dropdown-subitem"><a href="/view/ssm/ssm-senior/springmvc/" class="nav-link">
+  SpringMVC
+</a></li></ul></li></ul></div></div><div class="nav-item"><a href="/view/springboot/" class="nav-link router-link-active">
+  SpringBoot
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="常用工具" class="dropdown-title"><span class="title">常用工具</span> <span class="arrow down"></span></button> <button type="button" aria-label="常用工具" class="mobile-dropdown-title"><span class="title">常用工具</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://element.eleme.cn/#/zh-CN/component/table" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  elementUI
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="https://cn.vuejs.org/v2/guide/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Vue文档
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="http://momentjs.cn/docs/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  momentjs
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="http://easypoi.mydoc.io/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  EasyPoi文档
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Springboot</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/view/springboot/" aria-current="page" class="sidebar-link">前言</a></li><li><a href="/view/springboot/basicconfig.html" class="sidebar-link">SpringBoot基本配置</a></li><li><a href="/view/springboot/springboot-view.html" class="sidebar-link">springboot整合视图层</a></li><li><a href="/view/springboot/spring-web.html" aria-current="page" class="active sidebar-link">springboot 整合web 开发</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/view/springboot/spring-web.html#整合-jackson" class="sidebar-link">整合 Jackson</a></li></ul></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="整合-jackson"><a href="#整合-jackson" class="header-anchor">#</a> 整合 Jackson</h2> <p>SpringBoot 中，已经对 Jackson 做了自动化配置，<code>spring-boot-starter-web</code> 中也包含了 Jackson 依赖，所以在SpringBoot中什么都不需要配置就可以使用 Jackson。</p> <h3 id="使用方法"><a href="#使用方法" class="header-anchor">#</a> 使用方法</h3> <p>接下来我们来说 Jackson 的使用方法。</p> <div class="language-java line-numbers-mode"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> username<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Date</span> birthday<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">String</span> address<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Integer</span> age<span class="token punctuation">;</span>
+
+    <span class="token comment">// 省略 setter/getter 方法</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><div class="language-java line-numbers-mode"><pre class="language-java"><code><span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserController</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">&quot;/user&quot;</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">User</span> <span class="token function">getUserById</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token class-name">User</span> user <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setAge</span><span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setBirthday</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setAddress</span><span class="token punctuation">(</span><span class="token string">&quot;北京&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setUsername</span><span class="token punctuation">(</span><span class="token string">&quot;张三&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> user<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br></div></div><p>只需要创建一个 User 类，和一个 Controller 并且加上 <code>@RestController</code> 注解，就可以将对象序列化为 <code>json</code> 字符串。</p> <p>还可以使用注解进行一些操作：</p> <div class="language-java line-numbers-mode"><pre class="language-java"><code><span class="token comment">//@JsonIgnoreProperties({&quot;birthday&quot;,&quot;address&quot;})</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+
+    <span class="token comment">//@JsonProperty(value = &quot;name&quot;,index = 99)</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> username<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@JsonFormat</span><span class="token punctuation">(</span>pattern <span class="token operator">=</span> <span class="token string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="token punctuation">,</span>timezone <span class="token operator">=</span> <span class="token string">&quot;Asia/Shanghai&quot;</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">Date</span> birthday<span class="token punctuation">;</span>
+
+    <span class="token comment">//@JsonIgnore</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> address<span class="token punctuation">;</span>
+    
+    <span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span>index <span class="token operator">=</span> <span class="token number">96</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">Integer</span> age<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br></div></div><table><thead><tr><th style="text-align:center;">注解</th> <th style="text-align:center;">含义</th></tr></thead> <tbody><tr><td style="text-align:center;">@JsonProperty</td> <td style="text-align:center;">name属性，指定属性序列化/反序列化 时的名称。index 代表排列的顺序</td></tr> <tr><td style="text-align:center;">@JsonFormat</td> <td style="text-align:center;">日期格式化。注意时区问题</td></tr> <tr><td style="text-align:center;">@JsonIgnore</td> <td style="text-align:center;">序列化/反序列化时 忽略某一个字段，在一个属性上和 @JsonProperty 只能使用一个</td></tr> <tr><td style="text-align:center;">@JsonIgnoreProperties</td> <td style="text-align:center;">序列化/反序列化 批量忽略字段</td></tr></tbody></table> <p>如果感觉每一个对象，都要设置 日期 的格式。也可以全局配置。</p> <div class="language-java line-numbers-mode"><pre class="language-java"><code><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JsonConfig</span> <span class="token punctuation">{</span>
+
+    <span class="token class-name">ObjectMapper</span> <span class="token function">objectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token class-name">ObjectMapper</span> objectMapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        objectMapper<span class="token punctuation">.</span><span class="token function">setDateFormat</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">SimpleDateFormat</span><span class="token punctuation">(</span><span class="token string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        objectMapper<span class="token punctuation">.</span><span class="token function">setTimeZone</span><span class="token punctuation">(</span><span class="token class-name">TimeZone</span><span class="token punctuation">.</span><span class="token function">getTimeZone</span><span class="token punctuation">(</span><span class="token string">&quot;GMT+8&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> objectMapper<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br></div></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">更新时间:</span> <span class="time">12/26/2021, 1:20:30 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/view/springboot/springboot-view.html" class="prev">
+        springboot整合视图层
+      </a></span> <!----></p></div> </main></div><div class="global-ui"><!----><!----></div></div>
+    <script src="/assets/js/app.59e95152.js" defer></script><script src="/assets/js/2.3a807b85.js" defer></script><script src="/assets/js/57.9fcfe942.js" defer></script><script src="/assets/js/3.dcc3d320.js" defer></script>
+  </body>
+</html>
