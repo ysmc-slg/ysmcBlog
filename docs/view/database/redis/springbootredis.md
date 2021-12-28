@@ -73,7 +73,8 @@ public class RedisConfig extends CachingConfigurerSupport{
       mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
       mapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
       serializer.setObjectMapper(mapper);
-
+      
+      // 设置 value 的序列化和反序列化方式，这里使用自定义的 FastJson2JsonRedisSerializer
       template.setValueSerializer(serializer);
       // 使用StringRedisSerializer来序列化和反序列化redis的key值
       template.setKeySerializer(new StringRedisSerializer());
