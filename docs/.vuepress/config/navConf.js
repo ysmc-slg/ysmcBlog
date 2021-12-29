@@ -56,6 +56,14 @@ module.exports = [
   {
     text: 'SpringBoot',link: '/view/springboot/'
   },
+
+  {
+    text: '前端',
+    items: [
+      { text: 'ES6新特性', link: '/view/Front-end/es6/' },
+    ]
+  },
+
   {
     text: '常用工具',
     items: [
