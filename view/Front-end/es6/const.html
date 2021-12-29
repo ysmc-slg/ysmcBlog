@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>const 命令 | 余生慢尝</title>
+    <meta name="generator" content="VuePress 1.8.2">
+    <link rel="icon" href="/favicon.ico">
+    <link name="author" content="余生慢尝">
+    <link name="keywords" content="余生慢尝">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon-152x152.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#3eaf7c">
+    <meta name="description" content="余生慢尝的笔记">
+    <meta name="theme-color" content="#3eaf7c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="msapplication-TileImage" content="/icons/msapplication-icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#000000">
+    
+    <link rel="preload" href="/assets/css/0.styles.b42adf48.css" as="style"><link rel="preload" href="/assets/js/app.e6da75a5.js" as="script"><link rel="preload" href="/assets/js/2.3a807b85.js" as="script"><link rel="preload" href="/assets/js/11.82ee762a.js" as="script"><link rel="preload" href="/assets/js/3.dcc3d320.js" as="script"><link rel="prefetch" href="/assets/js/10.3beb2ba2.js"><link rel="prefetch" href="/assets/js/12.0bb6fd0b.js"><link rel="prefetch" href="/assets/js/13.6ba1b478.js"><link rel="prefetch" href="/assets/js/14.13ec36ce.js"><link rel="prefetch" href="/assets/js/15.9b5b0ba5.js"><link rel="prefetch" href="/assets/js/16.d86b12a9.js"><link rel="prefetch" href="/assets/js/17.b581c3ed.js"><link rel="prefetch" href="/assets/js/18.a1dbad08.js"><link rel="prefetch" href="/assets/js/19.5b542132.js"><link rel="prefetch" href="/assets/js/20.e7c551fd.js"><link rel="prefetch" href="/assets/js/21.6252992c.js"><link rel="prefetch" href="/assets/js/22.aa4f5066.js"><link rel="prefetch" href="/assets/js/23.9a43a7ab.js"><link rel="prefetch" href="/assets/js/24.4fa8dbb5.js"><link rel="prefetch" href="/assets/js/25.2407c123.js"><link rel="prefetch" href="/assets/js/26.9f3cc801.js"><link rel="prefetch" href="/assets/js/27.010eb94f.js"><link rel="prefetch" href="/assets/js/28.c19dc121.js"><link rel="prefetch" href="/assets/js/29.2f7515a8.js"><link rel="prefetch" href="/assets/js/30.8963c477.js"><link rel="prefetch" href="/assets/js/31.8f1dbf9b.js"><link rel="prefetch" href="/assets/js/32.1ff4e6f4.js"><link rel="prefetch" href="/assets/js/33.5ab16298.js"><link rel="prefetch" href="/assets/js/34.43a7349e.js"><link rel="prefetch" href="/assets/js/35.25bac92f.js"><link rel="prefetch" href="/assets/js/36.800ed73a.js"><link rel="prefetch" href="/assets/js/37.7e3c8180.js"><link rel="prefetch" href="/assets/js/38.7aa1f6ad.js"><link rel="prefetch" href="/assets/js/39.59edb285.js"><link rel="prefetch" href="/assets/js/4.6d0f0a7c.js"><link rel="prefetch" href="/assets/js/40.f909a0f8.js"><link rel="prefetch" href="/assets/js/41.779ac2d8.js"><link rel="prefetch" href="/assets/js/42.65b6766b.js"><link rel="prefetch" href="/assets/js/43.6ae7d202.js"><link rel="prefetch" href="/assets/js/44.2617afaa.js"><link rel="prefetch" href="/assets/js/45.3b1e2a70.js"><link rel="prefetch" href="/assets/js/46.937c5583.js"><link rel="prefetch" href="/assets/js/47.0685f3cc.js"><link rel="prefetch" href="/assets/js/48.fd36c220.js"><link rel="prefetch" href="/assets/js/49.043b1ccc.js"><link rel="prefetch" href="/assets/js/5.851d534f.js"><link rel="prefetch" href="/assets/js/50.13a83559.js"><link rel="prefetch" href="/assets/js/51.e1bda4fa.js"><link rel="prefetch" href="/assets/js/52.02974357.js"><link rel="prefetch" href="/assets/js/53.e531ce0d.js"><link rel="prefetch" href="/assets/js/54.f99bb7fb.js"><link rel="prefetch" href="/assets/js/55.cdd19708.js"><link rel="prefetch" href="/assets/js/56.916c6e07.js"><link rel="prefetch" href="/assets/js/57.137e2bb2.js"><link rel="prefetch" href="/assets/js/58.9abc8f24.js"><link rel="prefetch" href="/assets/js/59.7d95ffa6.js"><link rel="prefetch" href="/assets/js/6.0a2e90c4.js"><link rel="prefetch" href="/assets/js/60.538fc215.js"><link rel="prefetch" href="/assets/js/61.5c802133.js"><link rel="prefetch" href="/assets/js/62.da646912.js"><link rel="prefetch" href="/assets/js/63.d2f4e3c6.js"><link rel="prefetch" href="/assets/js/64.d5d2a726.js"><link rel="prefetch" href="/assets/js/65.b667fb74.js"><link rel="prefetch" href="/assets/js/66.8d80966f.js"><link rel="prefetch" href="/assets/js/67.a5ce79d1.js"><link rel="prefetch" href="/assets/js/68.251b721c.js"><link rel="prefetch" href="/assets/js/69.fc258143.js"><link rel="prefetch" href="/assets/js/7.1cc9bea6.js"><link rel="prefetch" href="/assets/js/70.127a07fb.js"><link rel="prefetch" href="/assets/js/71.c6bdcf7f.js"><link rel="prefetch" href="/assets/js/72.65f40647.js"><link rel="prefetch" href="/assets/js/73.ae55d7fc.js"><link rel="prefetch" href="/assets/js/74.e0f1e2d1.js"><link rel="prefetch" href="/assets/js/75.f9990547.js"><link rel="prefetch" href="/assets/js/76.31988027.js"><link rel="prefetch" href="/assets/js/77.c7b3052b.js"><link rel="prefetch" href="/assets/js/78.ea036e5e.js"><link rel="prefetch" href="/assets/js/79.5a5b2f67.js"><link rel="prefetch" href="/assets/js/8.15f7a4a2.js"><link rel="prefetch" href="/assets/js/80.58c33374.js"><link rel="prefetch" href="/assets/js/81.6acb580d.js"><link rel="prefetch" href="/assets/js/82.b82cdb01.js"><link rel="prefetch" href="/assets/js/83.c21e7c50.js"><link rel="prefetch" href="/assets/js/84.293d3a66.js"><link rel="prefetch" href="/assets/js/85.543acbf4.js"><link rel="prefetch" href="/assets/js/86.ba274df0.js"><link rel="prefetch" href="/assets/js/87.e7a8a0a8.js"><link rel="prefetch" href="/assets/js/88.a6943e97.js"><link rel="prefetch" href="/assets/js/89.2e79a6ea.js"><link rel="prefetch" href="/assets/js/9.f3502994.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.b42adf48.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/assets/img/hero.png" alt="余生慢尝" class="logo"> <span class="site-name can-hide">余生慢尝</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/view/preface/" class="nav-link">
+  前言
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="数据库" class="dropdown-title"><span class="title">数据库</span> <span class="arrow down"></span></button> <button type="button" aria-label="数据库" class="mobile-dropdown-title"><span class="title">数据库</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/database/redis/" class="nav-link">
+  Redis
+</a></li><li class="dropdown-item"><!----> <a href="/view/database/mysql/" class="nav-link">
+  Mysql
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="java系" class="dropdown-title"><span class="title">java系</span> <span class="arrow down"></span></button> <button type="button" aria-label="java系" class="mobile-dropdown-title"><span class="title">java系</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/java/basics/" class="nav-link">
+  java基础
+</a></li><li class="dropdown-item"><!----> <a href="/view/java/jdk8/" class="nav-link">
+  Java8新特性
+</a></li><li class="dropdown-item"><!----> <a href="/view/java/reflection/" class="nav-link">
+  java反射
+</a></li><li class="dropdown-item"><h4>
+          MQ
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/mq/rabbitmq/" class="nav-link">
+  rabbitMQ
+</a></li></ul></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="SSM" class="dropdown-title"><span class="title">SSM</span> <span class="arrow down"></span></button> <button type="button" aria-label="SSM" class="mobile-dropdown-title"><span class="title">SSM</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/ssm/spring/" class="nav-link">
+  Spring
+</a></li><li class="dropdown-item"><!----> <a href="/view/ssm/springmvc/" class="nav-link">
+  SpringMVC
+</a></li><li class="dropdown-item"><!----> <a href="/view/ssm/mybatis/" class="nav-link">
+  Mybatis
+</a></li><li class="dropdown-item"><!----> <a href="/view/ssm/integration/" class="nav-link">
+  SSM整合
+</a></li><li class="dropdown-item"><h4>
+          高级部分
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/ssm/ssm-senior/spring/" class="nav-link">
+  Spring
+</a></li><li class="dropdown-subitem"><a href="/view/ssm/ssm-senior/springmvc/" class="nav-link">
+  SpringMVC
+</a></li></ul></li></ul></div></div><div class="nav-item"><a href="/view/springboot/" class="nav-link">
+  SpringBoot
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="前端" class="dropdown-title"><span class="title">前端</span> <span class="arrow down"></span></button> <button type="button" aria-label="前端" class="mobile-dropdown-title"><span class="title">前端</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/Front-end/es6/" class="nav-link router-link-active">
+  ES6新特性
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="常用工具" class="dropdown-title"><span class="title">常用工具</span> <span class="arrow down"></span></button> <button type="button" aria-label="常用工具" class="mobile-dropdown-title"><span class="title">常用工具</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://element.eleme.cn/#/zh-CN/component/table" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  elementUI
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="https://cn.vuejs.org/v2/guide/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Vue文档
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="http://momentjs.cn/docs/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  momentjs
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="http://easypoi.mydoc.io/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  EasyPoi文档
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="/view/preface/" class="nav-link">
+  前言
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="数据库" class="dropdown-title"><span class="title">数据库</span> <span class="arrow down"></span></button> <button type="button" aria-label="数据库" class="mobile-dropdown-title"><span class="title">数据库</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/database/redis/" class="nav-link">
+  Redis
+</a></li><li class="dropdown-item"><!----> <a href="/view/database/mysql/" class="nav-link">
+  Mysql
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="java系" class="dropdown-title"><span class="title">java系</span> <span class="arrow down"></span></button> <button type="button" aria-label="java系" class="mobile-dropdown-title"><span class="title">java系</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/java/basics/" class="nav-link">
+  java基础
+</a></li><li class="dropdown-item"><!----> <a href="/view/java/jdk8/" class="nav-link">
+  Java8新特性
+</a></li><li class="dropdown-item"><!----> <a href="/view/java/reflection/" class="nav-link">
+  java反射
+</a></li><li class="dropdown-item"><h4>
+          MQ
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/mq/rabbitmq/" class="nav-link">
+  rabbitMQ
+</a></li></ul></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="SSM" class="dropdown-title"><span class="title">SSM</span> <span class="arrow down"></span></button> <button type="button" aria-label="SSM" class="mobile-dropdown-title"><span class="title">SSM</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/ssm/spring/" class="nav-link">
+  Spring
+</a></li><li class="dropdown-item"><!----> <a href="/view/ssm/springmvc/" class="nav-link">
+  SpringMVC
+</a></li><li class="dropdown-item"><!----> <a href="/view/ssm/mybatis/" class="nav-link">
+  Mybatis
+</a></li><li class="dropdown-item"><!----> <a href="/view/ssm/integration/" class="nav-link">
+  SSM整合
+</a></li><li class="dropdown-item"><h4>
+          高级部分
+        </h4> <ul class="dropdown-subitem-wrapper"><li class="dropdown-subitem"><a href="/view/ssm/ssm-senior/spring/" class="nav-link">
+  Spring
+</a></li><li class="dropdown-subitem"><a href="/view/ssm/ssm-senior/springmvc/" class="nav-link">
+  SpringMVC
+</a></li></ul></li></ul></div></div><div class="nav-item"><a href="/view/springboot/" class="nav-link">
+  SpringBoot
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="前端" class="dropdown-title"><span class="title">前端</span> <span class="arrow down"></span></button> <button type="button" aria-label="前端" class="mobile-dropdown-title"><span class="title">前端</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/view/Front-end/es6/" class="nav-link router-link-active">
+  ES6新特性
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="常用工具" class="dropdown-title"><span class="title">常用工具</span> <span class="arrow down"></span></button> <button type="button" aria-label="常用工具" class="mobile-dropdown-title"><span class="title">常用工具</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://element.eleme.cn/#/zh-CN/component/table" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  elementUI
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="https://cn.vuejs.org/v2/guide/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Vue文档
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="http://momentjs.cn/docs/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  momentjs
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="http://easypoi.mydoc.io/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  EasyPoi文档
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>Es6</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/view/Front-end/es6/" aria-current="page" class="sidebar-link">简介</a></li><li><a href="/view/Front-end/es6/let.html" class="sidebar-link">let 命令</a></li><li><a href="/view/Front-end/es6/const.html" aria-current="page" class="active sidebar-link">const 命令</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/view/Front-end/es6/const.html#基本用法" class="sidebar-link">基本用法</a></li><li class="sidebar-sub-header"><a href="/view/Front-end/es6/const.html#es6-声明变量的六种方法" class="sidebar-link">ES6 声明变量的六种方法</a></li></ul></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="基本用法"><a href="#基本用法" class="header-anchor">#</a> 基本用法</h2> <p><code>const</code> 声明一个只读的常量。一旦声明，常量的值就不能改变。</p> <div class="language-js line-numbers-mode"><pre class="language-js"><code><span class="token keyword">const</span> <span class="token constant">PI</span> <span class="token operator">=</span> <span class="token number">3.1415</span><span class="token punctuation">;</span>
+
+<span class="token constant">PI</span> <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span> <span class="token comment">//Assignment to constant variable.</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br></div></div><p>上面代码表明改变常量的值会报错。</p> <p><code>const</code> 声明的变量不得改变值，这意味着，<code>const</code> 一旦声明变量，就必须立即初始化，不能留到以后赋值。</p> <p><code>const</code> 只声明不赋值，就会报错。</p> <p>const的作用域与let命令相同：只在声明所在的块级作用域内有效。</p> <div class="language-js line-numbers-mode"><pre class="language-js"><code><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token constant">MAX</span> <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token constant">MAX</span> <span class="token comment">// Uncaught ReferenceError: MAX is not defined</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><h2 id="es6-声明变量的六种方法"><a href="#es6-声明变量的六种方法" class="header-anchor">#</a> ES6 声明变量的六种方法</h2> <ol><li>let</li> <li>const</li> <li>var</li> <li>function</li> <li>import</li> <li>class</li></ol></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">更新时间:</span> <span class="time">12/29/2021, 12:31:26 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/view/Front-end/es6/let.html" class="prev">
+        let 命令
+      </a></span> <!----></p></div> </main></div><div class="global-ui"><!----><!----></div></div>
+    <script src="/assets/js/app.e6da75a5.js" defer></script><script src="/assets/js/2.3a807b85.js" defer></script><script src="/assets/js/11.82ee762a.js" defer></script><script src="/assets/js/3.dcc3d320.js" defer></script>
+  </body>
+</html>
