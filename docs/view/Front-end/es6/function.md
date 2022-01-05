@@ -225,4 +225,75 @@ function full(person) {
 
 上面四点中，最重要的是第一点。对于普通函数来说，内部的 `this` 指向函数运行时所在的对象，但是这一点对箭头函数不成立。它没有自己的 `this` 对象，<font color='red'>内部的 `this` 就是定义时上层作用域中的 `this` <font>。也就是说，箭头函数内部的this指向是固定的，相比之下，普通函数的this指向是可变的。
 
+```js
+function foo() {
+  setTimeout(() => {
+    console.log('id:', this.id);
+  }, 100);
+}
 
+var id = 21;
+
+foo.call({ id: 42 });
+// id: 42
+```
+上面代码中，`setTimeout()` 的参数是一个箭头函数，这个箭头函数的定义生效是在 `foo` 函数生成时，而它真正执行要等到 100 毫秒后。如果是普通函数，执行时 `this` 应该指向全局对象 `window`，这时应该输出 `21` 。但是，箭头函数导致 `this` 总是指向外层代码块的 `this`（本例是 `{id:42}`），所以打印出来的是 `42`。
+
+下面例子是回调函数分别为箭头函数和普通函数，对比它们内部的 `this` 指向。
+
+```js
+function Timer() {
+  this.s1 = 0;
+  this.s2 = 0;
+  // 箭头函数
+  setInterval(() => this.s1++, 1000);
+  // 普通函数
+  setInterval(function () {
+    this.s2++;
+  }, 1000);
+}
+
+var timer = new Timer();
+
+setTimeout(() => console.log('s1: ', timer.s1), 3100);
+setTimeout(() => console.log('s2: ', timer.s2), 3100);
+// s1: 3
+// s2: 0
+```
+上面代码中，`Timer` 函数内部设置了两个定时器，分别使用了箭头函数和普通函数。前者的 `this` 绑定定义时所在的作用域（即Timer函数），后者的 `this` 指向运行时所在的作用域（即全局对象）。所以，3100 毫秒之后，`timer.s1` 被更新了 3 次，而 `timer.s2` 一次都没更新。
+
+总之，箭头函数根本没有自己的 `this`，导致内部的 `this` 就是外层代码块的 `this`。正是因为它没有 `this`，所以也就不能用作构造函数。
+
+```js
+// ES6
+function foo() {
+  setTimeout(() => {
+    console.log('id:', this.id);
+  }, 100);
+}
+
+// ES5
+function foo() {
+  var _this = this;
+
+  setTimeout(function () {
+    console.log('id:', _this.id);
+  }, 100);
+}
+```
+上面代码中，转换后的 ES5 版本清楚地说明了，箭头函数里面根本没有自己的this，而是引用外层的 `this`。
+
+除了`this`，以下三个变量在箭头函数之中也是不存在的，指向外层函数的对应变量：`arguments`、`super`、`new.target`。
+```js
+function foo() {
+  setTimeout(() => {
+    console.log('args:', arguments);
+  }, 100);
+}
+
+foo(2, 4, 6, 8)
+// args: [2, 4, 6, 8]
+```
+上面代码中，箭头函数内部的变量`arguments`，其实是函数`foo`的 `arguments` 变量。
+
+另外，由于箭头函数没有自己的 `this`，所以当然也就不能用`call()`、`apply()`、`bind()` 这些方法去改变this的指向。
