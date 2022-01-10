@@ -61,6 +61,7 @@ module.exports = [
     text: '前端',
     items: [
       { text: 'ES6新特性', link: '/view/Front-end/es6/' },
+      { text: 'VueJS', link: '/view/Front-end/vue/' }
     ]
   },
 
