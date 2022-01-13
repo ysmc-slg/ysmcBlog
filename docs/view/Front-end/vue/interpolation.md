@@ -2,7 +2,7 @@
 title: 基础语法
 ---
 
-首先需要安装 `VueJS`，我这里直接引用 vuejs 的文件。如果想用其他方法，请访问官网：![安装VueJS](https://cn.vuejs.org/v2/guide/installation.html)
+首先需要安装 `VueJS`，我这里直接引用 vuejs 的文件。如果想用其他方法，请访问官网：[安装VueJS](https://cn.vuejs.org/v2/guide/installation.html)
 
 ## 使用 Vue
 
@@ -46,7 +46,7 @@ title: 基础语法
 
 `data`：用于数据存储，只能在el指定的容器中使用
 
-`{{xxx}}`：插值表达式，能直接获取data中的数据，同时 `xxx` 必须得是 js表达式
+{{xxx}}：插值表达式，能直接获取data中的数据，同时 `xxx` 必须得是 js表达式
 
 :::
 
