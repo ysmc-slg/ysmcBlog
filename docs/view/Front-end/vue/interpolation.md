@@ -241,3 +241,109 @@ Vue 中的事件修饰符：
    </div>
    ```
    只在第一次点击的时候执行。
+
+## 键盘事件
+键盘事件也是前端比较常用的，比如，在`input`标签中回车触发查询条件。vue中为我们封装了一些常用的`按键别名`
+
+ 别名 |  按键 
+:----:|:----:
+ .enter &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|  Enter 
+ .tab | Tab 
+.delete| delete（删除）/BackSpace（退格） 
+ .esc | Esc(退出) 
+ .space | Space(空格键)  
+ .left | Left(左箭头) 
+ .up | Up(上箭头) 
+.down| Down(下箭头)
+.ctrl| Ctrl
+.alt| Alt 
+.shift| Shift 
+.meta|(window系统下是window键，<br>mac下是command键)
+
+### 使用vue键盘事件
+```html
+<body>
+  <script src="../js/vue.js"></script>
+  <div id="root">
+    <h2>欢迎学习{{name}}</h2>
+    <input type="text" placeholder="按下回车输入" @keyup.enter="showView">
+  </div>
+  
+  <script>
+    new Vue({
+      el:'#root',
+      data:{
+        name:'vue'
+      },
+      methods:{
+        showView(){
+          console.log('执行了方法')
+        }
+      }
+    })
+  </script>
+</body>
+```
+vue中使用`keyup` 和 `keydown`，来触发键盘事件。`keyup`是键盘按下抬起，`keydown` 是键盘按下。
+
+上面表格中的别名，tab、ctrl、alt、shift、meta，有点特殊，他们本身就系统修饰功能，比如 tab 它本身功能就是切换焦点，所以如果用`keyup`的话事件并不会触发。
+
+ctrl、alt、shift、meta有两种解决方法：
+
+1. 配合keyup使用：按下修饰键的同时，再按下其他键，随后释放其他键，事件才被触发。
+2. 配合keydown使用：正常触发事件。
+
+Vue还支持自定义键名，比如我想按下 `A` 触发事件，但是官方又没定义。此时就可以自定义键名。
+
+`Vue.config.keyCodes.自定义键名 = 键码`
+
+键码可以去网上查询：[查询地址](http://www.mamicode.com/info-detail-882180.html)
+
+```html
+<div id="root">
+  <h2>欢迎学习{{name}}</h2>
+  <input type="text" placeholder="按下回车输入" @keyup.a="showView">
+</div>
+
+<script>
+  Vue.config.keyCodes.a = 65
+  
+  new Vue({
+    el:'#root',
+    data:{
+      name:'vue'
+    },
+    methods:{
+      showView(){
+        console.log('执行了方法')
+      }
+    }
+  })
+</script>
+```
+### 使用js原生方法
+
+```html
+<div id="root">
+  <h2>欢迎学习{{name}}</h2>
+  <input type="text" placeholder="按下回车输入" @keyup="showView">
+</div>
+
+<script>
+  
+  new Vue({
+    el:'#root',
+    data:{
+      name:'vue'
+    },
+    methods:{
+      showView(e){
+        if(e.keyCode !== 13) return
+				console.log(e.target.value)
+      }
+    }
+  })
+</script>
+```
+回车显示出入的数据
+
