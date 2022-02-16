@@ -164,7 +164,7 @@ vue和react的虚拟DOM的Diff算法大致相同，其核心是基于两个简�
 
 比如一下这个情况：
 
-![diff](/blogImg/vue/diff.jpg)
+![diff1](/blogImg/vue/diff1.jpg)
 
 我们希望可以在B和C之间加一个F，Diff算法默认执行起来是这样的：
 
