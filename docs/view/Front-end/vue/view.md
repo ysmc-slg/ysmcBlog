@@ -1,11 +1,10 @@
 ---
-title: 渲染
+title: 条件渲染
 autoPrev: style
 ---
-## 条件渲染
 开发中我们需要，对一些DOM元素进行显示和隐藏，此时就可以用到 `v-if` 和 `v-show`。
 
-### v-if
+## v-if <Badge text="重要" type="error"/>
 ```html
 <!DOCTYPE html>
 <html>
@@ -60,7 +59,7 @@ autoPrev: style
 </script>
 ```
 
-### v-show
+## v-show <Badge text="重要" type="error"/>
 和 `v-if` 类似。
 
 ```html
@@ -102,5 +101,6 @@ autoPrev: style
 3. 编译条件：v-if是惰性的，如果初始条件为假，则什么也不做；只有在条件第一次变为真时才开始局部编译（编译被缓存？编译被缓存后，然后再切换的时候进行局部卸载); v-show是在任何条件下（首次条件是否为真）都被编译，然后被缓存，而且DOM元素保留；
 4. 性能消耗：v-if有更高的切换消耗；v-show有更高的初始渲染消耗；
 5. 如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好。
+
 
 
