@@ -40,3 +40,19 @@ autoPrev: computed
 除了 `el` 之外，其它参数都应该是只读的，切勿进行修改。如果需要在钩子之间共享数据，建议通过元素的 dataset 来进行。
 
 :::
+
+## 注册自定义指令
+
+先做一个案例，页面加载时，让元素获取焦点，点击按钮后让数字 `+10`
+
+```html
+<div id="root">
+  <h2>当前的n值是：<span v-text="n"></span> </h2>
+  <h2>+10后的n值是：<span v-big="n"></span> </h2>
+  <button @click="n++">点我n+1</button>
+
+  <hr/>
+  
+  <input type="text" v-fbind:value="n">
+</div>
+```
