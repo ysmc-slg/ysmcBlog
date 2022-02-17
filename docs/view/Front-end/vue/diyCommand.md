@@ -43,16 +43,129 @@ autoPrev: computed
 
 ## 注册自定义指令
 
-先做一个案例，页面加载时，让元素获取焦点，点击按钮后让数字 `+10`
+先做一个案例，页面加载时，让元素获取焦点，点击按钮后让数字 `+1`
 
 ```html
 <div id="root">
-  <h2>当前的n值是：<span v-text="n"></span> </h2>
-  <h2>+10后的n值是：<span v-big="n"></span> </h2>
-  <button @click="n++">点我n+1</button>
-
-  <hr/>
-  
   <input type="text" v-fbind:value="n">
+  <button @click="n++">点我n+1</button>
 </div>
+```
+
+```js
+<script type="text/javascript">
+
+  new Vue({
+    el:'#root',
+    data:{
+      name:'尚硅谷',
+      n:1
+    },
+    directives:{
+      fbind:{
+        //指令与元素成功绑定时（一上来）
+        bind(element,binding){
+          console.log('bind')
+          element.value = binding.value
+        },
+        //指令所在元素被插入页面时
+        inserted(element,binding){
+          console.log('inserted')
+          element.focus()
+        },
+        //指令所在的模板被重新解析时
+        update(element,binding){
+          console.log('update')
+          element.value = binding.value
+        },
+
+        componentUpdated(element,binding){
+          console.log('componentUpdated')
+          element.value = binding.value
+        },
+        unbind(element,binding){
+          console.log('unbind')
+          element.value = binding.value
+        }
+      }
+    }
+  })
+  
+</script>
+```
+
+以上是局部指令的注册方式，也可以对指令进行全局注册。只需要修改js代码即可
+
+```js
+Vue.directive('fbind', {
+  //指令与元素成功绑定时（一上来）
+  bind(element,binding){
+    console.log('bind')
+    element.value = binding.value
+  },
+  //指令所在元素被插入页面时
+  inserted(element,binding){
+    console.log('inserted')
+    element.focus()
+  },
+  //指令所在的模板被重新解析时
+  update(element,binding){
+    console.log('update')
+    element.value = binding.value
+  },
+
+  componentUpdated(element,binding){
+    console.log('componentUpdated')
+    element.value = binding.value
+  },
+  unbind(element,binding){
+    console.log('unbind')
+    element.value = binding.value
+  }
+})
+```
+
+狗子函数还是不变的。
+
+## 函数简写
+
+在很多时候，你可能想在 `bind` 和 `update` 时触发相同行为，而不关心其它的钩子。比如上面案例，可以修改为
+
+```js
+Vue.directive('fbind',(element,binding) => {
+  console.log('inserted/update')
+  element.value = binding.value
+})
+
+或
+
+new Vue({
+  el:'#root',
+  data:{
+    name:'尚硅谷',
+    n:1
+  },
+  directives:{
+    fbind(element,binding){
+      console.log('inserted/update')
+      element.value = binding.value
+    }
+  }
+})
+```
+
+## 对象字面量
+
+
+如果指令需要多个值，可以传入一个 JavaScript 对象字面量。记住，指令函数能够接受所有合法的 JavaScript 表达式。
+
+```html
+<div v-demo="{ color: 'white', text: 'hello!' }"></div>
+```
+
+```js
+Vue.directive('demo', function (el, binding) {
+  console.log(binding.value.color) // => "white"
+  console.log(binding.value.text)  // => "hello!"
+})
 ```
