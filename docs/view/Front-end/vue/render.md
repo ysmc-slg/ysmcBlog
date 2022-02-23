@@ -114,9 +114,41 @@ createElement(
 
   // 类型：{Object}
   // 一个与模板中 attribute 对应的数据对象。可选。
+  // 有多个对象
+  // class           
+  // style
+  // attrs
+  // domProps
+  // props
+  // on
+  // nativeOn
+  // directives
+  // scopedSlots
+  // slot
+  // key
+  // ref
   {
+    // 组件传递的参数
     props:{
       level: Number
+    },
+    class: {
+      foo: true,
+      baz: false
+    },
+    style: {
+      height: '34px',
+      background: 'orange',
+      fontSize: '16px'
+    },
+    //正常的html特性(除了class和style)
+    attrs: {
+      id: 'foo',
+      title: 'baz'
+    },
+    //用来写原生的DOM属性
+    domProps: {
+      innerHTML: '<span style="color:blue;font-size:24px">江心比心</span>'
     }
   },
 
@@ -241,4 +273,36 @@ export default {
 <style>
 </style>
 ```
+
+## JSX
+
+使用 JSX 可以在 js 代码中写 HTML 标签，可以精简render代码。
+
+我们想在页面显示一个 `h1` 标签，使用 render函数 写法如下：
+
+```vue
+<script>
+ export default {
+    name: "Jsx",
+    render(createElement) {
+        return createElement('h1','HelloJSX')
+    },
+ }
+</script>
+```
+
+也可以使用 JSX，写法更简单
+
+```vue
+<script>
+ export default {
+    name: "Jsx",
+    render() {
+        return (<h1>HelloJSX</h1>)
+    },
+ }
+</script>
+```
+
+这种写法更直观，它可以让我们回到更接近于模板的语法上。
 
