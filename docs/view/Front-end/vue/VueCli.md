@@ -27,6 +27,8 @@ autoPrev: declarationPeriod
 
 开发中我们可能还会添加一些其他的文件，如下：
 
+### env
+
 ::: tip
 
 .env.development：添加下根目录下，开发环境下的配置
@@ -39,5 +41,29 @@ autoPrev: declarationPeriod
 比如我们在开发环境下项目访问路径前面加上 `/dev-api`，生产环境访问路径加上 `/prod-api`。我们就可以用到上面的两个文件。
 
 分别在 `.env.development` 和 `.env.production` 
+```js
+VUE_APP_BASE_API = '/dev-api'
 ```
+
+```js
+VUE_APP_BASE_API = '/prod-api'
 ```
+
+在文件中使用 `process.env.VUE_APP_BASE_API` 就能读到两个文件设置的内容。
+
+如果使用 `npm run serve` 就会自动读取 `.env.development` 中的内容，使用 `npm run build:prod` 就会在`.env.production` 中读取数据，前提是要在 `package.json` 进行添加。
+
+```json
+"scripts": {
+    "dev": "vue-cli-service serve",
+    "build:prod": "vue-cli-service build"
+  }
+```
+
+### vue.config.js
+
+`vue.config.js` 是一个可选的配置文件，如果项目的 (和 `package.json` 同级的) 根目录中存在这个文件，那么它会被 @vue/cli-service 自动加载。你也可以使用 `package.json` 中的 `vue` 字段，但是注意这种写法需要你严格遵照 JSON 的格式来写。
+
+请参考官方文档：[官方文档](https://cli.vuejs.org/zh/config/)
+
+
