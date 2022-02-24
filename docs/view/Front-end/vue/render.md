@@ -9,7 +9,7 @@ Vue 推荐在绝大多数情况下使用模板来创建你的 HTML。然而在�
 
 拿官网的案例来说，我们想要实现根据不同的 `level` 来渲染 h 标签的大小。根据前面的知识首先想到的是这样做：
 
-先创建一个组件 `AnchoredHeading`
+先创建一个组件 `AnchoredHeading`，详细了解组件请移步[Vue组件](./component.html#概念)
 
 ```vue
 <template>
