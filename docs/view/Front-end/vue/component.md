@@ -259,5 +259,83 @@ export default {
 
 点击子组件的按钮，触发`sendStudentlName` 函数，在函数里面通过`$emit` 再去触发父组件的自定义事件，同时将参数传递过去。
 
+### 方式二：全局事件总线（$emit/$on）
+
+这种方法通过一个空的 Vue 实例作为全局事件总线，用它来触发事件和监听事件，巧妙而轻量实现了任何组件的通信，包括父子、兄弟、跨级。
+
+可以定义一个空的Vue实例，我这里就是用App的实例作为事件总线。
+
+```js
+new Vue({
+	el:'#app',
+	render: h => h(App),
+	beforeCreate() {
+		Vue.prototype.$bus = this //安装全局事件总线
+	},
+})
+```
+
+在 App.vue 调用`beforeCreate`钩子时，就给它绑定一个变量，值就是App实例。
+
+然后分别创建 `C`、`D` 两个子组件，案例是 `D` 组件传给 `C` 组件数据
+
+```vue
+D组件
+
+<template>
+	<div class="c">
+		<button @click="sendStudentName">把数据发送给C组件</button>
+	</div>
+</template>
+
+<script>
+	export default {
+		name:'c',
+		data() {
+			return {
+				name:'张三',
+				sex:'男',
+			}
+		},
+		methods: {
+			sendStudentName(){
+				this.$bus.$emit('hello',this.name)
+			}
+		},
+	}
+</script>
+```
+由于我们写了 `Vue.prototype.$bus = this`，所以就能直接通过`this.$bus` 获取到 `全局总线`，也就是 App的实例。然后通过 `$emit` 将数据发送出去，<font>注意，$emit 第一个参数是名称，第二个参数才是要传递的数据</font>
+
+```vue
+<template>
+	<div class="school">
+		<h2>C组件：{{}}</h2>
+	</div>
+</template>
+
+<script>
+	export default {
+		name:'C',
+		data() {
+			return {
+				mag:''
+			}
+		},
+		mounted() {
+			// console.log('School',this)
+			this.$bus.$on('hello',(data)=>{
+                this.msg = data
+				console.log('我是School组件，收到了数据',data)
+			})
+		},
+		beforeDestroy() {
+			this.$bus.$off('hello')
+		}, 
+	}
+</script>
+```
+相同的道理拿到 `App` 实例后，使用 `$on` 监听 `hello`，要和`$emit`第一个参数相同，因为有时不确定何时会触发，一般会在 `mounted` 或 `created` 钩子中来监听。完成后可以使用`$off` 停止自定义事件，停止后再点击就不执行了。
+
 
 
