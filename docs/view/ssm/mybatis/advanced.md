@@ -292,7 +292,7 @@ public interface AddressMapper {
 ```
 这里，定义 `association` 的时候，不直接指定映射的字段，而是指定要执行的方法，通过 `select` 字段来指定。
 
-`column` 表示执行方法时传递的参数字段，前面的`id`表示`getUserById`方法的参数，后面的`address_id`为`getUserById`方法传返回的列，名。将返回列名`address_id`的值赋值给`getAddressById`方法的参数，作为查询条件进行查询。如果`getAddressById`有多个参数，用 `,`分隔 `{id=address_id,xx=xx}`
+`column` 表示执行方法时传递的参数字段，前面的`id`表示`getUserById`方法的参数，后面的`address_id`是执行`getUserById` 查询返回的address的id。将查询到的`address_id`的值赋值给`getAddressById`方法的参数，作为查询条件进行查询。如果`getAddressById`有多个参数，用 `,`分隔 `{id=address_id,xx=xx}`
 
 fetchType 表示开启懒加载。
 
