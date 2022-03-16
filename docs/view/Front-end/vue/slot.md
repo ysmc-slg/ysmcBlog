@@ -246,7 +246,7 @@ autoPrev: cache
 	<div class="container">
 
 		<Category title="游戏">
-			<template v-slot:[name] = props>
+			<template v-slot:default = props>
 				<ul>
 					<li v-for="(g,index) in props.games" :key="index">{{g}}</li>
 				</ul>
@@ -254,7 +254,7 @@ autoPrev: cache
 		</Category>
 
 		<Category title="游戏">
-			<template scope="{games}">
+			<template v-slot:default="{games}">
 				<ol>
 					<li style="color:red" v-for="(g,index) in games" :key="index">{{g}}</li>
 				</ol>
@@ -262,7 +262,7 @@ autoPrev: cache
 		</Category>
 
 		<Category title="游戏">
-			<template slot-scope="{games}">
+			<v-slot:default v-slot:default="{games}">
 				<h4 v-for="(g,index) in games" :key="index">{{g}}</h4>
 			</template>
 		</Category>
@@ -289,4 +289,12 @@ autoPrev: cache
 </style>
 
 ```
+
+::: tip 注意
+
+1. 作用域插槽必须使用 `template` 标签。
+2. 自 2.6.0 起有所更新。已废弃的使用 slot-scope，改用 `v-slot:[name]` 如果 `slot标签` 没有name，需要写成 v-slot:default
+3. `v-slot:default = props` props是一个数组，里面可能有多个参数，如果在`slot标签` 中传两个参数(game/hello)，props就会有这两个值
+
+:::
 
