@@ -33,6 +33,13 @@ module.exports = [
     
   },
   {
+    text: '解决方案',
+    items: [
+      { text: '自定义注解实现添加操作日志', link: '/view/solution/aop/' }
+    ],
+    
+  },
+  {
     text: 'SSM',
     items: [
       { text: 'Spring', link: '/view/ssm/spring/' },
