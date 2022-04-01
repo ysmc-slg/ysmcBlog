@@ -354,3 +354,298 @@ export default {
   }
 }
 ```
+
+### Mutation 需遵守 Vue 的响应规则
+
+既然 `Vuex` 的 `store` 中的状态是响应式的，那么当我们变更状态时，监视状态的 Vue 组件也会自动更新。这也意味着 `Vuex` 中的 `mutation` 也需要与使用 Vue 一样遵守一些注意事项：
+
+1. 最好提前在 `store` 中初始化好所有所需属性。
+2. 当需要在对象上添加新属性是，你应该
+   * 使用 `Vue.set(obj,'newProp',123)`
+   ```js
+    import Vue from 'vue'
+    const store = new Vuex.Store({
+      state: { 
+        info: {
+          name: 'zxq',
+          age: 23
+        }
+      },
+      mutations: {
+        UPDATE_INFO (state) {
+          Vue.set(state.info,'address','山东')
+        }
+      }
+    })
+   ```
+  此时调用`UPDATE_INFO`就会给info添加一个新属性`address`
+3. mutation 必须是同步函数
+
+## Actions
+Action 类似于 mutation，不同在于：
+* Action 提交的是 `mutation`，而不是直接变更状态。
+* Action 可以包含任意异步操作。
+
+让我们来注册一个简单的 action：
+```js
+import Vue from 'vue'
+const store = new Vuex.Store({
+  state: { 
+  	info: {
+      name: 'zxq',
+      age: 23
+    }
+  },
+  mutations: {
+    updateInfo (state) {
+       Vue.set(state.info,'address','山东')
+    }
+  },
+  actions:{
+      //context：上下文
+      aUpadteInfo(context) {
+        setTimeout(() => {
+           context.commit('updateInfo')
+         })
+       }
+    }
+})
+```
+Action 函数接受一个与 `store` 实例具有相同方法和属性的 `context` 对象，因此你可以调用 `context.commit` 提交一个 `mutation`，或者通过 `context.state` 和 `context.getters` 来获取 `state` 和 `getters`。
+
+通过 `this.$store.dispatch()` 在组件中触发 `action`。
+```js
+updateInfo(){
+   this.$store.dispatch('aUpadteInfo')
+}
+```
+开发中，我们经常使用 `参数解构({commit})` 来简化代码（特别是我们需要调用 `commit` 很多次的时候）
+```js
+ actions:{
+  //context：上下文
+  aUpadteInfo({ commit }) {
+    setTimeout(() => {
+        commit('updateInfo')
+      })
+    }
+}
+``` 
+
+
+**Actions 支持与mutation同样的载荷方式和对象方式进行分发：**
+
+```js
+// 以载荷形式分发
+this.$store.dispatch('aUpadteInfo', {
+  amount: 10
+})
+
+// 以对象形式分发
+this.$store.dispatch({
+  type: 'aUpadteInfo',
+  amount: 10
+})
+```
+
+## Module
+由于使用单一状态树（state），应用的所有状态会集中到一个比较大的对象。当应用变得非常复杂时，store 对象就有可能变得相当臃肿。
+
+为了解决以上问题，`Vuex` 允许我们将 `store` 分割成`模块（module）`。每个模块拥有自己的 state、mutation、action、getter、甚至是嵌套子模块——从上至下进行同样方式的分割：
+
+```js
+const moduleA = {
+  state: () => ({ ... }),
+  mutations: { ... },
+  actions: { ... },
+  getters: { ... }
+}
+
+const moduleB = {
+  state: () => ({ ... }),
+  mutations: { ... },
+  actions: { ... }
+}
+
+const store = new Vuex.Store({
+  modules: {
+    a: moduleA,
+    b: moduleB
+  }
+})
+
+store.state.a // -> moduleA 的状态
+store.state.b // -> moduleB 的状态
+```
+
+### 模块的局部状态
+对于模块内部的 mutation 和 getter，接收的第一个参数是`模块的局部状态对象`。
+```js
+const moduleA = {
+  state: () => ({
+    count: 0
+  }),
+  mutations: {
+    increment (state) {
+      // 这里的 `state` 对象是模块的局部状态
+      state.count++
+    }
+  },
+
+  getters: {
+    doubleCount (state) {
+      return state.count * 2
+    }
+  }
+}
+```
+同样，对于模块内部的 action，局部状态通过 `context.state` 暴露出来，根节点状态则为 `context.rootState`：
+```js
+const moduleA = {
+  // ...
+  actions: {
+    incrementIfOddOnRootSum ({ state, commit, rootState }) {
+      if ((state.count + rootState.count) % 2 === 1) {
+        commit('increment')
+      }
+    }
+  }
+}
+```
+对于模块内部的 getter，根节点状态会作为第三个参数暴露出来：
+```js
+const moduleA = {
+  // ...
+  getters: {
+    sumWithRootCount (state, getters, rootState) {
+      return state.count + rootState.count
+    }
+  }
+}
+```
+
+### 命名空间
+默认情况下，模块内部的 action、mutation 和 getter 是注册在<font color="red">全局命名空间</font>的——这样使得多个模块能够对同一 mutation 或 action 作出响应。
+
+如果希望你的模块具有更高的封装度和复用性，你可以通过添加 `namespaced: true` 的方式使其成为带命名空间的模块。<font color="red">当模块被注册后，它的所有 getter、action 及 mutation 都会自动根据模块注册的路径调整命名</font>。例如：
+
+```js
+const store = new Vuex.Store({
+  modules: {
+    account: {
+      namespaced: true,
+
+      // 模块内容（module assets）
+      state: () => ({ ... }), // 模块内的状态已经是嵌套的了，使用 `namespaced` 属性不会对其产生影响
+      getters: {
+        isAdmin () { ... } // -> getters['account/isAdmin']
+      },
+      actions: {
+        login () { ... } // -> dispatch('account/login')
+      },
+      mutations: {
+        login () { ... } // -> commit('account/login')
+      }
+    }
+  }
+})
+```
+加上 `namespaced: true` 后，调用 `action` 的路径为 `dispatch('account/login')` 其他如上代码所示。
+
+启用了命名空间的 getter 和 action 会收到局部化的 getter，dispatch 和 commit。换言之，你在使用模块内容（module assets）时不需要在同一模块内额外添加空间名前缀。更改 namespaced 属性后不需要修改模块内的代码。
+
+### 在带命名空间的模块访问全局内容
+如果你希望使用全局 state 和 getter，`rootState` 和 `rootGetters` 会作为第三和第四参数传入 getter，也会通过 `context` 对象的属性传入 action。
+
+若需要调用全局的 action 或提交 mutation，将 `{ root: true }` 作为第三参数传给 `dispatch` 或 `commit` 即可。
+
+```js
+modules: {
+  foo: {
+    namespaced: true,
+
+    getters: {
+      // 在这个模块的 getter 中，`getters` 被局部化了
+      // 你可以使用 getter 的第四个参数来调用 `rootGetters`
+      someGetter (state, getters, rootState, rootGetters) {
+        getters.someOtherGetter // -> 'foo/someOtherGetter'
+        rootGetters.someOtherGetter // -> 'someOtherGetter'
+      },
+      someOtherGetter: state => { ... }
+    },
+
+    actions: {
+      // 在这个模块中， dispatch 和 commit 也被局部化了
+      // 他们可以接受 `root` 属性以访问根 dispatch 或 commit
+      someAction ({ dispatch, commit, getters, rootGetters }) {
+        getters.someGetter // -> 'foo/someGetter'
+        rootGetters.someGetter // -> 'someGetter'
+
+        dispatch('someOtherAction') // -> 'foo/someOtherAction'
+        dispatch('someOtherAction', null, { root: true }) // -> 'someOtherAction'
+
+        commit('someMutation') // -> 'foo/someMutation'
+        commit('someMutation', null, { root: true }) // -> 'someMutation'
+      },
+      someOtherAction (ctx, payload) { ... }
+    }
+  }
+}
+```
+### 在带命名空间的模块注册全局 action
+若需要在带命名空间的模块注册全局 action，你可添加 `root: true`，并将这个 action 的定义放在函数 `handler` 中。例如：
+```js
+{
+  actions: {
+    someOtherAction ({dispatch}) {
+      dispatch('someAction')
+    }
+  },
+  modules: {
+    foo: {
+      namespaced: true,
+
+      actions: {
+        someAction: {
+          root: true,
+          handler (namespacedContext, payload) { ... } // -> 'someAction'
+        }
+      }
+    }
+  }
+}
+```
+
+### 带名称空间的绑定函数<Badge text="知识点" type="warning"/>
+当使用 `mapState`, `mapGetters`, `mapActions` 和 `mapMutations` 这些函数来绑定带命名空间的模块时，写起来可能比较繁琐：
+```js
+computed: {
+  ...mapState({
+    a: state => state.some.nested.module.a,
+    b: state => state.some.nested.module.b
+  })
+},
+methods: {
+  ...mapActions([
+    'some/nested/module/foo', // -> this['some/nested/module/foo']()
+    'some/nested/module/bar' // -> this['some/nested/module/bar']()
+  ])
+}
+```
+对于这种情况，你可以将模块的空间名称字符串作为第一个参数传递给上述函数，这样所有绑定都会自动将该模块作为上下文。于是上面的例子可以简化为：
+```js
+computed: {
+  ...mapState('some/nested/module', {
+    a: state => state.a,
+    b: state => state.b
+  })
+
+  // 或者
+  ...mapState('some/nested/module', ["a","b"])
+},
+methods: {
+  ...mapActions('some/nested/module', [
+    'foo', // -> this.foo()
+    'bar' // -> this.bar()
+  ])
+}
+```
