@@ -618,15 +618,35 @@ modules: {
 ### 带名称空间的绑定函数<Badge text="知识点" type="warning"/>
 当使用 `mapState`, `mapGetters`, `mapActions` 和 `mapMutations` 这些函数来绑定带命名空间的模块时，写起来可能比较繁琐：
 ```js
+export default new Vuex.Store({
+	modules:{
+		countAbout:countOptions,
+		personAbout:personOptions
+	}
+})
+```
+```js
+// countOptions
+export default {
+	namespaced:true,
+	actions:{},
+	mutations:{},
+	state:{
+		sum:0, //当前的和
+		school:'尚硅谷',
+		subject:'前端',
+	}
+}
+```
+```js
 computed: {
   ...mapState({
-    a: state => state.some.nested.module.a,
-    b: state => state.some.nested.module.b
+    sum: state => state.countAbout.sum
   })
 },
 methods: {
   ...mapActions([
-    'some/nested/module/foo', // -> this['some/nested/module/foo']()
+    'countAbout/foo', // -> this['some/nested/module/foo']()
     'some/nested/module/bar' // -> this['some/nested/module/bar']()
   ])
 }
@@ -634,17 +654,20 @@ methods: {
 对于这种情况，你可以将模块的空间名称字符串作为第一个参数传递给上述函数，这样所有绑定都会自动将该模块作为上下文。于是上面的例子可以简化为：
 ```js
 computed: {
-  ...mapState('some/nested/module', {
-    a: state => state.a,
-    b: state => state.b
+  ...mapState('countAbout', {
+    sum: state => state.sum,
+    school: state => state.school
   })
 
   // 或者
-  ...mapState('some/nested/module', ["a","b"])
+  ...mapState('countAbout', ["sum","school"])
+
+  // 或者，表示取出countAbout，具体取值如：countAbout.sum
+  ...mapState(["countAbout"])
 },
 methods: {
-  ...mapActions('some/nested/module', [
-    'foo', // -> this.foo()
+  ...mapActions('countAbout', [
+    'countAbout', // -> this.countAbout()
     'bar' // -> this.bar()
   ])
 }
