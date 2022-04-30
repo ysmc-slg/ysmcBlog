@@ -1,7 +1,8 @@
 ---
 title: Eee
-autoPrev: router2
+autoPrev: Vuex
 ---
 
 ### dsfaf
 dsfa
+## hguihiu
