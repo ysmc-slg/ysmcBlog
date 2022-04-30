@@ -467,11 +467,6 @@ export default new VueRouter({
     ```js
     export default {
 		name:'Detail',
-		props:['id','title'],
-		computed: {
-		},
-		mounted() {
-		},
+		props:['id','title']
 	}
-    sadf
     ```
