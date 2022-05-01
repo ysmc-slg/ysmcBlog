@@ -1,0 +1,1 @@
+const t={key:"v-65f44bd9",path:"/algorithms/627-swap-salary.html",title:"\u53D8\u66F4\u6027\u522B",lang:"zh-CN",frontmatter:{autoSort:-627},excerpt:"",headers:[{level:2,title:"SET",slug:"set",children:[]}],filePathRelative:"algorithms/627-swap-salary.md",git:{updatedTime:1651393107e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:1}]}};export{t as data};

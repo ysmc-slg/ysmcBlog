@@ -1,0 +1,1 @@
+const t={key:"v-09e08423",path:"/algorithms/55-jump-game.html",title:"\u8DF3\u8DC3\u6E38\u620F",lang:"zh-CN",frontmatter:{autoSort:-55},excerpt:"",headers:[{level:2,title:"\u8D2A\u5FC3",slug:"\u8D2A\u5FC3",children:[]}],filePathRelative:"algorithms/55-jump-game.md",git:{updatedTime:1651393107e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:1}]}};export{t as data};

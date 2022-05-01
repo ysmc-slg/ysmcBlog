@@ -1,0 +1,1 @@
+const e={key:"v-7fbd6690",path:"/frontend/typescript/extend-vue-router-meta-interface.html",title:"\u6269\u5C55 Vue Router Meta \u4FE1\u606F",lang:"zh-CN",frontmatter:{},excerpt:"",headers:[],filePathRelative:"frontend/typescript/extend-vue-router-meta-interface.md",git:{updatedTime:1651393107e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:1}]}};export{e as data};
