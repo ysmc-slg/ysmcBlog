@@ -1,22 +1,16 @@
 ---
 home: true
-heroImage: /hero.jpg
-heroText: 飞跃高山与大洋的鱼
+heroImage: /lizhi.png
+heroText: 我只横刀向天笑，去留肝胆两昆仑。
 tagline: 文档、笔记、博客
 actionText: 进入笔记 →
-actionLink: /guide/
+ actionLink: /view/preface/
+# actionLink: /guide/
 ---
 
-# 关于~~文档~~笔记
 
-::: danger
-
-这根本不是什么文档，仅仅是一个个人笔记而已。
-
+:::tip  
+  不积跬步，无以至千里；不积小流，无以成江海。
 :::
 
-如果你也想部署这样的一个文档，可以观看视频：
-
-:tada: [视频地址](https://www.bilibili.com/video/av43316513/) :tada:
-
-<p style="text-align:center;">MIT Licensed | Copyright © 2018-2022 飞跃高山与大洋的鱼 | ICP证：<a href="http://www.beian.miit.gov.cn" target="_blank" rel="noopener noreferrer">皖ICP备19002167号</a></p>
+<p style="text-align:center;">MIT Licensed | Copyright © 2021 余生慢尝 | ICP证：<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">鲁ICP备19060158号-1</a></p>

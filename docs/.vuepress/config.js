@@ -18,8 +18,8 @@ module.exports = {
     }
   },
   lang: 'zh-CN',
-  title: '飞跃高山与大洋的鱼',
-  description: '飞跃高山与大洋的鱼的文档, vuepress 文档',
+  title: '余生慢尝',
+  description: '余生慢尝, vuepress 文档',
   head: headConf,
   plugins: pluginConf,
   themeConfig: {
