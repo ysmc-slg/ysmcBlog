@@ -1,7 +1,7 @@
 <template>
   <Layout>
     <template #navbar-after>
-      <a class="icon-button" href="https://github.com/shanyuhai123/documents" target="_blank" aria-label="View GitHub Repo">
+      <a class="icon-button" href="https://github.com/ysmc-slg/ysmcBlog" target="_blank" aria-label="View GitHub Repo">
         <Icon :icon="icons.githubIcon" width="18" />
       </a>
     </template>
