@@ -1,37 +1,34 @@
 {
-  "name": "documents",
+  "name": "docs",
   "version": "1.0.0",
-  "description": "shanyuhai123's docs web",
-  "private": true,
+  "description": "测试",
+  "main": "index.js",
   "scripts": {
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "deploy": "bash deploy.sh",
+    "cname": "bash cname.sh",
+    "docs:nav": "vuepress nav docs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ysmc-slg/ysmcBlog.git"
+    "url": "git@gitee.com:zxq_slg/docs.git"
   },
-  "author": "shanyuhai123",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ysmc-slg/ysmcBlog/issues"
-  },
-  "homepage": "https://github.com/ysmc-slg/ysmcBlog#readme",
-  "devDependencies": {
-    "@vuepress/plugin-google-analytics": "^2.0.0-beta.27",
-    "@vuepress/plugin-medium-zoom": "^2.0.0-beta.27",
-    "@vuepress/plugin-pwa": "^2.0.0-beta.27",
-    "@vuepress/plugin-pwa-popup": "^2.0.0-beta.27",
-    "@vuepress/plugin-register-components": "^2.0.0-beta.27",
-    "@vuepress/plugin-search": "^2.0.0-beta.27",
-    "markdown-it-katex": "^2.0.3",
-    "vuepress": "^2.0.0-beta.27",
-    "vuepress-vite": "^2.0.0-beta.27"
-  },
   "dependencies": {
-    "@iconify-icons/brandico": "^1.1.0",
-    "@iconify/vue": "^3.1.0",
-    "dotenv": "^10.0.0",
-    "vuepress-plugin-auto-sidebar": "^2.4.0-alpha.4"
+    "@mr-hope/vuepress-plugin-last-update": "^1.11.0",
+    "@vssue/api-github-v4": "^1.4.7",
+    "@vssue/vuepress-plugin-vssue": "^1.4.8",
+    "moment": "^2.29.1"
+  },
+  "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.8.2",
+    "@vuepress/plugin-blog": "^1.9.4",
+    "@vuepress/plugin-medium-zoom": "^1.8.2",
+    "@vuepress/plugin-pwa": "^1.8.2",
+    "vuepress": "^1.8.2",
+    "vuepress-plugin-auto-sidebar": "^2.3.0"
   }
 }
