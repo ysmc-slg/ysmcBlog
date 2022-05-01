@@ -27,7 +27,7 @@ ls --help
 ### 3. -c
 
 + commands：执行命令
-+ create：创建
++ create：创建gg
 
 ### 4. -d
 
