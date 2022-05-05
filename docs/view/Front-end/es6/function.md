@@ -162,25 +162,7 @@ var f = function (v) {
 };
 ```
 如果箭头函数 `不需要参数` 或需 `要多个参数` ，就使用一个 `圆括号` 代表参数部分。只有`一个参数`，圆括号可以省略
-```js
-var f = () => 5;
-// 等同于
-var f = function () { 
-  return 5;
-};
 
-var sum = (num1, num2) => num1 + num2;
-// 等同于
-var sum = function(num1, num2) {
-  return num1 + num2;
-};
-
-var y = x => x;
-// 等同于
-var f = function (x) { 
-  return x;
-};
-```
 如果箭头函数的代码块部分 `多于一条语句` ，就要使用大括号将它们括起来，并且使用 `return` 语句返回。
 ```js
 var sum = (num1, num2) => { 
