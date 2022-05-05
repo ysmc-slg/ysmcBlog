@@ -4,181 +4,288 @@ autoPrev: image
 sidebarDepth: 2
 ---
 
-# 了解 Docker 容器
+## 函数默认值
+ES6 之前，不能直接为函数的参数指定默认值，只能采用变通的方法。
+```js
+function log(x, y) {
+  y = y || 'World';
+  console.log(x, y);
+}
 
-## 概念
+log('Hello') // Hello World
+log('Hello', 'China') // Hello China
+log('Hello', '') // Hello World
+```
+上面代码检查函数 `log` 的参数 `y` 有没有赋值，如果没有，则指定默认值为    `World`。这种写法的缺点在于，如果参数 `y` 赋值了，但是对应的布尔值为 `false`，则该赋值不起作用。就像上面代码的最后一行，参数 `y` 等于空字符，结果被改为默认值。
 
-简单来说，容器是镜像的一个运行实例。所不同的是，镜像是静态的只读文件，而容器带有运行时需要的可写文件层，同时，容器中的应用进程处于运行状态。
+ES6 允许为函数的参数设置默认值，即直接写在参数定义的后面。
 
-## 状态
+```js
+function log(x, y = 'World') {
+  console.log(x, y);
+}
 
-### 1. 运行中的容器
+log('Hello') // Hello World
+log('Hello', 'China') // Hello China
+log('Hello', '') // Hello
+```
+可以看到，ES6 的写法比 ES5 简洁许多，而且非常自然。下面是另一个例子。
+```bash
+function Point(x = 0, y = 0) {
+  this.x = x;
+  this.y = y;
+}
+
+const p = new Point();
+p // { x: 0, y: 0 }
+```
+除了简洁，ES6 的写法还有两个好处：首先，阅读代码的人，可以立刻意识到哪些参数是可以省略的，不用查看函数体或文档；其次，有利于将来的代码优化，即使未来的版本在对外接口中，彻底拿掉这个参数，也不会导致以前的代码无法运行。
+
+参数变量是默认声明的，所以不能用 `let` 或 `const` 再次声明。
+```js
+function foo(x = 5) {
+  let x = 1; // error
+  const x = 2; // error
+}
+```
+### 与解构赋值默认值结合使用
+函数默认值可以与解构赋值的默认值，结合起来使用。
+```js
+function foo({x, y = 5}) {
+  console.log(x, y);
+}
+
+foo({}) // undefined 5
+foo({x: 1}) // 1 5
+foo({x: 1, y: 2}) // 1 2
+foo() // TypeError: Cannot read property 'x' of undefined
+```
+上面代码只使用了对象的解构赋值默认值，没有使用函数参数的默认值。只有当函数foo的参数是一个对象时，变量x和y才会通过解构赋值生成。如果函数foo调用时没提供参数，变量x和y就不会生成，从而报错。通过提供函数参数的默认值，就可以避免这种情况。
+
+```js
+function foo({x, y = 5} = {}) {
+  console.log(x, y);
+}
+
+foo() // undefined 5
+```
+### 函数的 length 属性
+指定了默认值以后，函数的 `length` 属性，将返回没有指定默认值的参数个数。也就是说，指定了默认值后，`length` 属性将失真。
+```js
+(function (a) {}).length // 1
+(function (a = 5) {}).length // 0
+(function (a, b, c = 5) {}).length // 2
+```
+上面代码中，`length`属性的返回值，等于函数的参数个数减去指定了默认值的参数个数。比如，上面最后一个函数，定义了 3 个参数，其中有一个参数 `c` 指定了默认值，因此`length` 属性等于 `3` 减去 `1`，最后得到 `2`。
+
+## rest 参数
+
+ES6 引入 rest 参数（形式为 <font color='red'>`...变量名`</font>），用于获取函数的多余参数，这样就不需要使用 <font color='red'>`arguments` </font>对象了。rest 参数搭配的变量是一个数组，该变量将多余的参数放入数组中。
+```js
+function add(...values) {
+  let sum = 0;
+
+  for (var val of values) {
+    sum += val;
+  }
+
+  return sum;
+}
+
+add(2, 5, 3) // 10
+```
+上面代码的<font color='red'>`add`</font>函数是一个求和函数，利用 rest 参数，可以向该函数传入任意数目的参数。
+
+下面是一个 rest 参数代替 `arguments` 变量的例子。
+```js
+// arguments变量的写法
+function sortNumbers() {
+  return Array.from(arguments).sort();
+}
+
+// rest参数的写法
+const sortNumbers = (...numbers) => numbers.sort();
+```
+`arguments` 对象不是数组，而是一个类似数组的对象。所以为了使用数组的方法，必须使用 `Array.from` 先将其转为数组。`rest` 参数就不存在这个问题，它就是一个真正的数组，数组特有的方法都可以使用。下面是一个利用 `rest` 参数改写数组 `push` 方法的例子。
+
+```js
+function push(array, ...items) {
+  items.forEach(function(item) {
+    array.push(item);
+    console.log(item);  // 1 2 3
+  });
+}
+
+var a = [];
+push(a, 1, 2, 3)
+```
+**注意**：<font color = 'red'>rest 参数之后不能再有其他参数（即只能是最后一个参数），否则会报错。</font>
+
+```js
+// 报错
+function f(a, ...b, c) {
+  // ...
+}
+```
+函数的 `length` 属性，不包括 rest 参数。
+```js
+(function(a) {}).length  // 1
+(function(...a) {}).length  // 0
+(function(a, ...b) {}).length  // 1
+```
+## name 属性
+函数的 `name` 属性，返回该函数的函数名。
+```js
+function foo() {}
+foo.name // "foo"
+```
+这个属性早就被浏览器广泛支持，但是直到 ES6，才将其写入了标准。
+
+需要注意的是，ES6 对这个属性的行为做出了一些修改。如果将一个匿名函数赋值给一个变量，ES5 的 `name` 属性，会返回空字符串，而 ES6 的 `name` 属性会返回实际的函数名。
+```js
+var f = function () {};
+
+// ES5
+f.name // ""
+
+// ES6
+f.name // "f"
+```
+上面代码中，变量f等于一个匿名函数，ES5 和 ES6 的name属性返回的值不一样。
+
+## 箭头函数
+
+ES6 允许使用 '箭头'（ `=>` ）定义函数。
 
 ```bash
-docker ps
+var f = v => v;
 
-# -a 所有的
-# -f 可以按需求进行过滤
-# 过滤参数 status：One of created, restarting, running, removing, paused, exited, or dead
+// 等同于
+var f = function (v) {
+  return v;
+};
+```
+如果箭头函数 `不需要参数` 或需 `要多个参数` ，就使用一个 `圆括号` 代表参数部分。只有`一个参数`，圆括号可以省略
+
+如果箭头函数的代码块部分 `多于一条语句` ，就要使用大括号将它们括起来，并且使用 `return` 语句返回。
+```js
+var sum = (num1, num2) => { 
+  let s = num1 + num2
+  return s; 
+}
 ```
 
-### 2. 容器日志
+如果箭头函数的代码块部分只有一条语句，大括号可以省略，此时`return` 必须也省略
 
 ```bash
-# docker logs [OPTIONS] CONTAINER
-docker logs ttubuntu
+var sum = (num1, num2) =>  num1 + num2; 
 
-# -f 跟踪实时日志
-# -n 指定输出多少行日志
-docker logs -f --tail 20 ttubuntu
+console.log(sum(1,2));   //3
 ```
 
-### 3. 容器信息
+由于大括号被解释为代码块，所以如果箭头函数直接返回一个对象，必须在对象外面加上括号，否则会报错。
+```js
+// 报错
+let getTempItem = id => { id: id, name: "Temp" };
 
-```bash
-# 具体信息
-docker insepect ttubuntu
+// 不报错
+let getTempItem = id => ({ id: id, name: "Temp" });
+```
+箭头函数可以与变量解构结合使用。
 
-# 内部进程
-docker top ttubuntu
+```js
+let person = {first:'a',last:'z'}
+		
+const full = ({ first, last }) => first + ' ' + last;
+console.log(full(person))
 
-# 统计信息
-docker stats ttubuntu
+// 等同于
+function full(person) {
+  return person.first + ' ' + person.last;
+}
 ```
 
-### 4. 容器变更
+**使用注意点：**
+::: tip 使用注意点
 
-```bash
-docker diff ttubuntu
+1. 箭头函数没有自己的 `this` 对象（详见下文）
+2. 不可以当作构造函数，也就是说，不可以对箭头函数使用 `new` 命令，否则会抛出一个错误。
+3. 不可以使用 `arguments` 对象，该对象在函数体内不存在。如果要用，可以用 `rest` 参数代替。
+4. 不可以使用 `yield` 命令，因此箭头函数不能用作 Generator 函数 
+
+:::
+
+上面四点中，最重要的是第一点。对于普通函数来说，内部的 `this` 指向函数运行时所在的对象，但是这一点对箭头函数不成立。它没有自己的 `this` 对象，<font color='red'>内部的 `this` 就是定义时上层作用域中的 `this` <font>。也就是说，箭头函数内部的this指向是固定的，相比之下，普通函数的this指向是可变的。
+
+```js
+function foo() {
+  setTimeout(() => {
+    console.log('id:', this.id);
+  }, 100);
+}
+
+var id = 21;
+
+foo.call({ id: 42 });
+// id: 42
 ```
+上面代码中，`setTimeout()` 的参数是一个箭头函数，这个箭头函数的定义生效是在 `foo` 函数生成时，而它真正执行要等到 100 毫秒后。如果是普通函数，执行时 `this` 应该指向全局对象 `window`，这时应该输出 `21` 。但是，箭头函数导致 `this` 总是指向外层代码块的 `this`（本例是 `{id:42}`），所以打印出来的是 `42`。
 
-### 5. 端口映射
+下面例子是回调函数分别为箭头函数和普通函数，对比它们内部的 `this` 指向。
 
-```bash
-docker port ttubuntu
+```js
+function Timer() {
+  this.s1 = 0;
+  this.s2 = 0;
+  // 箭头函数
+  setInterval(() => this.s1++, 1000);
+  // 普通函数
+  setInterval(function () {
+    this.s2++;
+  }, 1000);
+}
+
+var timer = new Timer();
+
+setTimeout(() => console.log('s1: ', timer.s1), 3100);
+setTimeout(() => console.log('s2: ', timer.s2), 3100);
+// s1: 3
+// s2: 0
 ```
+上面代码中，`Timer` 函数内部设置了两个定时器，分别使用了箭头函数和普通函数。前者的 `this` 绑定定义时所在的作用域（即Timer函数），后者的 `this` 指向运行时所在的作用域（即全局对象）。所以，3100 毫秒之后，`timer.s1` 被更新了 3 次，而 `timer.s2` 一次都没更新。
 
-## 操作
+总之，箭头函数根本没有自己的 `this`，导致内部的 `this` 就是外层代码块的 `this`。正是因为它没有 `this`，所以也就不能用作构造函数。
 
-### 1. 创建容器
+```js
+// ES6
+function foo() {
+  setTimeout(() => {
+    console.log('id:', this.id);
+  }, 100);
+}
 
-```bash
-docker create -it --name ttubuntu ubuntu # 默认新创建的容器为停止状态
+// ES5
+function foo() {
+  var _this = this;
+
+  setTimeout(function () {
+    console.log('id:', _this.id);
+  }, 100);
+}
 ```
+上面代码中，转换后的 ES5 版本清楚地说明了，箭头函数里面根本没有自己的this，而是引用外层的 `this`。
 
-+ `-i` 让容器的标准输入保持打开
-+ `-t` 让 Docker 分配一个伪终端并绑定到容器上
+除了`this`，以下三个变量在箭头函数之中也是不存在的，指向外层函数的对应变量：`arguments`、`super`、`new.target`。
+```js
+function foo() {
+  setTimeout(() => {
+    console.log('args:', arguments);
+  }, 100);
+}
 
-### 2. 启动容器
-
-```bash
-# docker start [OPTIONS] CONTAINER [CONTAINER...]
-docker start ttubuntu
+foo(2, 4, 6, 8)
+// args: [2, 4, 6, 8]
 ```
+上面代码中，箭头函数内部的变量`arguments`，其实是函数`foo`的 `arguments` 变量。
 
-### 3. 执行容器
-
-```bash
-docker run ubuntu echo "hello world"
-```
-
-等价于先执行 `docker create` 再执行 `docker start`，在输出 `hello world` 后容器自动停止。
-
-```bash
-# 守护态 -d
-docker run -d ubuntu /bin/sh -c "while true; do echo hello world; sleep 1;done"
-```
-
-### 4. 暂停/恢复容器
-
-```bash
-docker pause ttubuntu
-# docker unpause ttubuntu
-docker ps
-
-# 可见 paused 状态
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                   PORTS               NAMES
-228fe9793889        ubuntu              "/bin/bash"         14 minutes ago      Up 14 minutes (Paused)                       ttubuntu
-```
-
-### 5. 终止
-
-```bash
-docker stop ttubuntu
-
-# 验证
-docker ps # ttubuntu 已消失
-```
-
-### 6. 启动/重启容器
-
-`restart` 命令会将一个运行态的容器先终止，然后再重新启动。
-
-```bash
-docker start ttubuntu
-# docker restart ttubuntu
-
-# 验证
-docker ps # ttubuntu 可见
-```
-
-### 7. 清除停止状态的容器
-
-```bash
-docker container prune
-
-# 验证
-docker start ttubuntu
-# Error response from daemon: No such container: ttubuntu
-```
-
-### 8. 删除容器
-
-```bash
-# docker rm [OPTIONS] CONTAINER [CONTAINER...]
-# -v 可以删除容器挂载的数据卷
-docker rm ttubuntu
-```
-
-### 9. 更新容器配置
-
-```bash
-docker update ttubuntu
-```
-
-## 进入容器
-
-在使用 `-d` 参数启动容器后，容器会进入后台，无法看到容器的输出信息，可以利用 `docker attach` 或 `docker exec` 进入容器。
-
-`attach` 不会在容器中创建进程执行额外的命令，只是附着到容器上；`exec` 会在运行的容器上创建进程执行新的命令。
-
-```bash
-docker exec -it ttubuntu sh
-```
-
-## 分享
-
-### 1. 导出容器
-
-不管容器是否处于运行状态，都可以导出。
-
-```bash
-# docker export [OPTIONS] CONTAINER
-docker export -o ubuntu-latest.tar ttubuntu
-```
-
-### 2. 导入容器
-
-```bash
-# docker import [OPTIONS] file|URL|- [REPOSITORY[:TAG]]
-docker import http://example.com/exampleimage.tgz
-docker import ubuntu-latest.tar
-```
-
-### 3. 复制文件
-
-主机和容器间复制文件。
-
-```bash
-docker cp data ttubuntu:/tmp/
-```
+另外，由于箭头函数没有自己的 `this`，所以当然也就不能用`call()`、`apply()`、`bind()` 这些方法去改变this的指向。
