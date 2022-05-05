@@ -67,27 +67,27 @@ module.exports = [
   },
   {
     text: '前言',
-    link: '/view/preface/'
+    link: '/preface/'
   },
   {
     text: '数据库',
     items: [
-      { text: 'Redis', link: '/view/database/redis/' },
-      { text: 'Mysql', link: '/view/database/mysql/' },
+      { text: 'Redis', link: '/database/redis/' },
+      { text: 'Mysql', link: '/database/mysql/' },
     ]
   },
   {
     text: 'java系',
     items: [
-      { text: 'java基础', link: '/view/java/basics/' },
-      { text: 'Java8新特性', link: '/view/java/jdk8/' },
-      { text: 'java反射', link: '/view/java/reflection/' },
+      { text: 'java基础', link: '/java/basics/' },
+      { text: 'Java8新特性', link: '/java/jdk8/' },
+      { text: 'java反射', link: '/java/reflection/' },
       { 
         text: 'MQ',
         items: [
           {
             text: 'rabbitMQ',
-            link: '/view/mq/rabbitmq/'
+            link: '/mq/rabbitmq/'
           },
         ]
       }
@@ -97,40 +97,40 @@ module.exports = [
   {
     text: '解决方案',
     items: [
-      { text: '自定义注解实现添加操作日志', link: '/view/solution/aop/' }
+      { text: '自定义注解实现添加操作日志', link: '/solution/aop/' }
     ],
     
   },
   {
     text: 'SSM',
     items: [
-      { text: 'Spring', link: '/view/ssm/spring/' },
-      { text: 'SpringMVC', link: '/view/ssm/springmvc/' },
-      { text: 'Mybatis', link: '/view/ssm/mybatis/' },
-      { text: 'SSM整合', link: '/view/ssm/integration/' },
+      { text: 'Spring', link: '/ssm/spring/' },
+      { text: 'SpringMVC', link: '/ssm/springmvc/' },
+      { text: 'Mybatis', link: '/ssm/mybatis/' },
+      { text: 'SSM整合', link: '/ssm/integration/' },
       { 
         text: '高级部分',
         items: [
           {
             text: 'Spring',
-            link: '/view/ssm/ssm-senior/spring/'
+            link: '/ssm/ssm-senior/spring/'
           },{
             text: 'SpringMVC',
-            link: '/view/ssm/ssm-senior/springmvc/'
+            link: '/ssm/ssm-senior/springmvc/'
           },
         ]
       }
     ]
   },
   {
-    text: 'SpringBoot',link: '/view/springboot/'
+    text: 'SpringBoot',link: '/springboot/'
   },
 
   {
     text: '前端',
     items: [
-      { text: 'ES6新特性', link: '/view/Front-end/es6/' },
-      { text: 'VueJS', link: '/view/Front-end/vue/' }
+      { text: 'ES6新特性', link: '/Front-end/es6/' },
+      { text: 'VueJS', link: '/Front-end/vue/' }
     ]
   },
 
