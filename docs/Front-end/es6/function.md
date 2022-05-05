@@ -28,7 +28,7 @@ log('Hello', 'China') // Hello China
 log('Hello', '') // Hello
 ```
 可以看到，ES6 的写法比 ES5 简洁许多，而且非常自然。下面是另一个例子。
-```js
+```bash
 function Point(x = 0, y = 0) {
   this.x = x;
   this.y = y;
@@ -152,8 +152,10 @@ f.name // "f"
 上面代码中，变量f等于一个匿名函数，ES5 和 ES6 的name属性返回的值不一样。
 
 ## 箭头函数
+
 ES6 允许使用 '箭头'（ `=>` ）定义函数。
-```js
+
+```bash
 var f = v => v;
 
 // 等同于
@@ -170,8 +172,10 @@ var sum = (num1, num2) => {
   return s; 
 }
 ```
+
 如果箭头函数的代码块部分只有一条语句，大括号可以省略，此时`return` 必须也省略
-```js
+
+```bash
 var sum = (num1, num2) =>  num1 + num2; 
 
 console.log(sum(1,2));   //3
