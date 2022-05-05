@@ -5,8 +5,10 @@ sidebarDepth: 2
 ---
 
 ## 函数默认值
+
 ES6 之前，不能直接为函数的参数指定默认值，只能采用变通的方法。
-```js
+
+```bash
 function log(x, y) {
   y = y || 'World';
   console.log(x, y);
@@ -15,21 +17,25 @@ function log(x, y) {
 log('Hello') // Hello World
 log('Hello', 'China') // Hello China
 log('Hello', '') // Hello World
+
 ```
 上面代码检查函数 `log` 的参数 `y` 有没有赋值，如果没有，则指定默认值为    `World`。这种写法的缺点在于，如果参数 `y` 赋值了，但是对应的布尔值为 `false`，则该赋值不起作用。就像上面代码的最后一行，参数 `y` 等于空字符，结果被改为默认值。
 
 ES6 允许为函数的参数设置默认值，即直接写在参数定义的后面。
 
-```js
+```bash
+
 function log(x, y = 'World') {
   console.log(x, y);
 }
 
-log('Hello') // Hello World
-log('Hello', 'China') // Hello China
-log('Hello', '') // Hello
+log('Hello') # Hello World
+log('Hello', 'China') # Hello China
+log('Hello', '') # Hello
 ```
+
 可以看到，ES6 的写法比 ES5 简洁许多，而且非常自然。下面是另一个例子。
+
 ```bash
 function Point(x = 0, y = 0) {
   this.x = x;
@@ -39,9 +45,11 @@ function Point(x = 0, y = 0) {
 const p = new Point();
 p // { x: 0, y: 0 }
 ```
+
 除了简洁，ES6 的写法还有两个好处：首先，阅读代码的人，可以立刻意识到哪些参数是可以省略的，不用查看函数体或文档；其次，有利于将来的代码优化，即使未来的版本在对外接口中，彻底拿掉这个参数，也不会导致以前的代码无法运行。
 
 参数变量是默认声明的，所以不能用 `let` 或 `const` 再次声明。
+
 ```js
 function foo(x = 5) {
   let x = 1; // error
@@ -49,7 +57,9 @@ function foo(x = 5) {
 }
 ```
 ### 与解构赋值默认值结合使用
+
 函数默认值可以与解构赋值的默认值，结合起来使用。
+
 ```js
 function foo({x, y = 5}) {
   console.log(x, y);
@@ -70,6 +80,7 @@ function foo({x, y = 5} = {}) {
 foo() // undefined 5
 ```
 ### 函数的 length 属性
+
 指定了默认值以后，函数的 `length` 属性，将返回没有指定默认值的参数个数。也就是说，指定了默认值后，`length` 属性将失真。
 ```js
 (function (a) {}).length // 1
@@ -81,6 +92,7 @@ foo() // undefined 5
 ## rest 参数
 
 ES6 引入 rest 参数（形式为 <font color='red'>`...变量名`</font>），用于获取函数的多余参数，这样就不需要使用 <font color='red'>`arguments` </font>对象了。rest 参数搭配的变量是一个数组，该变量将多余的参数放入数组中。
+
 ```js
 function add(...values) {
   let sum = 0;
@@ -206,6 +218,7 @@ function full(person) {
 ```
 
 **使用注意点：**
+
 ::: tip 使用注意点
 
 1. 箭头函数没有自己的 `this` 对象（详见下文）
