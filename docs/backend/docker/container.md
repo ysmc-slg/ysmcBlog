@@ -91,7 +91,7 @@ foo() // undefined 5
 
 ## rest 参数
 
-ES6 引入 rest 参数（形式为 <font color='red'>`...变量名`</font>），用于获取函数的多余参数，这样就不需要使用 <font color='red'>`arguments` </font>对象了。rest 参数搭配的变量是一个数组，该变量将多余的参数放入数组中。
+ES6 引入 rest 参数（形式为 `...变量名`），用于获取函数的多余参数，这样就不需要使用 `arguments`对象了。rest 参数搭配的变量是一个数组，该变量将多余的参数放入数组中。
 
 ```js
 function add(...values) {
@@ -106,7 +106,7 @@ function add(...values) {
 
 add(2, 5, 3) // 10
 ```
-上面代码的<font color='red'>`add`</font>函数是一个求和函数，利用 rest 参数，可以向该函数传入任意数目的参数。
+上面代码的`add`函数是一个求和函数，利用 rest 参数，可以向该函数传入任意数目的参数。
 
 下面是一个 rest 参数代替 `arguments` 变量的例子。
 ```js
@@ -131,7 +131,7 @@ function push(array, ...items) {
 var a = [];
 push(a, 1, 2, 3)
 ```
-**注意**：<font color = 'red'>rest 参数之后不能再有其他参数（即只能是最后一个参数），否则会报错。</font>
+**注意**：<div style="color:red">rest 参数之后不能再有其他参数（即只能是最后一个参数），否则会报错。</div>
 
 ```js
 // 报错
