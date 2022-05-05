@@ -1,35 +1,48 @@
-
-const headConf = require("./config/headConf")
-const pluginsConf = require('./config/pluginsConf')
-const sidebarConf = require('./config/sidebarConf')
-const navConf = require('./config/navConf')
-
+const path = require('path');
+const katex = require('markdown-it-katex')
+const pluginConf = require('./config/pluginConf.js');
+const navConf = require('./config/navConf.js');
+const sidebarConf = require('./config/sidebarConf.js');
+const headConf = require('./config/headConf.js');
 
 module.exports = {
-  title: "余生慢尝",
-  description: '余生慢尝的笔记',
+  theme: path.resolve(__dirname, './theme'),
+  bundler: '@vuepress/vite',
+  bundlerConfig: {
+    vuePluginOptions: {
+      template: {
+        compilerOptions: {
+          isCustomElement: tag => ['mi', 'msup', 'mo', 'mrow', 'annotation', 'semantics', 'math', 'msub'].includes(tag)
+        }
+      }
+    }
+  },
+  lang: 'zh-CN',
+  title: '余生慢尝',
+  description: '余生慢尝, vuepress 文档',
   head: headConf,
-  plugins: pluginsConf,
-
+  plugins: pluginConf,
   themeConfig: {
-    lastUpdated: '更新时间',
-    logo: '/assets/img/hero.png',
-    sidebar: sidebarConf,
-    nav: navConf,
+    logo: '/hero.jpg',
+    lastUpdatedText: '上次更新',
+    contributorsText: '贡献者',
+    docsRepo: 'ysmc-slg/ysmcBlog',
+    editLinks: true,
+    editLinkText: '编辑文档！',
+    docsDir: 'docs',
+    docsBranch: 'master',
+    navbar: navConf,
+    sidebar: sidebarConf
   },
-
-  markdown:{
-    // 代码块显示行号
-    lineNumbers: true
+  markdown: {
+    importCode: {
+      handleImportPath: str => str.replace(/^@components/, path.resolve(__dirname, './components'))
+    },
+    code: {
+      lineNumbers: false
+    }
   },
-
-   // 作者
-   author: '余生慢尝',
-   // 备案号
-   record: '鲁ICP备19060158号-1',
-   // 项目开始时间
-   startYear: '2021',
-   //git地址
-   //repo: 'zpj80231/znote',
-
+  extendsMarkdown(md) {
+    md.use(katex)
+  }
 }

@@ -1,18 +1,12 @@
----
-home: false
-# heroImage: /hero.png
-actionText: 起步 →
-actionLink: /guide/
-features:
-- title: 简明优先
-  details: 对以 markdown 为中心的项目结构，做最简化的配置，帮助你专注于创作。
-- title: Vue 驱动
-  details: 享用 Vue + webpack 开发环境，在 markdown 中使用 Vue 组件，并通过 Vue 开发自定义主题。
-- title: 性能高效
-  details: VuePress 将每个页面生成为预渲染的静态 HTML，每个页面加载之后，然后作为单页面应用程序(SPA)运行。
-footer: MIT Licensed | Copyright © 2018-present Evan You
----
+![Deploy Vuepress](https://github.com/shanyuhai123/documents/workflows/Deploy%20Vuepress/badge.svg) [![GitHub forks](https://img.shields.io/github/forks/shanyuhai123/documents)](https://github.com/shanyuhai123/documents/network) [![GitHub stars](https://img.shields.io/github/stars/shanyuhai123/documents)](https://github.com/shanyuhai123/documents/stargazers) [![GitHub license](https://img.shields.io/github/license/shanyuhai123/documents)](https://github.com/shanyuhai123/documents/blob/master/LICENSE)
 
-# Hello VuePress
+## 介绍
 
-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
+这是一个由 VuePress 搭建的文档，具体如何搭建 VuePress 文档可以参考我录制的视频, 视频地址为 https://www.bilibili.com/video/av43316513/ 。
+
+
+
+## 说明
+
+评论模块已经被移除，对我来说这是文档，但对于其余人来说这仅仅是一个浅薄的笔记而已，也就没有太多讨论的价值。
+当然，这浅薄的笔记如果能够帮到他人，那真是好极了。
