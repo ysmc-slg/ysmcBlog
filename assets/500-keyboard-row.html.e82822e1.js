@@ -1,0 +1,1 @@
+const t={key:"v-0c94e49b",path:"/algorithms/500-keyboard-row.html",title:"\u952E\u76D8\u884C",lang:"zh-CN",frontmatter:{autoSort:-500},excerpt:"",headers:[{level:2,title:"\u904D\u5386",slug:"\u904D\u5386",children:[]}],filePathRelative:"algorithms/500-keyboard-row.md",git:{updatedTime:1651754193e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:3}]}};export{t as data};

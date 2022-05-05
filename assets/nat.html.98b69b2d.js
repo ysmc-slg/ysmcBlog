@@ -1,0 +1,1 @@
+const t={key:"v-61aa12f3",path:"/computer/nat.html",title:"NAT \u662F\u4EC0\u4E48",lang:"zh-CN",frontmatter:{},excerpt:"",headers:[],filePathRelative:"computer/nat.md",git:{updatedTime:1651754193e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:3}]}};export{t as data};

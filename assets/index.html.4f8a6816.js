@@ -1,1 +1,0 @@
-const t={key:"v-155fce89",path:"/tools/google/",title:"\u8C37\u6B4C",lang:"zh-CN",frontmatter:{},excerpt:"",headers:[],filePathRelative:"tools/google/README.md",git:{updatedTime:1651393107e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:1}]}};export{t as data};

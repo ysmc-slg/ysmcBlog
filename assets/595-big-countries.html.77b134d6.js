@@ -1,0 +1,1 @@
+const t={key:"v-6ebdc600",path:"/algorithms/595-big-countries.html",title:"\u5927\u7684\u56FD\u5BB6",lang:"zh-CN",frontmatter:{autoSort:-595},excerpt:"",headers:[{level:2,title:"OR",slug:"or",children:[]}],filePathRelative:"algorithms/595-big-countries.md",git:{updatedTime:1651754193e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:3}]}};export{t as data};

@@ -1,0 +1,1 @@
+const t={key:"v-7bdd4e1a",path:"/algorithms/155-min-stack.html",title:"\u6700\u5C0F\u6808",lang:"zh-CN",frontmatter:{autoSort:-155},excerpt:"",headers:[{level:2,title:"\u53CC\u6808",slug:"\u53CC\u6808",children:[]}],filePathRelative:"algorithms/155-min-stack.md",git:{updatedTime:1651754193e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:3}]}};export{t as data};
