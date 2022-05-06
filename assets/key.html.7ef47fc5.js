@@ -1,0 +1,1 @@
+const e={key:"v-5ed5ebe9",path:"/database/redis/key.html",title:"redis\u952E(key)\u5E38\u7528\u547D\u4EE4",lang:"zh-CN",frontmatter:{title:"redis\u952E(key)\u5E38\u7528\u547D\u4EE4",autoPrev:"install"},excerpt:"",headers:[],filePathRelative:"database/redis/key.md",git:{updatedTime:1651816461e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:5}]}};export{e as data};
