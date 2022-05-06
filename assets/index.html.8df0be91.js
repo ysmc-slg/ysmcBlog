@@ -1,0 +1,1 @@
+const e={key:"v-fb326fc4",path:"/ssm/ssm-senior/spring/",title:"SpringMVC\u9AD8\u7EA7",lang:"zh-CN",frontmatter:{description:"Spring\u9AD8\u7EA7"},excerpt:"",headers:[],filePathRelative:"ssm/ssm-senior/spring/README.md",git:{updatedTime:1651843712e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:7}]}};export{e as data};

@@ -1,0 +1,1 @@
+const s={key:"v-12205d74",path:"/ssm/ssm-senior/springmvc/",title:"springmvc\u9AD8\u7EA7",lang:"zh-CN",frontmatter:{description:"springmvc\u9AD8\u7EA7"},excerpt:"",headers:[],filePathRelative:"ssm/ssm-senior/springmvc/README.md",git:{updatedTime:1651843712e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:7}]}};export{s as data};
