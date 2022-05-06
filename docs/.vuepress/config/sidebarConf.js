@@ -105,21 +105,89 @@ module.exports = {
       ]
     }
   ],
-  "/backend/docker/": [
+  "/ssm/integration/": [
     {
-      "text": "DOCKER",
-      "title": "DOCKER",
+      "text": "integration",
+      "title": "integration",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
+      ]
+    }
+  ],
+  "/ssm/mybatis/": [
+    {
+      "text": "mybatis",
+      "title": "mybatis",
       "collapsable": false,
       "sidebarDepth": 1,
       "children": [
         "README.md",
-        "dockerfile.md",
-        "image.md",
-        "container.md",
-        "volumes.md",
-        "docker-compose.md",
-        "etcd.md",
-        "private-registry.md"
+        "select.md",
+        "Primarykey.md",
+        "mapper.md",
+        "advanced.md",
+        "typeHandler.md"
+      ]
+    }
+  ],
+  "/ssm/spring/": [
+    {
+      "text": "spring",
+      "title": "spring",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "IOC.md",
+        "XML.md",
+        "JavaConfiguration.md",
+        "authConfigure.md",
+        "conditionalAnnotation.md",
+        "beanScope.md",
+        "Aware.md",
+        "AOP.md"
+      ]
+    }
+  ],
+  "/ssm/springmvc/": [
+    {
+      "text": "springmvc",
+      "title": "springmvc",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "DispatcherServlet.md",
+        "handler.md",
+        "requestmapping.md",
+        "FileUpload.md",
+        "exceptionAndValidator.md",
+        "json.md",
+        "static.md"
+      ]
+    }
+  ],
+  "/ssm/ssm-senior/spring": [
+    {
+      "text": "seniorspring",
+      "title": "seniorspring",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
+      ]
+    }
+  ],
+  "/ssm/ssm-senior/springmvc": [
+    {
+      "text": "seniorspringmvc",
+      "title": "seniorspringmvc",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
       ]
     }
   ],
