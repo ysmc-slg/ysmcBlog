@@ -132,25 +132,25 @@ module.exports = {
       ]
     }
   ],
-  // "/ssm/spring/": [
-  //   {
-  //     "text": "spring",
-  //     "title": "spring",
-  //     "collapsable": false,
-  //     "sidebarDepth": 1,
-  //     "children": [
-  //       "README.md",
-  //       "IOC.md",
-  //       "XML.md",
-  //       "JavaConfiguration.md",
-  //       "authConfigure.md",
-  //       "conditionalAnnotation.md",
-  //       "beanScope.md",
-  //       "Aware.md",
-  //       "AOP.md"
-  //     ]
-  //   }
-  // ],
+  "/ssm/spring/": [
+    {
+      "text": "spring",
+      "title": "spring",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "IOC.md",
+        "XML.md",
+        "JavaConfiguration.md",
+        "authConfigure.md",
+        "conditionalAnnotation.md",
+        "beanScope.md",
+        "Aware.md",
+        "AOP.md"
+      ]
+    }
+  ],
   // "/ssm/springmvc/": [
   //   {
   //     "text": "springmvc",
