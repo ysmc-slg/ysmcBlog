@@ -61,6 +61,7 @@ method.invoke(object, "hello world",2017032009);//通过invoke调用该方法
 ```java
 public Field[] getDeclaredFields()
 ```
+
 获得类的所有声明的字段，即包括public、private和proteced，但是`不包括父类的申明字段`。
 
 ```java
@@ -101,4 +102,4 @@ public Constructor<?>[] getConstructors()
 public Constructor<T> getConstructor(Class<?>... parameterTypes)
 ```
 
-构造器和上面的方法、属性都是大同小异的。需要注意的是，当返回一个数组的时候，返回类型是Constructor<?>[]而不是Constructor<T>[]，因为从此方法返回之后，该数组可能被修改以保存不同类的 Constructor 对象。
+构造器和上面的方法、属性都是大同小异的。需要注意的是，当返回一个数组的时候，返回类型是Constructor<?>[] ，而不是Constructor<T>[]，因为从此方法返回之后，该数组可能被修改以保存不同类的 Constructor 对象。
