@@ -71,76 +71,76 @@ module.exports = [
   },
   {
     text: '数据库',
-    items: [
+    children: [
       { text: 'Redis', link: '/database/redis/' },
       { text: 'Mysql', link: '/database/mysql/' },
     ]
+  },
+  {
+    text: 'java系',
+    children: [
+      { text: 'java基础', link: '/java/basics/' },
+      { text: 'Java8新特性', link: '/java/jdk8/' },
+      { text: 'java反射', link: '/java/reflection/' },
+      { 
+        text: 'MQ',
+        children: [
+          {
+            text: 'rabbitMQ',
+            link: '/mq/rabbitmq/'
+          },
+        ]
+      }
+    ],
+    
+  },
+  {
+    text: '解决方案',
+    children: [
+      { text: '自定义注解实现添加操作日志', link: '/solution/aop/' }
+    ],
+    
+  },
+  {
+    text: 'SSM',
+    children: [
+      { text: 'Spring', link: '/ssm/spring/' },
+      { text: 'SpringMVC', link: '/ssm/springmvc/' },
+      { text: 'Mybatis', link: '/ssm/mybatis/' },
+      { text: 'SSM整合', link: '/ssm/integration/' },
+      { 
+        text: '高级部分',
+        children: [
+          {
+            text: 'Spring',
+            link: '/ssm/ssm-senior/spring/'
+          },{
+            text: 'SpringMVC',
+            link: '/ssm/ssm-senior/springmvc/'
+          },
+        ]
+      }
+    ]
+  },
+  {
+    text: 'SpringBoot',link: '/springboot/'
+  },
+
+  {
+    text: '前端',
+    children: [
+      { text: 'ES6新特性', link: '/Front-end/es6/' },
+      { text: 'VueJS', link: '/Front-end/vue/' }
+    ]
+  },
+
+  {
+    text: '常用工具',
+    children: [
+      { text: 'elementUI', link: 'https://element.eleme.cn/#/zh-CN/component/table', icon: ':tada:'},
+      { text: 'Vue文档', link: 'https://cn.vuejs.org/v2/guide/' },
+      { text: 'momentjs', link: 'http://momentjs.cn/docs/', icon: ':tada:'},
+      { text: 'EasyPoi文档', link: 'http://easypoi.mydoc.io/'}
+    ]
   }
-  // {
-  //   text: 'java系',
-  //   items: [
-  //     { text: 'java基础', link: '/java/basics/' },
-  //     { text: 'Java8新特性', link: '/java/jdk8/' },
-  //     { text: 'java反射', link: '/java/reflection/' },
-  //     { 
-  //       text: 'MQ',
-  //       items: [
-  //         {
-  //           text: 'rabbitMQ',
-  //           link: '/mq/rabbitmq/'
-  //         },
-  //       ]
-  //     }
-  //   ],
-    
-  // },
-  // {
-  //   text: '解决方案',
-  //   items: [
-  //     { text: '自定义注解实现添加操作日志', link: '/solution/aop/' }
-  //   ],
-    
-  // },
-  // {
-  //   text: 'SSM',
-  //   items: [
-  //     { text: 'Spring', link: '/ssm/spring/' },
-  //     { text: 'SpringMVC', link: '/ssm/springmvc/' },
-  //     { text: 'Mybatis', link: '/ssm/mybatis/' },
-  //     { text: 'SSM整合', link: '/ssm/integration/' },
-  //     { 
-  //       text: '高级部分',
-  //       items: [
-  //         {
-  //           text: 'Spring',
-  //           link: '/ssm/ssm-senior/spring/'
-  //         },{
-  //           text: 'SpringMVC',
-  //           link: '/ssm/ssm-senior/springmvc/'
-  //         },
-  //       ]
-  //     }
-  //   ]
-  // },
-  // {
-  //   text: 'SpringBoot',link: '/springboot/'
-  // },
-
-  // {
-  //   text: '前端',
-  //   items: [
-  //     { text: 'ES6新特性', link: '/Front-end/es6/' },
-  //     { text: 'VueJS', link: '/Front-end/vue/' }
-  //   ]
-  // },
-
-  // {
-  //   text: '常用工具',
-  //   items: [
-  //     { text: 'elementUI', link: 'https://element.eleme.cn/#/zh-CN/component/table', icon: ':tada:'},
-  //     { text: 'Vue文档', link: 'https://cn.vuejs.org/v2/guide/' },
-  //     { text: 'momentjs', link: 'http://momentjs.cn/docs/', icon: ':tada:'},
-  //     { text: 'EasyPoi文档', link: 'http://easypoi.mydoc.io/'}
-  //   ]
-  // }
 ];
