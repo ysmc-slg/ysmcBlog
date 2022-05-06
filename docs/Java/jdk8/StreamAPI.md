@@ -6,8 +6,7 @@ autoPrev: method-reference
 # StreamAPI
 
 ## Stream说明
-Java8中有两大最为重要的改变。第一个是 Lambda 表达式；另外一个则
-是 Stream API。
+Java8中有两大最为重要的改变。第一个是 Lambda 表达式；另外一个则是 Stream API。
 
 Stream 是 Java8 中处理集合的关键抽象概念，它可以指定你希望对集合进
 行的操作，可以执行非常复杂的`查找`、`过滤`和`映射数据`等操作。 使用
@@ -161,7 +160,9 @@ public class EmployeeData {
 	}
 }
 ```
+
 **filter(Predicate p)**：
+
 ```java
   // 查询员工表中薪资大于7000的员工信息
   public void test(){
