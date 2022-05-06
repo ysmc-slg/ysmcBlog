@@ -1,1 +1,0 @@
-const t={key:"v-e396d61c",path:"/database/redis/configuration.html",title:"",lang:"zh-CN",frontmatter:{description:"\u914D\u7F6E\u6587\u4EF6\u4ECB\u7ECD",autoPrev:"zset"},excerpt:"",headers:[],filePathRelative:"database/redis/configuration.md",git:{updatedTime:1651817958e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:6}]}};export{t as data};
