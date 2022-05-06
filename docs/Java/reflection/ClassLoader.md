@@ -7,7 +7,7 @@ autoPrev: class
 
 ## 获取类的方法
 
-获取Class类的四种方法上面已经说了，这里不多介绍。下面主要介绍常用的一些方法
+获取Class类的四种方法上面已经说了，这里不多介绍。下面主要介绍常用的一些方法.
 
 ```java
 Class<?> clazz  = Class.forName("com.Dan.Consumer");
@@ -37,7 +37,7 @@ public Method getMethod(String name,Class<?>... parameterTypes)
 //返回一个 Method 对象，获取类或接口的指定`公共成员方法`。
 ```
 
-得到`Method`可以使用`invoke`方法执行方法。
+得到 `Method` 可以使用 `invoke` 方法执行方法。
 
 ```java
 Class<?> clazz  = Class.forName("com.Dan.Consumer");
