@@ -1,0 +1,1 @@
+const t={key:"v-7691bd28",path:"/ssm/spring/JavaConfiguration.html",title:"Java \u914D\u7F6E",lang:"zh-CN",frontmatter:{title:"Java \u914D\u7F6E",autoPrev:"XML"},excerpt:"",headers:[],filePathRelative:"ssm/spring/JavaConfiguration.md",git:{updatedTime:1651844522e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:9}]}};export{t as data};
