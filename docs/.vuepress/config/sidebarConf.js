@@ -116,22 +116,22 @@ module.exports = {
       ]
     }
   ],
-  "/ssm/mybatis/": [
-    {
-      "text": "mybatis",
-      "title": "mybatis",
-      "collapsable": false,
-      "sidebarDepth": 1,
-      "children": [
-        "README.md",
-        "select.md",
-        "Primarykey.md",
-        "mapper.md",
-        "advanced.md",
-        "typeHandler.md"
-      ]
-    }
-  ],
+  // "/ssm/mybatis/": [
+  //   {
+  //     "text": "mybatis",
+  //     "title": "mybatis",
+  //     "collapsable": false,
+  //     "sidebarDepth": 1,
+  //     "children": [
+  //       "README.md",
+  //       "select.md",
+  //       "Primarykey.md",
+  //       "mapper.md",
+  //       "advanced.md",
+  //       "typeHandler.md"
+  //     ]
+  //   }
+  // ],
   // "/ssm/spring/": [
   //   {
   //     "text": "spring",
