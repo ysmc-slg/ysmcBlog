@@ -132,65 +132,65 @@ module.exports = {
       ]
     }
   ],
-  "/ssm/spring/": [
-    {
-      "text": "spring",
-      "title": "spring",
-      "collapsable": false,
-      "sidebarDepth": 1,
-      "children": [
-        "README.md",
-        "IOC.md",
-        "XML.md",
-        "JavaConfiguration.md",
-        "authConfigure.md",
-        "conditionalAnnotation.md",
-        "beanScope.md",
-        "Aware.md",
-        "AOP.md"
-      ]
-    }
-  ],
-  // "/ssm/springmvc/": [
+  // "/ssm/spring/": [
   //   {
-  //     "text": "springmvc",
-  //     "title": "springmvc",
+  //     "text": "spring",
+  //     "title": "spring",
   //     "collapsable": false,
   //     "sidebarDepth": 1,
   //     "children": [
   //       "README.md",
-  //       "DispatcherServlet.md",
-  //       "handler.md",
-  //       "requestmapping.md",
-  //       "FileUpload.md",
-  //       "exceptionAndValidator.md",
-  //       "json.md",
-  //       "static.md"
+  //       "IOC.md",
+  //       "XML.md",
+  //       "JavaConfiguration.md",
+  //       "authConfigure.md",
+  //       "conditionalAnnotation.md",
+  //       "beanScope.md",
+  //       "Aware.md",
+  //       "AOP.md"
   //     ]
   //   }
   // ],
-  // "/ssm/ssm-senior/spring": [
-  //   {
-  //     "text": "seniorspring",
-  //     "title": "seniorspring",
-  //     "collapsable": false,
-  //     "sidebarDepth": 1,
-  //     "children": [
-  //       "README.md"
-  //     ]
-  //   }
-  // ],
-  // "/ssm/ssm-senior/springmvc": [
-  //   {
-  //     "text": "seniorspringmvc",
-  //     "title": "seniorspringmvc",
-  //     "collapsable": false,
-  //     "sidebarDepth": 1,
-  //     "children": [
-  //       "README.md"
-  //     ]
-  //   }
-  // ],
+  "/ssm/springmvc/": [
+    {
+      "text": "springmvc",
+      "title": "springmvc",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "DispatcherServlet.md",
+        "handler.md",
+        "requestmapping.md",
+        "FileUpload.md",
+        "exceptionAndValidator.md",
+        "json.md",
+        "static.md"
+      ]
+    }
+  ],
+  "/ssm/ssm-senior/spring": [
+    {
+      "text": "seniorspring",
+      "title": "seniorspring",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
+      ]
+    }
+  ],
+  "/ssm/ssm-senior/springmvc": [
+    {
+      "text": "seniorspringmvc",
+      "title": "seniorspringmvc",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
+      ]
+    }
+  ],
   "/backend/golang/": [
     {
       "text": "GOLANG",
