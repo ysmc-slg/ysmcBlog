@@ -3,7 +3,7 @@ description: Hash
 autoPrev: set
 ---
 
-## 哈希(Hash)
+# 哈希(Hash)
 
 ::: tip
 

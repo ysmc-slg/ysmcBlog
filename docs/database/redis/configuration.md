@@ -2,6 +2,7 @@
 description: 配置文件介绍
 autoPrev: zset
 ---
+# 配置文件介绍
 
 下面配置项说明并不全，了解更多请检阅redis.conf。
 

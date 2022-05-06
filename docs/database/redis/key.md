@@ -3,6 +3,8 @@ description: redis键(key)常用命令
 autoPrev: install
 ---
 
+# redis键(key)常用命令
+
 ```redis
 keys *                     查看库中所有的key
 exists <key>               判断某个key是否存在

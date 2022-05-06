@@ -3,6 +3,8 @@ description: 'redis6安装'
 autoPrev: README
 ---
 
+# redis6安装
+
 ## 准备工作 
 版本：`redis-6.2.3`
 

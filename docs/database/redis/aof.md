@@ -1,7 +1,7 @@
 ---
 description: Redis持久化之-AOF
 autoPrev: rdb
-sidebarDepth: 2
+sidebarDepth: 1
 ---
 
 #  Redis持久化之-AOF

@@ -3,7 +3,7 @@ description: Zset
 autoPrev: hash
 ---
 
-## Zset(sorted set)
+# Zset(sorted set)
 :::tip
 
 Redis有序集合zset与普通集合set非常相似，是一个没有重复元素的字符串集合。

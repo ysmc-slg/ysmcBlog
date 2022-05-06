@@ -3,6 +3,8 @@ description: set
 autoPrev: list
 ---
 
+# Set
+
 :::tip
 
 Redis set对外提供的功能与list类似，是一个列表的功能，特殊之处在于set是可以`自动排重`的，当你需要存储一个列表数据，又不希望出现重复数据时，set是一个很好的选择，并且set提供了`判断某个成员是否在一个set集合内`命令，这个也是list所不能提供的。

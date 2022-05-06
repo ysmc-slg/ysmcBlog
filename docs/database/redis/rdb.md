@@ -3,6 +3,8 @@ description: Redis持久化之-RDB
 autoPrev: configuration
 ---
 
+#  Redis持久化之-RDB
+
 Redis 提供了2个不同形式的持久化方式。
 
 * RDB（Redis DataBase）

@@ -3,6 +3,8 @@ description: Redis哨兵模式(Sentinel)
 autoPrev: masterSlave
 ---
 
+# Redis哨兵模式(Sentinel)
+
 ## 简介
 
 Sentinel(哨兵)是用于`监控redis集群中Master状态`的工具，是Redis 的高可用性解决方案，sentinel哨兵模式已经被集成在redis2.4之后的版本中。sentinel是redis高可用的解决方案，`sentinel系统可以监视一个或者多个redis master服务，以及这些master服务的所有从服务；当某个master服务下线时，自动将该master下的某个从服务升级为master服务替代已下线的master服务继续处理请求。`
