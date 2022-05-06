@@ -1,22 +1,5 @@
 module.exports = {
-  "/backend/docker/": [
-    {
-      "text": "DOCKER",
-      "title": "DOCKER",
-      "collapsable": false,
-      "sidebarDepth": 1,
-      "children": [
-        "README.md",
-        "dockerfile.md",
-        "image.md",
-        "container.md",
-        "volumes.md",
-        "docker-compose.md",
-        "etcd.md",
-        "private-registry.md"
-      ]
-    }
-  ],
+  
   "/database/mysql/": [
     {
       "text": "MYSQL",
@@ -49,6 +32,94 @@ module.exports = {
         "masterSlave.md",
         "sentinel.md",
         "springbootredis.md",
+      ]
+    }
+  ],
+  "/java/basics/": [
+    {
+      "text": "Basics",
+      "title": "Basics",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "io.md",
+        "enum.md"
+      ]
+    }
+  ],
+  "/java/jdk8/": [
+    {
+      "text": "jdk8",
+      "title": "jdk8",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "Lamada.md",
+        "functional.md",
+        "method-reference.md",
+        "StreamAPI.md",
+        "CollectorsApi.md",
+        "Date.md"
+      ]
+    }
+  ],
+  "/java/reflection/": [
+    {
+      "text": "reflection",
+      "title": "reflection",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "class.md",
+        "ClassLoader.md"
+      ]
+    }
+  ],
+  "/mq/rabbitmq/": [
+    {
+      "text": "rabbitmq",
+      "title": "rabbitmq",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "rabbitmq.md",
+        "install.md",
+        "web.md",
+        "pattern.md",
+        "HelloWorld.md",
+        "workquene.md",
+        "fanout.md",
+        "direct.md",
+        "topic.md",
+        "messageResponse.md",
+        "persistence.md",
+        "messageDistribution.md",
+        "integrationspringboot.md",
+        "messageConfirmation.md",
+        "MessageSuccessfullyConsumed.md",
+        "message_delay.md"
+      ]
+    }
+  ],
+  "/backend/docker/": [
+    {
+      "text": "DOCKER",
+      "title": "DOCKER",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "dockerfile.md",
+        "image.md",
+        "container.md",
+        "volumes.md",
+        "docker-compose.md",
+        "etcd.md",
+        "private-registry.md"
       ]
     }
   ],
