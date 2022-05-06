@@ -1,6 +1,9 @@
 ---
 description: Mysql
+sidebarDepth: 2
 ---
+
+# Mysql
 
 ## 前言
 mysql是很久之前学过的知识，导致现在有些东西都已经忘记。所以，再次回顾一下，将回顾内容记录下来。
