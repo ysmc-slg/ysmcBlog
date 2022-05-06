@@ -1,5 +1,5 @@
 ---
-title: Redis哨兵模式(Sentinel)
+description: Redis哨兵模式(Sentinel)
 autoPrev: masterSlave
 ---
 

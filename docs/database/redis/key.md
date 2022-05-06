@@ -1,5 +1,5 @@
 ---
-title: redis键(key)常用命令
+description: redis键(key)常用命令
 autoPrev: install
 ---
 

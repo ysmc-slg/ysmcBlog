@@ -17,6 +17,41 @@ module.exports = {
       ]
     }
   ],
+  "/database/mysql/": [
+    {
+      "text": "MYSQL",
+      "title": "MYSQL",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
+      ]
+    }
+  ],
+  "/database/redis/": [
+    {
+      "text": "Redis",
+      "title": "Redis",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "install.md",
+        "key.md",
+        "string.md",
+        "list.md",
+        "set.md",
+        "hash.md",
+        "zset.md",
+        "configuration.md",
+        "rdb.md",
+        "aof.md",
+        "masterSlave.md",
+        "sentinel.md",
+        "springbootredis.md",
+      ]
+    }
+  ],
   "/backend/golang/": [
     {
       "text": "GOLANG",

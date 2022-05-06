@@ -1,5 +1,6 @@
 ---
-title: 'redis6安装'
+description: 'redis6安装' 
+autoPrev: README
 ---
 
 ## 准备工作 

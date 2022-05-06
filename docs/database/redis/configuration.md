@@ -1,5 +1,5 @@
 ---
-title: 配置文件介绍
+description: 配置文件介绍
 autoPrev: zset
 ---
 

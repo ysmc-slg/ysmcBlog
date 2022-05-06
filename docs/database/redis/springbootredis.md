@@ -1,5 +1,5 @@
 ---
-title: SpringBoot + Redis 实现缓存
+description: SpringBoot + Redis 实现缓存
 autoPrev: sentinel
 ---
 上面我们都是讲的 redis 基本命令和配置，我们在开发中并不是直接去使用 redis 命令进行操作的，而是通过 java 代码去操作redis进行具体的操作。
