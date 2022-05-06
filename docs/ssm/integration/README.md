@@ -15,6 +15,7 @@ tomcat和jdk版本需要对应，否则会出现兼容性的问题。
 :::
 
 ## 准备工作
+
 新建一个 `user` 表：
 ```sql
 DROP TABLE IF EXISTS `user`;
