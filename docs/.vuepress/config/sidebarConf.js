@@ -191,6 +191,20 @@ module.exports = {
       ]
     }
   ],
+  "/springboot/": [
+    {
+      "text": "springboot",
+      "title": "springboot",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "basicconfig.md",
+        "springboot-view.md",
+        "spring-web.md"
+      ]
+    }
+  ],
   "/backend/golang/": [
     {
       "text": "GOLANG",
