@@ -224,6 +224,37 @@ module.exports = {
       ]
     }
   ],
+  "/Front-end/vue/": [
+    {
+      "text": "vue",
+      "title": "vue",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "interpolation.md",
+        "computed.md",
+        "watch.md",
+        "style.md",
+        "view.md",
+        "tabView.md",
+        "filter.md",
+        "command.md",
+        "diyCommand.md",
+        "declarationPeriod.md",
+        "VueCli.md",
+        "render.md",
+        "ref.md",
+        "component.md",
+        "mixin.md",
+        "plugin.md",
+        "cache.md",
+        "slot.md",
+        "Vuex.md",
+        "router.md"
+      ]
+    }
+  ],
   "/backend/golang/": [
     {
       "text": "GOLANG",
