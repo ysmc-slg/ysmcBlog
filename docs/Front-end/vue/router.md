@@ -222,3 +222,90 @@ export default new VueRouter({
     router.go(100)
     ```
 
+## 路由组件传参
+
+上面所有的案例故意没讲到传参，这里我们同意来说一下。传参的方式主要有三种：
+
+1. query
+    `<router-link>` 标签和 导航式编程都可以。
+
+    * 1.1 <router-link> 标签方式
+    
+        ```js
+        data() {
+            return {
+                messageList:[
+                    {id:'001',title:'消息001'},
+                    {id:'002',title:'消息002'},
+                    {id:'003',title:'消息003'}
+                ]
+            }
+        }
+        ```
+        ```bash
+        
+        <li v-for="m in messageList" :key="m.id">
+            //跳转路由并携带query参数，to的字符串写法
+            <router-link :to="`/home/message/detail?id=${m.id}&title=${m.title}`">{{m.title}}</router-link>
+            
+
+            //也可以使用对象的方式传递参数
+            <router-link :to="{
+                path:'/home/message/detail',
+                query:{
+                    id:m.id,
+                    title:m.title
+                }
+            }">
+            {{m.title}}
+
+            </router-link>
+
+
+            // 使用路命名
+            <router-link :to="{
+                name:'detail',
+                query:{
+                    id:m.id,
+                    title:m.title
+                }
+            }">
+            {{m.title}}
+            </router-link>
+        </li>
+        ```
+        三种方式任选
+
+    * 1.2 编程式导航
+        ```js
+        //带查询参数，变成 /home/message/detail?id='001&title='消息001'
+        this.$route.push({paht:'/home/message/detail',query:{
+            id:m.id,
+            title:m.title
+        }})
+
+
+        this.$route.push({name:'detail',query:{
+            id:m.id,
+            title:m.title
+        }})
+
+        this.$route.replace({paht:'/home/message/detail',query:{
+            id:m.id,
+            title:m.title
+        }})
+
+
+        this.$route.replace({name:'detail',query:{
+            id:m.id,
+            title:m.title
+        }})
+        ```
+
+    获取参数都是一样的
+
+     ```js
+    $route.query.id
+    $route.query.title
+     ```
+
