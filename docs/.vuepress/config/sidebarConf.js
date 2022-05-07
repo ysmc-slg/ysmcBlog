@@ -205,6 +205,25 @@ module.exports = {
       ]
     }
   ],
+  "/Front-end/es6/": [
+    {
+      "text": "es6",
+      "title": "es6",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
+        "let.md",
+        "const.md",
+        "Destructuring.md",
+        "string.md",
+        "function.md",
+        "symbol.md",
+        "setMap.md",
+        "Iterator.md"
+      ]
+    }
+  ],
   "/backend/golang/": [
     {
       "text": "GOLANG",
