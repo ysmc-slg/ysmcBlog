@@ -52,7 +52,7 @@ autoPrev: filter
 	</script>
 ```
 
-**<font color='red'>注意</font>**：
+**<div style="color:red">注意</div>**：
 
 v-html有安全性问题！！！！
 

@@ -12,9 +12,11 @@ autoPrev: ref
 ![component](/blogImg/vue/component1.jpg)
 
 ## 组件注册
+
 组件大体有两种注册方式，`全局注册` 和 `局部注册`，我们会分别来学习。
 
 ### 全局组件
+
 1. 使用 extend 创建组件，然后注册
    ```js
    var com1 = Vue.extend({
@@ -48,6 +50,7 @@ autoPrev: ref
    ```
 
 ### 局部注册
+
 ```js
 var vm = new Vue({
     el:"#newBrand",
@@ -106,7 +109,7 @@ var vm = new Vue({
 
 `props` 用来实现父组件向子组件传递数据，`$emit` 则是子组件向父组件传递数据
 
-<font color='red'>1. 父组件向子组件传值</font>
+<div style="color:red">1. 父组件向子组件传值</div>
 
 接下来我们通过一个案例来说明如何向子组件中传递值，App.vue 向子组件，`Student.vue` 中传值。
 
@@ -177,7 +180,7 @@ props:{
     }
 }
 ```
-<font color='red'>2. 子组件向父组件传递参数</font>
+<div style="color:red">2. 子组件向父组件传递参数</div>
 
 使用 `$emit` 实现子组件向父组件传递参数，这里用的是自定义事件的形式。
 
@@ -307,7 +310,7 @@ D组件
 	}
 </script>
 ```
-由于我们写了 `Vue.prototype.$bus = this`，所以就能直接通过`this.$bus` 获取到 `全局总线`，也就是 App的实例。然后通过 `$emit` 将数据发送出去，<font>注意，$emit 第一个参数是名称，第二个参数才是要传递的数据</font>
+由于我们写了 `Vue.prototype.$bus = this`，所以就能直接通过`this.$bus` 获取到 `全局总线`，也就是 App的实例。然后通过 `$emit` 将数据发送出去，<div style="color:red">注意，$emit 第一个参数是名称，第二个参数才是要传递的数据</div>
 
 ```vue
 <template>

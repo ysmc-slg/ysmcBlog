@@ -6,7 +6,7 @@ autoPrev: slot
 # Vuex
 
 ## 概念
-Vuex 是一个专为 Vue.js 应用程序开发的<font color="red">状态管理模式</font>。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。Vuex 也集成到 Vue 的官方调试工具 devtools，提供了诸如零配置的 time-travel 调试、状态快照导入导出等高级调试功能
+Vuex 是一个专为 Vue.js 应用程序开发的<div style="color:red">状态管理模式</div>。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。Vuex 也集成到 Vue 的官方调试工具 devtools，提供了诸如零配置的 time-travel 调试、状态快照导入导出等高级调试功能
 
 ## 工作流程
 Vuex有5个重要的属性：
@@ -527,9 +527,9 @@ const moduleA = {
 ```
 
 ### 命名空间
-默认情况下，模块内部的 action、mutation 和 getter 是注册在<font color="red">全局命名空间</font>的——这样使得多个模块能够对同一 mutation 或 action 作出响应。
+默认情况下，模块内部的 action、mutation 和 getter 是注册在<div style="color:red">全局命名空间</div>的——这样使得多个模块能够对同一 mutation 或 action 作出响应。
 
-如果希望你的模块具有更高的封装度和复用性，你可以通过添加 `namespaced: true` 的方式使其成为带命名空间的模块。<font color="red">当模块被注册后，它的所有 getter、action 及 mutation 都会自动根据模块注册的路径调整命名</font>。例如：
+如果希望你的模块具有更高的封装度和复用性，你可以通过添加 `namespaced: true` 的方式使其成为带命名空间的模块。<div style="color:red">当模块被注册后，它的所有 getter、action 及 mutation 都会自动根据模块注册的路径调整命名</div>。例如：
 
 ```js
 const store = new Vuex.Store({
