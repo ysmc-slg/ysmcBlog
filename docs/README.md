@@ -10,7 +10,7 @@ actionLink: /guide/
 
 
 :::tip  
-  不积跬步，无以至千里；不积小流，无以成江海123。
+  不积跬步，无以至千里；不积小流，无以成江海。
 :::
 
 <p style="text-align:center;">MIT Licensed | Copyright © 2021 余生慢尝 | ICP证：<a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">鲁ICP备19060158号-1</a></p>
