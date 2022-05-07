@@ -1,1 +1,0 @@
-const t={key:"v-7c1e52eb",path:"/algorithms/66-plus-one.html",title:"\u52A0\u4E00",lang:"zh-CN",frontmatter:{autoSort:-66},excerpt:"",headers:[{level:2,title:"\u8FDB\u4F4D",slug:"\u8FDB\u4F4D",children:[]}],filePathRelative:"algorithms/66-plus-one.md",git:{updatedTime:1651754193e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:3}]}};export{t as data};
