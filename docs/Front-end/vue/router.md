@@ -229,7 +229,7 @@ export default new VueRouter({
 1. query
     `<router-link>` 标签和 导航式编程都可以。
 
-    * 1.1 <router-link> 标签方式
+    * 1.1 `<router-link>` 标签方式
     
         ```js
         data() {
