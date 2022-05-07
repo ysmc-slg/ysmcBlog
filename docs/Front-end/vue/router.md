@@ -226,8 +226,7 @@ export default new VueRouter({
 
 上面所有的案例故意没讲到传参，这里我们同意来说一下。传参的方式主要有三种：
 
-1. query
-    `<router-link>` 标签和 导航式编程都可以。
+1. query `<router-link>` 标签和 导航式编程都可以。
 
     * 1.1 `<router-link>` 标签方式
     
