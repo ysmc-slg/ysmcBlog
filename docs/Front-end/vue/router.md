@@ -333,8 +333,8 @@ export default new VueRouter({
 
     `<router-link>` 标签和 导航式编程都可以。
 
-    * 2.1 <router-link>
-        ```js
+    * 2.1 `<router-link>`
+        ```bash
         <router-link :to="/home/message/detail/666/你好">跳转</router-link>
 
         <!-- 跳转并携带params参数，to的对象写法 -->
@@ -346,7 +346,8 @@ export default new VueRouter({
                         title:'你好'
                 }
             }"
-        >跳转</router-link>
+        >跳转
+        </router-link>
         ```
 
         需要注意的是，在使用 `param` 参数对象方式的时候，只能使用 `命名路由` 使用 `path` 不生效。
