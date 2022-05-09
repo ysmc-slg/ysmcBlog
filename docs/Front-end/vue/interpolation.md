@@ -4,6 +4,7 @@ autoPrev: README
 ---
 # 基础语法
 
+
 首先需要安装 `VueJS`，我这里直接引用 vuejs 的文件。如果想用其他方法，请访问官网：[安装VueJS](https://cn.vuejs.org/v2/guide/installation.html)
 
 ## 使用 Vue
@@ -48,7 +49,7 @@ autoPrev: README
 
 `data`：用于数据存储，只能在el指定的容器中使用
 
-{{xxx}}：插值表达式，能直接获取data中的数据，同时 `xxx` 必须得是 js表达式
+`{{xxx}}`：插值表达式，能直接获取data中的数据，同时 `xxx` 必须得是 js表达式
 
 :::
 
@@ -160,8 +161,8 @@ js 中使用 `v-on:xxx` 来绑定一个事件。
 			},
 			methods:{
 				showInfo2(event,number){
-					console.log(event.target.innerText)
-          console.log(number)
+					console.log(event.target.innerText);
+                    console.log(number);
 				}
 			}
 		})
