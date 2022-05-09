@@ -224,10 +224,12 @@ export default new VueRouter({
 
 ## 路由组件传参
 
-上面所有的案例故意没讲到传参，这里我们同意来说一下。传参的方式主要有三种：
+上面所有的案例故意没讲到传参，这里我们统一来说一下。传参的方式主要有三种：
 
-1. query `<router-link>` 标签和 导航式编程都可以。
-
+1. query 
+ 
+    `<router-link>` 标签和 `导航式编程` 都可以。
+    
     * 1.1 `<router-link>` 标签方式
     
         ```js
@@ -261,7 +263,7 @@ export default new VueRouter({
             </router-link>
 
 
-            // 使用路命名
+            // 使用命名路由
             <router-link :to="{
                 name:'detail',
                 query:{

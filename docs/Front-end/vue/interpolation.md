@@ -48,7 +48,7 @@ autoPrev: README
 
 `data`：用于数据存储，只能在el指定的容器中使用
 
-{{xxx}}：插值表达式，能直接获取data中的数据，同时 `xxx` 必须得是 js表达式
+`{{xxx}}`：插值表达式，能直接获取data中的数据，同时 `xxx` 必须得是 js表达式
 
 :::
 
@@ -160,8 +160,8 @@ js 中使用 `v-on:xxx` 来绑定一个事件。
 			},
 			methods:{
 				showInfo2(event,number){
-					console.log(event.target.innerText)
-          console.log(number)
+					console.log(event.target.innerText);
+                    console.log(number);
 				}
 			}
 		})

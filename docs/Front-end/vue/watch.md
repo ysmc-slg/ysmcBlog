@@ -79,13 +79,14 @@ immediate：true 的含义是，在初始化的时候就调用一次 `handler`
 				changeWeather(){
 					this.isHot = !this.isHot
 				}
-			},
-			vm.$watch('isHot',{
-        immediate:true,
-        handler(newValue,oldValue){
-          console.log('isHot被修改了',newValue,oldValue)
-        }
-		 })
+			}
+		})
+		// 写在 vue 实例外面
+		vm.$watch('isHot',{
+			immediate:true,
+			handler(newValue,oldValue){
+				console.log('isHot被修改了',newValue,oldValue)
+			}
 		})
 	</script>
 </html>

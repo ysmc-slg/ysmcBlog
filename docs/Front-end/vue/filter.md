@@ -31,7 +31,7 @@ Vue.js 允许你自定义过滤器，可被用于一些常见的文本格式化�
     })
 </script>
 ```
-过滤器实际上就是一个函数，`{{time | timeFormater}}` 表示将`time` 作为参数传递给 `timeFormater`,返回值覆盖`{{}}`，timeFormater函数的参数可以有多个，但是第一个参数默认是 `管道符（|）` 前面的变量。
+过滤器实际上就是一个函数，“{{time | timeFormater}}” 表示将`time` 作为参数传递给 `timeFormater`,返回值覆盖“{{}}”，timeFormater函数的参数可以有多个，但是第一个参数默认是 `管道符（|）` 前面的变量。
 
 下面看一下多个参数的。
 ```html

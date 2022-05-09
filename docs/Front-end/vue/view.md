@@ -19,7 +19,7 @@ autoPrev: style
 	<body>
 		<div id="root">
 			<button @click="show">{{isShow == true ? '隐藏' : '显示'}}</button>
-			<h2 v-if="isShow">欢迎来到 德莱联盟</h2>
+			<h2 v-if="isShow">欢迎来到 我的博客</h2>
 		</div>
 	</body>
 
@@ -76,7 +76,7 @@ autoPrev: style
 	<body>
 		<div id="root">
 			<button @click="show">{{isShow == true ? '隐藏' : '显示'}}</button>
-			<h2 v-show="isShow">欢迎来到 德莱联盟</h2>
+			<h2 v-show="isShow">欢迎来到 我的博客</h2>
 		</div>
 	</body>
 

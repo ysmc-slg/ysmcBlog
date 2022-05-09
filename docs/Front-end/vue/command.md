@@ -27,7 +27,7 @@ autoPrev: filter
   })
 </script>
 ```
-和插值语法`{{}}` 有点类似，但是 `v-text` 会替换掉节点中的内容，而`{{xx}}` 不会
+和插值语法“{{}}” 有点类似，但是 `v-text` 会替换掉节点中的内容，而“{{xx}}” 不会
 
 ### v-html
 
@@ -52,7 +52,7 @@ autoPrev: filter
 	</script>
 ```
 
-**<div style="color:red">注意</div>**：
+**<div style="color:red">注意：</div>**
 
 v-html有安全性问题！！！！
 
@@ -83,7 +83,7 @@ v-html有安全性问题！！！！
   })
 </script>
 ```
-如果不加 `v-cloak` 在网速慢的情况下，会显示 `{{name}}`，之后才会渲染。
+如果不加 `v-cloak` 在网速慢的情况下，会显示 “{{name}}”，之后才会渲染。
 
 ### v-once
 
