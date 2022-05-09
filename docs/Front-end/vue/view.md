@@ -97,7 +97,7 @@ autoPrev: style
 </html>
 ```
 
-**<div style="color:red">v-if和v-show的区别**：</div>
+**v-if和v-show的区别**：
 
 1. 手段：v-if是通过控制dom节点的存在与否来控制元素的显隐；v-show是通过设置DOM元素的display样式，block为显示，none为隐藏；
 2. 编译过程：v-if切换有一个局部编译/卸载的过程，切换过程中合适地销毁和重建内部的事件监听和子组件；v-show只是简单的基于css切换；
