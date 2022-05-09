@@ -224,25 +224,6 @@ export default new VueRouter({
 
 ## 路由组件传参
 
-<<<<<<< HEAD
-上面所有的案例故意没讲到传参，这里我们统一来说一下。传参的方式主要有三种：
-
-1. query 
- 
-    `<router-link>` 标签和 `导航式编程` 都可以。
-    
-    * 1.1 `<router-link>` 标签方式
-    
-        ```js
-        data() {
-            return {
-                messageList:[
-                    {id:'001',title:'消息001'},
-                    {id:'002',title:'消息002'},
-                    {id:'003',title:'消息003'}
-                ]
-            }
-=======
 上面所有的案例故意没讲到传参，这里我们同意来说一下。传参的方式主要有三种：
 
 ### query方式
@@ -259,7 +240,6 @@ query方式又包含两种， `<router-link>` 标签和 导航式编程。
                 {id:'002',title:'消息002'},
                 {id:'003',title:'消息003'}
             ]
->>>>>>> f51d03930b4a7f1425b8974b50580902b04546a9
         }
     }
     ```
@@ -297,14 +277,6 @@ query方式又包含两种， `<router-link>` 标签和 导航式编程。
     ```
     三种方式任选
 
-<<<<<<< HEAD
-            // 使用命名路由
-            <router-link :to="{
-                name:'detail',
-                query:{
-                    id:m.id,
-                    title:m.title
-=======
 * 2 编程式导航方式
 
     使用 `this.$route.push` 或 `this.$route.replace`
@@ -357,7 +329,6 @@ export default new VueRouter({
                     name:'xiangqing',
                     path:'detail/:id/:title',
                     component:Detail,
->>>>>>> f51d03930b4a7f1425b8974b50580902b04546a9
                 }
             ]
         }
