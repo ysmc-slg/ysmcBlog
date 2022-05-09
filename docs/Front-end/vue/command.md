@@ -27,7 +27,7 @@ autoPrev: filter
   })
 </script>
 ```
-和插值语法`{{}}` 有点类似，但是 `v-text` 会替换掉节点中的内容，而`{{xx}}` 不会
+和插值语法“{{}}” 有点类似，但是 `v-text` 会替换掉节点中的内容，而“{{xx}}” 不会
 
 ### v-html
 
@@ -52,7 +52,7 @@ autoPrev: filter
 	</script>
 ```
 
-**<div style="color:red">注意</div>**：
+**<div style="color:red">注意：</div>
 
 v-html有安全性问题！！！！
 
@@ -132,5 +132,3 @@ v-once这个指令不需要任何表达式，它的作用就是定义它的元�
 </script>
 ```
 使用 `v-pre` 的标签里面的插值表达式就失效了。
-
-
