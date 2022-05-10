@@ -190,7 +190,7 @@ export default {
 	组件的bar2被调用
 	混入的foo2被调用
 	组件的conflicting被调用
-	```
+```
 
 ## 全局混入
 全局混入就简单的多，只需要在 `main.js` 引入 `mixin.js`，然后使用 `Vue.mixin()` 即可。
