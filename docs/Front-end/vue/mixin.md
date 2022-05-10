@@ -168,29 +168,29 @@ export default {
 	```
 	```js
 	export default {
-	name:'App',
-	//局部混入
-		mixins: [mixin],
+		name:'App',
+		//局部混入
+			mixins: [mixin],
 
-	created() {
-		this.bar2()
-		this.foo2()
-		this.conflicting()
-	},
-	methods: {
-		bar2() {
-			console.log('组件的bar2被调用')
+		created() {
+			this.bar2()
+			this.foo2()
+			this.conflicting()
 		},
-		conflicting() {
-			console.log('组件的conflicting被调用')
+		methods: {
+			bar2() {
+				console.log('组件的bar2被调用')
+			},
+			conflicting() {
+				console.log('组件的conflicting被调用')
+			}
 		}
-	}
 	}
 	// 结果
 	组件的bar2被调用
 	混入的foo2被调用
 	组件的conflicting被调用
-```
+  ```
 
 ## 全局混入
 全局混入就简单的多，只需要在 `main.js` 引入 `mixin.js`，然后使用 `Vue.mixin()` 即可。

@@ -8,7 +8,7 @@ autoPrev: declarationPeriod
 
 ## 文件结构
 
-	```js
+```js
 	├── node_modules 
 	├── public
 	│   ├── favicon.ico: 页签图标
@@ -25,7 +25,7 @@ autoPrev: declarationPeriod
 	├── package.json: 应用包配置文件 
 	├── README.md: 应用描述文件
 	├── package-lock.json：包版本控制文件
-	```
+```
 
 上面是使用`vue-cli` 创建的项目结构，不同版本的`vue-cli` 生成的结构可以会不同，我使用的版本是`4.5.11`。
 
