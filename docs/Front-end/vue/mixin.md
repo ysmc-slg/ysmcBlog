@@ -25,14 +25,14 @@ autoPrev: component
 export default {
 	//数据
 	data() {
-			return {
-				message: '我是混入',
-				foo: 'abc'
-			}
+		return {
+			message: '我是混入',
+			foo: 'abc'
+		}
 	},
 	//生命周期
 	created() {
-			console.log('混入的created被调用')
+		console.log('混入的created被调用')
 	},
 	// 方法
 	methods: {
@@ -59,7 +59,7 @@ export default {
 	export default {
 		name:'App',
 		//局部混入
-    mixins: [mixin],
+    	mixins: [mixin],
 
 		data() {
 			return {
@@ -92,39 +92,39 @@ export default {
 ## 选项合并
 1. 当组件和混入对象含有同名选项时，这些选项将以恰当的方式进行“合并”。并在发生冲突时以组件数据优先。
 
-		```js
-		export default {
-			//数据
-			data() {
-					return {
-						message: '我是混入',
-						foo: 'abc'
-					}
+	```js
+	export default {
+		//数据
+		data() {
+			return {
+				message: '我是混入',
+				foo: 'abc'
 			}
 		}
-		```
-		```js
-		export default {
-			name:'App',
-			//局部混入
-			mixins: [mixin],
+	}
+	```
+	```js
+	export default {
+		name:'App',
+		//局部混入
+		mixins: [mixin],
 
-			data() {
-				return {
-					message: '我是APP',
-					bar: 'def'
-				}
-			},
-			created() {
-				console.log(this.$data);
-			},
-		}
+		data() {
+			return {
+				message: '我是APP',
+				bar: 'def'
+			}
+		},
+		created() {
+			console.log(this.$data);
+		},
+	}
 
-		// 结果：
-		bar: "def"
-		foo: "abc"
-		message: "我是APP"
-		```
+	// 结果：
+	bar: "def"
+	foo: "abc"
+	message: "我是APP"
+	```
 2. 同名钩子函数将合并为一个数组，因此都将被调用。另外，**混入对象的钩子将在组件自身钩子之前调用**。
 
 	```js
@@ -153,44 +153,44 @@ export default {
 	```
 
 3. 值为对象的选项，例如 `methods`、`components` 和 `directives`，将被合并为同一个对象。两个对象键名冲突时，取组件对象的键值对。
-   ```js
-	 export default {
-			// 方法
-			methods: {
-				foo2(){
-					console.log('混入的foo2被调用')
-				},
-				conflicting(){
-					console.log('混入的conflicting被调用')
-				}
-			}
-	 }
-	 ```
-	 ```js
-	 export default {
-		name:'App',
-		//局部混入
-    	mixins: [mixin],
-
-		created() {
-			this.bar2()
-			this.foo2()
-			this.conflicting()
-		},
+  ```js
+	export default {
+		// 方法
 		methods: {
-			bar2() {
-				console.log('组件的bar2被调用')
+			foo2(){
+				console.log('混入的foo2被调用')
 			},
-			conflicting() {
-				console.log('组件的conflicting被调用')
+			conflicting(){
+				console.log('混入的conflicting被调用')
 			}
 		}
-	 }
-	 // 结果
-	 组件的bar2被调用
-   混入的foo2被调用
-   组件的conflicting被调用
-	 ```
+	}
+	```
+	```js
+	export default {
+	name:'App',
+	//局部混入
+		mixins: [mixin],
+
+	created() {
+		this.bar2()
+		this.foo2()
+		this.conflicting()
+	},
+	methods: {
+		bar2() {
+			console.log('组件的bar2被调用')
+		},
+		conflicting() {
+			console.log('组件的conflicting被调用')
+		}
+	}
+	}
+	// 结果
+	组件的bar2被调用
+	混入的foo2被调用
+	组件的conflicting被调用
+	```
 
 ## 全局混入
 全局混入就简单的多，只需要在 `main.js` 引入 `mixin.js`，然后使用 `Vue.mixin()` 即可。
