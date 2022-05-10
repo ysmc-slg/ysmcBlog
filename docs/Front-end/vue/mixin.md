@@ -17,131 +17,193 @@ autoPrev: component
 
 ## 局部混入
 
-顾名思义，局部混入必须引入混入对象才能使用，并且只有在引入了混入地向的组件中才有效。
+顾名思义，**局部混入必须引入混入对象才能使用，并且只有在引入了混入地向的组件中才有效**。
 
-看下面代码，创建两个组件，组件A 和 组件B，两个组件是一样的，只是在点击按钮时弹出的内容不一样。
+将组件公共的部分抽离出来最为一个混入对象，如下：
 
-```vue
-组件A
-<template>
-	<div>
-		<button @click="showName">组件A</button>
-	</div>
-</template>
-
-<script>
-
-	export default {
-		name:'A',
-		data() {
-			return {
-				name:'我是组件A',
-			}
-		},
-		methods: {
-      showName(){
-        alert(this.name)
-      }
-    }
-	}
-</script>
-```
-
-```vue
-组件B
-<template>
-	<div>
-		<button @click="showName">组件B</button>
-	</div>
-</template>
-
-<script>
-
-	export default {
-		name:'B',
-		data() {
-			return {
-				name:'我是组件B',
-			}
-		},
-		methods: {
-      showName(){
-        alert(this.name)
-      }
-    }
-	}
-</script>
-```
-我们可以看到，两个组件都有 `showName` 函数，只是处理逻辑不同，此时我们就可以使用 `混入(mixin)` 将 `showName` 函数抽离出来
-
-新建一个`mixin.js`，将重复的代码放进去
 ```js
-export const hunhe = {
+export default {
+	//数据
+	data() {
+			return {
+				message: '我是混入',
+				foo: 'abc'
+			}
+	},
+	//生命周期
+	created() {
+			console.log('混入的created被调用')
+	},
+	// 方法
 	methods: {
-		showName(){
-			alert(this.name)
+		foo2(){
+			console.log('混入的foo2被调用')
+		},
+		conflicting(){
+			console.log('混入的conflicting被调用')
 		}
 	}
 }
 ```
-
-此时，组件就可以这样写。
-```vue
-<template>
-	<div>
-		<button @click="showName">组件A</button>
-	</div>
-</template>
-
-<script>
-	//引入一个hunhe
-	import {hunhe} from '../mixin'
-
-	export default {
-		name:'School',
-		data() {
-			return {
-				name:'我是组件A',
-			}
-		},
-		mixins:[hunhe],
-	}
-</script>
-```
+使用局部混入
 
 ```vue
 <template>
 	<div>
-		<button @click="showName">组件B</button>
+		{{message}}
 	</div>
 </template>
 
 <script>
-	import {hunhe} from '../mixin'
-
+  import mixin from './mixin'
 	export default {
-		name:'Student',
+		name:'App',
+		//局部混入
+    mixins: [mixin],
+
 		data() {
 			return {
-				name:'我是组件B',
+				message: '我是APP',
+				bar: 'def'
 			}
 		},
-		mixins:[hunhe]
+		created() {
+			console.log('组件的created被调用');
+			console.log(this.$data);
+
+			this.bar2()
+			this.foo2()
+			this.conflicting()
+		},
+		methods: {
+			bar2() {
+				console.log('组件的bar2被调用')
+			},
+			conflicting() {
+				console.log('组件的conflicting被调用')
+			}
+		}
 	}
 </script>
 ```
 
 添加一个配置项 `mixins`，这就是局部混入，如果有多个混入用 `,` 隔开
 
+## 选项合并
+1. 当组件和混入对象含有同名选项时，这些选项将以恰当的方式进行“合并”。并在发生冲突时以组件数据优先。
+
+		```js
+		export default {
+			//数据
+			data() {
+					return {
+						message: '我是混入',
+						foo: 'abc'
+					}
+			}
+		}
+		```
+		```js
+		export default {
+			name:'App',
+			//局部混入
+			mixins: [mixin],
+
+			data() {
+				return {
+					message: '我是APP',
+					bar: 'def'
+				}
+			},
+			created() {
+				console.log(this.$data);
+			},
+		}
+
+		// 结果：
+		bar: "def"
+		foo: "abc"
+		message: "我是APP"
+		```
+2. 同名钩子函数将合并为一个数组，因此都将被调用。另外，**混入对象的钩子将在组件自身钩子之前调用**。
+
+	```js
+	export default {
+		//生命周期
+		created() {
+			console.log('混入的created被调用')
+		}
+	}
+	```
+	```js
+	export default {
+		name:'App',
+		//局部混入
+    mixins: [mixin],
+
+		created() {
+			console.log('组件的created被调用');
+		}
+	}
+
+	// 结果
+	混入的created被调用
+
+	组件的created被调用
+	```
+
+3. 值为对象的选项，例如 `methods`、`components` 和 `directives`，将被合并为同一个对象。两个对象键名冲突时，取组件对象的键值对。
+   ```js
+	 export default {
+			// 方法
+			methods: {
+				foo2(){
+					console.log('混入的foo2被调用')
+				},
+				conflicting(){
+					console.log('混入的conflicting被调用')
+				}
+			}
+	 }
+	 ```
+	 ```js
+	 export default {
+		name:'App',
+		//局部混入
+    	mixins: [mixin],
+
+		created() {
+			this.bar2()
+			this.foo2()
+			this.conflicting()
+		},
+		methods: {
+			bar2() {
+				console.log('组件的bar2被调用')
+			},
+			conflicting() {
+				console.log('组件的conflicting被调用')
+			}
+		}
+	 }
+	 // 结果
+	 组件的bar2被调用
+   混入的foo2被调用
+   组件的conflicting被调用
+	 ```
+
 ## 全局混入
 全局混入就简单的多，只需要在 `main.js` 引入 `mixin.js`，然后使用 `Vue.mixin()` 即可。
 
 ```js
-import {hunhe} from './mixin'
-Vue.mixin(hunhe)
+import {mixin} from './mixin'
+Vue.mixin(mixin)
 ```
 
 **注意：**
 
 全局混入完成后，所有的组件都会被添加，所以这种方式一般不会使用
+
+
+
  

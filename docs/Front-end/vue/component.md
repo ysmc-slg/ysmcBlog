@@ -49,6 +49,7 @@ autoPrev: ref
     <h3>这是html中的temp</h3>
    </template>
    ```
+5. 如果是 `vuecli` 需要在 `main.js` 中使用 `Vue.component('组件名',模板)` 注册全局组件
 
 ### 局部注册
 

@@ -9,6 +9,8 @@ autoPrev: VueCli
 
 Vue 推荐在绝大多数情况下使用模板来创建你的 HTML。然而在一些场景中，你真的需要 JavaScript 的完全编程的能力。这时你可以用`渲染函数`（render），它比模板更接近编译器。
 
+`render` 函数和 `template` 一样都是创建 html 模板的，但是有些场景中用 template 实现起来代码冗长繁琐而且有大量重复，这时候就可以用 render 函数。
+
 拿官网的案例来说，我们想要实现根据不同的 `level` 来渲染 h 标签的大小。根据前面的知识首先想到的是这样做：
 
 先创建一个组件 `AnchoredHeading`，详细了解组件请移步[Vue组件](./component.html#概念)
@@ -106,27 +108,27 @@ return createElement('h1', this.blogTitle)
 
 `createElement` 函数需要可以接受三个参数，如下：
 
+createElement(标签, {属性}, [内容])
+
 ```js
 // @returns {VNode}
 createElement(
   // 类型：{String | Object | Function}
-  // 一个 HTML 标签名、组件选项对象，或者
-  // resolve 了上述任何一种的一个 async 函数。必填项。
+  // 一个 HTML 标签名、组件选项对象，或者解析上述任何一种的一个 async 异步函数，必填项。
   'div',
 
   // 类型：{Object}
-  // 一个与模板中 attribute 对应的数据对象。可选。
-  // 有多个对象
-  // class           
-  // style
-  // attrs
-  // domProps
-  // props
-  // on
-  // nativeOn
-  // directives
-  // scopedSlots
-  // slot
+  // 一个包含模板相关属性的数据对象。可选。
+  // class               和v-bind:class 一样
+  // style               和v-bind:style 一样
+  // attrs               正常的HTML属性 id:"foo"
+  // domProps            DOM属性 innerHTML:'bar'
+  // props               组件props
+  // on                  自定义事件监听器，不支持如 v-on:keyup.enter的修饰器
+  // nativeOn            仅对于组件，用于监听原生事件
+  // directives          自定义指令
+  // scopedSlots         作用域 slot
+  // slot                
   // key
   // ref
   {
