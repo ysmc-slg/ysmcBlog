@@ -286,34 +286,56 @@ query方式又包含两种， `<router-link>` 标签和 导航式编程。
 
     结果：
 
-    ![query](http://img.zxqs.top/touter.jpg)
+    ![query](/blogImg/vue/router.jpg)
 
 * 2 编程式导航方式
 
-    使用 `this.$route.push` 或 `this.$route.replace`
     ```js
-    //带查询参数，变成 /home/message/detail?id='001&title='消息001'
-    this.$route.push({paht:'/home/message/detail',query:{
-        id:m.id,
-        title:m.title
-    }})
+    <li v-for="m in messageList" :key="m.id">
+        <a @click="clickEvent(m.id,m.title)">{{m.title}}</a>
+    </li>
+    ```
+    给`a` 标签绑定事件
+
+    使用 `this.$router.push` 或 `this.$router.replace`
+    ```js
+    export default {
+	    name:'Message',
+		data() {
+			return {
+				messageList:[
+					{id:'001',title:'消息001'},
+					{id:'002',title:'消息002'},
+					{id:'003',title:'消息003'}
+				]
+			}
+		},
+		methods:{
+			clickEvent(id,title){
+				// this.$router.push({path:'/home/message/detail',query:{
+				// 		id,
+				// 		title
+				// }})
 
 
-    this.$route.push({name:'detail',query:{
-        id:m.id,
-        title:m.title
-    }})
+				// this.$router.push({name:'Detail',query:{
+				// 		id:id,
+				// 		title:title
+				// }})
 
-    this.$route.replace({paht:'/home/message/detail',query:{
-        id:m.id,
-        title:m.title
-    }})
+				this.$router.replace({path:'/home/message/detail',query:{
+						id:id,
+						title:title
+				}})
 
 
-    this.$route.replace({name:'detail',query:{
-        id:m.id,
-        title:m.title
-    }})
+				// this.$router.replace({name:'Detail',query:{
+				// 		id:id,
+				// 		title:title
+				// }})
+			}
+		}
+	}
     ```
 
 获取参数都是一样的
@@ -333,16 +355,26 @@ $route.query.title
 export default new VueRouter({
     routes:[
         {
-            path:'/message',
-            component:Mesaage,
-            children:[
-                {
-                    name:'xiangqing',
-                    path:'detail/:id/:title',
-                    component:Detail,
-                }
-            ]
-        }
+			path:'/home',
+			component:Home,
+			children:[
+				{
+					path:'news',
+					component:News,
+				},
+				{
+					path:'message',
+					component:Message,
+					children:[
+						{
+							name:'Detail',
+							path:'detail/:id/:title',
+							component:Detail,
+						}
+					]
+				}
+			]
+		}
     ]
 })
 ```
@@ -350,25 +382,28 @@ export default new VueRouter({
 1. `<router-link>` 方式传递参数：
 
     ```js
-    // 直接在路径后面写参数，会将 666传递给id，你好传递给 title
-    <router-link :to="/home/message/detail/666/你好">跳转</router-link>
+    <li v-for="m in messageList" :key="m.id">
+        // 直接在路径后面写参数，分别会将 m.id、m.title作为参数传递给detail组件
+        <router-link :to="`/home/message/detail/${m.id}/${m.title}`">{{m.title}}</router-link>
 
-    // 对象写法
-    <router-link 
-        :to="{
-            name:'xiangqing',
+        // to 的对象写法
+        <router-link :to="{
+            name:'Detail',
             params:{
-                id:666,
-                title:'你好'
+                id:m.id,
+                title:m.title
             }
-        }"
-    >跳转
-    </router-link>
+        }">
+            {{m.title}}
+        </router-link>
+    </li>
+    
+    // 在 detail 组件中使用 this.$route.params.id 获取数据
     ```
 
     **<div style="color:red">注意：</div>**
 
-    这里和 `query` 有区别，`query` 传递参数，使用to的对象写法中，可以使用 `path` 也可以使用 `name`。
+    这里和 `query` 有区别，`query` 传递参数，使用to的对象写法时，可以使用 `path` 也可以使用 `name`。
 
     但是在使用 `params` 传递方式，使用 `to` 属性的对象写法时，只能使用 `name` 不能使用 `path` 否则不生效。同样的规则也适用于 `编程式导航`。
 
@@ -385,30 +420,43 @@ export default new VueRouter({
     `<router-link>` 标签的 `to` 属性的对象写法规则，在编程式导航中一样适用
 
     ```js
-    this.$route.push({
-        name: 'xiangqing',
-        params: {
-            id: '666',
-            title: '你好'
-        }
-    })
+    <li v-for="m in messageList" :key="m.id">		
+        <a @click="clickEvent(m.id,m.title)">{{m.title}}</a>
+    </li>
 
-    this.$route.replace({
-        name: 'xiangqing',
-        params: {
-            id: '666',
-            title: '你好'
-        }
-    })
 
-    // 不生效
-    this.$route.push({
-        path: '/home/message/detail',
-        params: {
-            id: '666',
-            title: '你好'
-        }
-    })
+    export default {
+		name:'Message',
+		data() {
+			return {
+				messageList:[
+					{id:'001',title:'消息001'},
+					{id:'002',title:'消息002'},
+					{id:'003',title:'消息003'}
+				]
+			}
+		},
+		methods:{
+			clickEvent(id,title){
+				this.$router.push({
+						name:'Detail',
+						params:{
+							id:id,
+							title:title
+						}
+					})
+
+
+				// this.$router.replace({
+				// 		name:'Detail',
+				// 		params:{
+				// 			id:id,
+				// 			title:title
+				// 		}
+				// 	})
+			}
+		}
+	}
     ```
 
 获取参数的方法都是一样的：
@@ -427,54 +475,52 @@ this.$route.params.title
     export default new VueRouter({
         routes:[
             {
-                path:'/message',
-                component:Mesaage,
-                children:[
-                    {
-                        name:'xiangqing',
-                        path:'detail/:id/:title',
-                        component:Detail,
-                        props:{a:900}
-                    }
-                ]
+                name:'About',
+                path:'/about',
+                component:About
+            },
+            {
+                name:'Home',
+                path:'/home',
+                component:Home,
+                props:{a:900}
             }
         ]
     })
     ```
-    props值为对象，该对象中所有的key-value的组合最终都会通过 `props` 传给 `Detail` 组件，只需要在组件中声明 `props` 即可
+    props值为对象，该对象中所有的key-value的组合最终都会通过 `props` 传给 `Home` 组件，只需要在组件中声明 `props` 即可
 
-    ```js
-    // Detail 组件
-    export default {
-        name:'Detail',
+    ```vue
+    <!-- Home -->
+    <template>
+        <h2>{{a}}</h2>
+    </template>
 
-        props:['a'],  // a = 900
-
-        computed: {
-        },
-        mounted() {
-        },
-    }
+    <script>
+        export default {
+            name:'Home',
+            props:['a']
+        }
+    </script>
     ```
     这种方式不太灵活，将传递的数据写死了，所以一般不用这种方式
 
 2. props值为布尔值
 
-   `props` 值如果为 true，则把路由收到的所有 `params` 参数通过 `props` 传给 `Detail` 组件。
+   `props` 值如果为 true，则把路由收到的所有 `params` 参数通过 `props` 传给 `Home` 组件。
     ```js
     export default new VueRouter({
         routes:[
             {
-                path:'/message',
-                component:Mesaage,
-                children:[
-                    {
-                        name:'xiangqing',
-                        path:'detail/:id/:title',
-                        component:Detail,
-                        props:true
-                    }
-                ]
+                name:'About',
+                path:'/about',
+                component:About
+            },
+            {
+                name:'Home',
+                path:'/home/:id/:title',
+                component:Home,
+                props:true
             }
         ]
     })
@@ -484,71 +530,99 @@ this.$route.params.title
     参数传递：
 
     ```js
-    id = 666
-    title = "你好"
-    <router-link :to=`/message/detail/${id}/${title}`></router-link>
+    // App 
+    <router-link 
+        class="list-group-item" 
+        active-class="active" 
+        :to="{
+            name:'Home',
+            params:{
+                id:'2',
+                title: 'props:true'
+            }
+    }">Home</router-link>
     ```
 
-    `Detail` 组件接收参数，这样就不需要使用 `this.$route.params.xxx` 了。
+    `Home` 组件接收参数，这样就不需要使用 `this.$route.params.xxx` 了。
 
-    ```js
-    export default {
-        name:'Detail',
+    ```vue
+    <!-- Home -->
+    <template>
+	    <h2>{{id}}----{{title}}</h2>
+    </template>
 
-        props:['id','title'],
-
-        computed: {
-        },
-        mounted() {
-        },
-    }
+    <script>
+        export default {
+            name:'Home',
+            props:['id','title'],
+        }
+    </script>
     ```
 
-    这种写法相对比上一种传参更为简介灵活 <div style="color:red">但是只能作用于params类型的参数 无法对query类型的参数起作用</div>
+    这种写法相对比上一种传参更为简介灵活 <div style="color:red">但是只能作用于`params`类型的传参 无法对`query`类型的传参起作用</div>
 
 3. props值为函数
     
-    如果 `props` 为函数，那么该函数返回的对象中每一组 `key-value` 都会通过props传给Detail组件
+    如果 `props` 为函数，那么该函数返回的对象中每一组 `key-value` 都会通过props传给Home组件
 
     ```js
     export default new VueRouter({
         routes:[
             {
-                path:'/message',
-                component:Mesaage,
-                children:[
-                    {
-                        name:'xiangqing',
-                        path:'detail/:id/:title',
-                        component:Detail,
-                        props($route){
-                            return {
-                                id:$route.query.id,
-                                title:$route.query.title,
-                                // 还可以返回一些别的数据
-                                a:1,
-                                b:'hello'
-                            }
-                        }
+                name:'About',
+                path:'/about',
+                component:About
+            },
+            {
+                name:'Home',
+                path:'/home/:id/:title',
+                component:Home,
+                props($route){
+                    return {
+                        id:$route.query.id,
+                        title:$route.query.title,
+                        // 还可以返回一些别的数据
+                        a:1,
+                        b:'hello'
                     }
-                ]
+                }
             }
         ]
     })
     ```
     props函数会自动调用并提供一个 `$route` 参数 可以通过 `$route` 来获取想要的数据传递给组件。
 
+    使用 `query` 方式传递参数:
+
+    ```js
+    // App
+    <router-link 
+        class="list-group-item" 
+        active-class="active" 
+        :to="{
+            name:'Home',
+            query:{
+                id:'3',
+                title: 'props为函数'
+            }
+        }">Home
+    </router-link>
+    ```
+
 
     组件内部使用props接收参数
-    ```js
-    export default {
-        name:'Detail',
-        props:['id','title','a','b'],
-        computed: {
-        },
-        mounted() {
-        },
-    }
+    ```vue
+    <!-- Home -->
+    <template>
+        <h2>{{id}}----{{title}}</h2>
+    </template>
+
+    <script>
+        export default {
+            name:'Home',
+            props:['id','title','a','b']
+        }
+    </script>
     ```
 
     这种方式传递数据更为灵活 通过函数的 `$route` 参数来获取需要的数据传递给组件，另外还可以携带一些其他数据。通过 `$route` 可以获取 `params` 和 `query` 两种形式的参数，相对前两种方式来说功能更加的强大
