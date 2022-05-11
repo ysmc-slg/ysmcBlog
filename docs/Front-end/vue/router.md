@@ -5,6 +5,12 @@ autoPrev: Vuex
 
 # Router
 
+::: tip
+
+demo地址：https://github.com/ysmc-slg/vue_cli
+
+:::
+
 ## 介绍
 Vue Router 是 Vue.js 的官方路由。它与 Vue.js 核心深度集成，让用 Vue.js 构建单页应用变得轻而易举。功能包括：
 
@@ -175,11 +181,11 @@ export default new VueRouter({
 
     ```js
 
-    this.$router.router.push({ path: '/about' })
+    this.$router.push({ path: '/about' })
 
-    this.$router.router.push({ name: 'guanyu'})
+    this.$router.push({ name: 'guanyu'})
     // 默认就是 path 的形式
-    this.$router.router.push("/about")
+    this.$router.push("/about")
     ```
 
     使用 `router.push` ，会向 history 栈中添加一个新的记录，所以，当用户点击浏览器回退按钮时，则返回之前的URL
@@ -196,11 +202,11 @@ export default new VueRouter({
 
     ```js
 
-    this.$router.router.replace({ path: '/about' })
+    this.$router.replace({ path: '/about' })
 
-    this.$router.router.replace({ name: 'guanyu'})
+    this.$router.replace({ name: 'guanyu'})
     // 默认就是 path 的形式
-    this.$router.router.replace("/about")
+    this.$router.replace("/about")
     ```
 
 3. router.go(n)
@@ -233,6 +239,7 @@ query方式又包含两种， `<router-link>` 标签和 导航式编程。
 * 1 `<router-link>` 标签方式
 
     ```js
+    // Message 组件
     data() {
         return {
             messageList:[
@@ -276,6 +283,10 @@ query方式又包含两种， `<router-link>` 标签和 导航式编程。
     </li>
     ```
     三种方式任选
+
+    结果：
+
+    ![query](http://img.zxqs.top/touter.jpg)
 
 * 2 编程式导航方式
 
