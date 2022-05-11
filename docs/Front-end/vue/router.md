@@ -173,7 +173,7 @@ export default new VueRouter({
 
 1. router.push
 
-    在 `Vue` 实例内部，我们可以通过 `$route` 访问路由实例，调用它里面的 `push` 进行路由跳转。
+    在 `Vue` 实例内部，我们可以通过 `$router` 访问路由实例，调用它里面的 `push` 进行路由跳转。
 
     |  声明式   | 编程式  |
     |  ----  | ----  |
@@ -408,14 +408,6 @@ export default new VueRouter({
     但是在使用 `params` 传递方式，使用 `to` 属性的对象写法时，只能使用 `name` 不能使用 `path` 否则不生效。同样的规则也适用于 `编程式导航`。
 
 2. 编程式导航方式：
-
-    ```js
-    id=666
-    title="你好"
-    // 直接在路径后面写参数，会将 666传递给id，你好传递给 title
-    this.$route.push({path:`/home/message/detail/${id}/${title}`})
-    this.$route.replace({path:`/home/message/detail/${id}/${title}`})
-    ```
 
     `<router-link>` 标签的 `to` 属性的对象写法规则，在编程式导航中一样适用
 
