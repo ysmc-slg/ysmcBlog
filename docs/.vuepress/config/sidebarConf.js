@@ -220,7 +220,8 @@ module.exports = {
         "function.md",
         "symbol.md",
         "setMap.md",
-        "Iterator.md"
+        "Iterator.md",
+        "promise.md"
       ]
     }
   ],
