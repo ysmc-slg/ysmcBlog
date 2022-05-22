@@ -221,7 +221,8 @@ module.exports = {
         "symbol.md",
         "setMap.md",
         "Iterator.md",
-        "promise.md"
+        "promise.md",
+        "axios.md"
       ]
     }
   ],
