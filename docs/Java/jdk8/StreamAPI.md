@@ -468,17 +468,4 @@ Employee{id=1007, name='库克', age=26, salary=4333.32}
 Employee{id=1008, name='扎克伯格', age=35, salary=2500.32}
 ```
 
-### 2. 规约
-| 方法 | 描述 |
-|:------:|:------:|
-| reduce(T iden, BinaryOperator b) | 可以将流中元素反复结合起来，得到一个值。返回 T |
-| reduce(BinaryOperator b) | 可以将流中元素反复结合起来，得到一个值。返回 Optional<T> |
-
-
-
-identity：默认值或初始值。
-
-BinaryOperator：函数式接口，取两个值并产生一个新值。
-
-如果缺少`identity`参数，则没有默认值或初始值，并且它返回 `Optional<T>`。
 
