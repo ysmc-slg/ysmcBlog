@@ -60,7 +60,7 @@ module.exports = {
         "functional.md",
         "method-reference.md",
         "StreamAPI.md",
-        "CollectorsApi.md",
+        "CollectorsApi.md", 
         "Date.md"
       ]
     }

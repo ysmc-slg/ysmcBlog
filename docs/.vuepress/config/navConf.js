@@ -81,18 +81,18 @@ module.exports = [
     children: [
       { text: 'java基础', link: '/java/basics/' },
       { text: 'Java8新特性', link: '/java/jdk8/' },
-      { text: 'java反射', link: '/java/reflection/' },
-      { 
-        text: 'MQ',
-        children: [
-          {
-            text: 'rabbitMQ',
-            link: '/mq/rabbitmq/'
-          },
-        ]
-      }
+      { text: 'java反射', link: '/java/reflection/' }
     ],
     
+  },
+  { 
+    text: 'MQ',
+    children: [
+      {
+        text: 'rabbitMQ',
+        link: '/mq/rabbitmq/'
+      },
+    ]
   },
   {
     text: '解决方案',
