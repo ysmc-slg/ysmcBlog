@@ -255,4 +255,60 @@ Employee{id=1010, name='谢广坤', age=40, salary=8000.0}
 Employee{id=1010, name='谢广坤', age=41, salary=8000.0}
 ```
 
+### 2. 映射 <Badge text="重要" type="error"/>
+|     方法     |    描述    |
+|:------------:|:----------:|
+| map(Function f)| 接收一个函数作为参数，<br>该函数会被应用到每个元素上，<br>并将其映射成一个新的元素。|
+|  mapToDouble(ToDoubleFunction f)  |   接收一个函数作为参数，<br>该函数会被应用到每个元素上，<br>产生一个新的 DoubleStream。    |
+| mapToInt(ToIntFunction f) | 接收一个函数作为参数，<br>该函数会被应用到每个元素上，<br>产生一个新的 IntStream。 |
+| mapToLong(ToLongFunction f) | 接收一个函数作为参数，<br>该函数会被应用到每个元素上，<br>产生一个新的 LongStream。 |
+| flatMap(Function f) | 接收一个函数作为参数，<br>将流中的每个值都换成另一个流，<br>然后把所有流连接成一个流 |
+
+**map(Function f)**
+```java
+public void test(){
+  // 获取姓名大于3的员工姓名
+  List<Employee> employees = EmployeeData.getEmployees();
+  employees.stream().map(Employee::getName).filter(name -> name.length() > 3).forEach(System.out :: println);
+
+  // mapToDouble
+  List<String> stringList = Arrays.asList("33.5", "55", "546.33");
+  stringList.stream().mapToDouble(d -> Double.parseDouble(d)).forEach(System.out :: println);
+
+  // mapToInt
+  stringList.stream().mapToInt(s -> Integer.parseInt(s)).forEach(System.out :: println);
+}
+```
+```java
+// 结果
+比尔盖茨
+扎克伯格
+33.0
+55.0
+546.0
+
+33
+55
+546
+```
+**flatMap(Function f)**：
+```java
+public void test(){
+  List<String> strings = Arrays.asList("a", "b", "c");
+  Stream<Character> characterStream = strings.stream().flatMap(StreamAPITest1::fromStringToStream);
+}
+
+//将字符串中的多个字符构成的集合转换为对应的Stream的实例
+public static Stream<Character> fromStringToStream(String str){
+    ArrayList<Character> list = new ArrayList<>();
+    for(Character c : str.toCharArray()){
+        list.add(c);
+    }
+    return list.stream();
+
+}
+```
+
+
+
 
