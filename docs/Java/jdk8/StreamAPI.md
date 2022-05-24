@@ -159,30 +159,12 @@ public class EmployeeData {
 }
 ```
 
-**filter(Predicate p)**
 
-```java
-// 查询员工表中薪资大于7000的员工信息
-public void test(){
-  List<Employee> list = EmployeeData.getEmployees();
-  Stream<Employee> stream = list.stream();
-
-  stream.filter(e -> e.getSalary() > 7000).forEach(System.out::println);
-}
-```
-
-```java
-// 结果：
-Employee{id=1002, name='李四', age=12, salary=9876.12}
-Employee{id=1004, name='赵六', age=26, salary=7657.37}
-Employee{id=1006, name='比尔盖茨', age=42, salary=9500.43}
-```
-
-由于Stream是`延迟执行`所以必须有`终止操作`，这里使用了`forEach`后面会详细讲解终止操作。
 
 
 
 **limit(n)**
+
 ```java
 // 打印集合中前3个对象
 public void test(){
@@ -205,7 +187,8 @@ limit方法：Stream<T> limit(long maxSize);
 
 :::
 
-**skip(n)**：
+**skip(n)**
+
 ```java
 // 跳过前3个对象
 public void test(){
