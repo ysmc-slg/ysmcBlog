@@ -139,5 +139,19 @@ public void test4(){
 | skip(long n) | 跳过元素，返回一个扔掉了前 n 个元素的流。<br>若流中元素不足 n 个，则返回一个空流。与 limit(n) 互补 |
 
 
+**map(Function f)**
+```java
+public void test(){
+  // 获取姓名大于3的员工姓名
+  List<Employee> employees = EmployeeData.getEmployees();
+  employees.stream().map(Employee::getName).filter(name -> name.length() > 3).forEach(System.out :: println);
 
+  // mapToDouble
+  List<String> stringList = Arrays.asList("33.5", "55", "546.33");
+  stringList.stream().mapToDouble(d -> Double.parseDouble(d)).forEach(System.out :: println);
+
+  // mapToInt
+  stringList.stream().mapToInt(s -> Integer.parseInt(s)).forEach(System.out :: println);
+}
+```
 
