@@ -180,15 +180,6 @@ Employee{id=1006, name='比尔盖茨', age=42, salary=9500.43}
 
 由于Stream是`延迟执行`所以必须有`终止操作`，这里使用了`forEach`后面会详细讲解终止操作。
 
-::: tip 注意
-
-Stream<T> filter(Predicate<? super T> predicate);
-
-filter需要一个参数`Predicate`，而`Predicate`是一个函数式接口(抽象方法: boolean test(T t);)，所以可以已使用lambda表达式。
-
-lambda表达式中参数`e`是list集合中的每一个`Employee`对象
-
-:::
 
 
 
