@@ -359,3 +359,111 @@ Employee{id=1008, name='扎克伯格', age=35, salary=2500.32}
 Employee{id=1006, name='比尔盖茨', age=42, salary=9500.43}
 Employee{id=1005, name='赵四', age=65, salary=5555.32}
 ```
+
+## 终止操作<Badge text="重要" type="error"/>
+
+```js
+
+终端操作会从流的流水线生成结果。其结果可以是任何不是流的值，例如：List、Integer，甚至是 void
+
+流进行了终止操作后，不能再次使用。
+```
+
+### 1. 匹配与查找
+
+|    方法    |         描述         |
+|:----------:|:--------------------:|
+| allMatch(Predicate p)  |     检查是否匹配所有元素     |
+| anyMatch(Predicate p) | 检查是否至少匹配一个元素 |
+| noneMatch(Predicate p) | 检查是否没有匹配所有元素 |
+| findFirst() | 返回第一个元素 |
+| findAny() | 返回当前流中的任意元素 |
+| count() | 返回流中元素总数 |
+| max(Comparator c) | 返回流中最大值 |
+| min(Comparator c) | 返回流中最小值 |
+| forEach(Consumer c) | 内部迭代(使用 Collection 接口需要用户去做迭代，<br>称为外部迭代。<br>相反，Stream API 使用内部迭代——它帮你把迭代做了) |
+
+```java
+@Test
+public void test1(){
+    List<Employee> employees = EmployeeData.getEmployees();
+
+    // boolean allMatch(Predicate p)——检查是否匹配所有元素。
+    // 练习：是否所有的员工的年龄都大于18
+    boolean allMatch = employees.stream().allMatch(e -> e.getAge() > 18);
+    System.out.println(allMatch);
+
+    // boolean anyMatch(Predicate p)——检查是否至少匹配一个元素。
+    // 练习：是否存在员工的工资大于 10000
+    boolean anyMatch = employees.stream().anyMatch(e -> e.getSalary() > 10000);
+    System.out.println(anyMatch);
+
+    // boolean noneMatch(Predicate p)——检查是否没有匹配的元素。
+    // 练习：是否不存在员工姓“李”
+    boolean noneMatch = employees.stream().noneMatch(e -> e.getName().startsWith("李"));
+    System.out.println(noneMatch);
+
+    // Optional<T> findFirst() ——返回第一个元素
+    Optional<Employee> employee = employees.stream().findFirst();
+    System.out.println(employee);
+
+    // Optional<T> findAny() ——返回当前流中的任意元素
+    Optional<Employee> employee1 = employees.parallelStream().findAny();
+    System.out.println(employee1);
+
+}
+```
+```java
+// 结果：
+false
+false
+false
+Optional[Employee{id=1001, name='张三', age=34, salary=6000.38}]
+Optional[Employee{id=1006, name='比尔盖茨', age=42, salary=9500.43}]
+```
+
+```ja
+
+noneMatch(Predicate p)：是否没有匹配的元素，没有匹配的返回`true`，有匹配的返回`false`
+
+```
+
+```java
+@Test
+public void test2(){
+    List<Employee> employees = EmployeeData.getEmployees();
+    // long count——返回流中元素的总个数
+    long count = employees.stream().filter(e -> e.getSalary() > 5000).count();
+    System.out.println(count);
+
+    // Optional<T> max(Comparator c)——返回流中最大值
+    // 练习：返回最高的工资：
+    Stream<Double> salaryStream = employees.stream().map(e -> e.getSalary());
+    Optional<Double> maxSalary = salaryStream.max(Double::compare);
+    System.out.println(maxSalary);
+
+    // Optional<T> min(Comparator c)——返回流中最小值
+    // 练习：返回最低工资的员工
+    Optional<Employee> employee = employees.stream().min((e1, e2) -> Double.compare(e1.getSalary(), e2.getSalary()));
+    System.out.println(employee);
+    System.out.println();
+
+    // void forEach(Consumer c)——内部迭代
+    employees.stream().forEach(System.out::println);
+}
+```
+```java
+结果：
+5
+Optional[9876.12]
+Optional[Employee{id=1008, name='扎克伯格', age=35, salary=2500.32}]
+
+Employee{id=1001, name='张三', age=34, salary=6000.38}
+Employee{id=1002, name='李四', age=12, salary=9876.12}
+Employee{id=1003, name='王五', age=33, salary=3000.82}
+Employee{id=1004, name='赵六', age=26, salary=7657.37}
+Employee{id=1005, name='赵四', age=65, salary=5555.32}
+Employee{id=1006, name='比尔盖茨', age=42, salary=9500.43}
+Employee{id=1007, name='库克', age=26, salary=4333.32}
+Employee{id=1008, name='扎克伯格', age=35, salary=2500.32}
+```
