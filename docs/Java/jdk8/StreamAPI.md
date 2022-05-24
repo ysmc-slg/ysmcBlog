@@ -467,3 +467,70 @@ Employee{id=1006, name='比尔盖茨', age=42, salary=9500.43}
 Employee{id=1007, name='库克', age=26, salary=4333.32}
 Employee{id=1008, name='扎克伯格', age=35, salary=2500.32}
 ```
+
+### 2. 规约
+| 方法 | 描述 |
+|:------:|:------:|
+| reduce(T iden, BinaryOperator b) | 可以将流中元素反复结合起来，得到一个值。返回 T |
+| reduce(BinaryOperator b) | 可以将流中元素反复结合起来，得到一个值。<br>返回 Optional<T> |
+
+```java
+@Test
+public void test3(){
+  // T reduce(T identity, BinaryOperator)——可以将流中元素反复结合起来，得到一个值。返回 T
+  // 练习1：计算1-10的自然数的和
+  List<Integer> list = Arrays.asList(1,2,3,4,5,6,7,8,9,10);
+
+  Integer reduce = list.stream().reduce(0, Integer::sum);
+  System.out.println(reduce);
+
+
+  // Optional<T> reduce(BinaryOperator) ——可以将流中元素反复结合起来，得到一个值。返回 Optional<T>
+  // 练习2：计算公司所有员工工资的总和
+
+  List<Employee> employees = EmployeeData.getEmployees();
+
+  Optional<Double> reduce1 = employees.stream().map(Employee::getSalary).reduce(Double::sum);
+  System.out.println(reduce1);
+}
+```
+
+```
+
+identity：默认值或初始值。
+
+BinaryOperator：函数式接口，取两个值并产生一个新值。
+
+如果缺少`identity`参数，则没有默认值或初始值，并且它返回 `Optional<T>`。
+
+```
+
+### 3. 收集
+|    方法    |      描述      |
+|:----------:|:--------------:|
+| collect(Collector c) | 将流转换为其他形式。接收一个 Collector接口的实现，<br>用于给Stream中元素做汇总的方法  |
+
+```java
+@Test
+public void test4(){
+    // <R, A> R collect(Collector c)——将流转换为其他形式。接收一个 Collector接口的实现，用于给Stream中元素做汇总的方法
+    // 练习1：查找工资大于6000的员工，结果返回为一个List或Set
+
+    List<Employee> employees = EmployeeData.getEmployees();
+    List<Employee> employeeList = employees.stream().filter(e -> e.getSalary() > 6000).collect(Collectors.toList());
+
+    employeeList.forEach(System.out::println);
+    System.out.println();
+    Set<Employee> employeeSet = employees.stream().filter(e -> e.getSalary() > 6000).collect(Collectors.toSet());
+
+    employeeSet.forEach(System.out::println);
+}
+```
+
+```
+
+`collect(Collector c)`方法需要一个Collector接口，在系统中`Collectors`工具类已经内置了一些常用的方法。方法返回的就是一个`Collector`接口的实现类
+
+```
+
+Collectors中还有很多方法，请点击：[Collectors更多方法](./CollectorsApi.html)
