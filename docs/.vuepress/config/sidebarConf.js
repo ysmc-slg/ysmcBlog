@@ -56,7 +56,7 @@ module.exports = {
       "sidebarDepth": 2,
       "children": [
         "README.md",
-        "Lamada.md",
+        "lambda.md",
         "functional.md",
         "method-reference.md",
         "StreamAPI.md",
