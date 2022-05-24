@@ -1,7 +1,6 @@
 ---
 description: 函数式接口
 autoPrev: Lambda
-sidebarDepth: 2
 ---
 # 函数式接口
 

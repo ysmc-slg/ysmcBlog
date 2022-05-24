@@ -1,6 +1,5 @@
 ---
 description: 简介
-sidebarDepth: 2
 ---
 
 # 简介

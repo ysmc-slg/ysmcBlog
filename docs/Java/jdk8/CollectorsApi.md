@@ -1,7 +1,6 @@
 ---
 description: Collectors其他方法
 autoPrev: StreamAPI
-sidebarDepth: 2
 ---
 
 # Collectors其他方法

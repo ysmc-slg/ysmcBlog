@@ -1,7 +1,6 @@
 ---
 description: 方法引用
 autoPrev: functional
-sidebarDepth: 2
 ---
 
 # 方法引用
