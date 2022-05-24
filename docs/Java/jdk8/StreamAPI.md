@@ -495,12 +495,9 @@ public void test3(){
 }
 ```
 
-```
-
 identity：默认值或初始值。
 
 BinaryOperator：函数式接口，取两个值并产生一个新值。
 
 如果缺少`identity`参数，则没有默认值或初始值，并且它返回 `Optional<T>`。
 
-```
