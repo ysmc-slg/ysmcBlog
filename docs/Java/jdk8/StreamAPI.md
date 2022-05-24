@@ -469,3 +469,36 @@ Employee{id=1008, name='扎克伯格', age=35, salary=2500.32}
 ```
 
 
+### 2. 规约
+
+
+```java
+@Test
+public void test3(){
+  // T reduce(T identity, BinaryOperator)——可以将流中元素反复结合起来，得到一个值。返回 T
+  // 练习1：计算1-10的自然数的和
+  List<Integer> list = Arrays.asList(1,2,3,4,5,6,7,8,9,10);
+
+  Integer reduce = list.stream().reduce(0, Integer::sum);
+  System.out.println(reduce);
+
+
+  // Optional<T> reduce(BinaryOperator) ——可以将流中元素反复结合起来，得到一个值。返回 Optional<T>
+  // 练习2：计算公司所有员工工资的总和
+
+  List<Employee> employees = EmployeeData.getEmployees();
+
+  Optional<Double> reduce1 = employees.stream().map(Employee::getSalary).reduce(Double::sum);
+  System.out.println(reduce1);
+}
+```
+
+:::tip
+
+identity：默认值或初始值。
+
+BinaryOperator：函数式接口，取两个值并产生一个新值。
+
+如果缺少`identity`参数，则没有默认值或初始值，并且它返回 `Optional<T>`。
+
+:::
