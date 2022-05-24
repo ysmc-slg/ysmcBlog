@@ -40,7 +40,7 @@ module.exports = {
       "text": "Basics",
       "title": "Basics",
       "collapsable": false,
-      "sidebarDepth": 1,
+      "sidebarDepth": 2,
       "children": [
         "README.md",
         "io.md",
@@ -53,7 +53,7 @@ module.exports = {
       "text": "jdk8",
       "title": "jdk8",
       "collapsable": false,
-      "sidebarDepth": 1,
+      "sidebarDepth": 2,
       "children": [
         "README.md",
         "Lamada.md",
@@ -70,7 +70,7 @@ module.exports = {
       "text": "reflection",
       "title": "reflection",
       "collapsable": false,
-      "sidebarDepth": 1,
+      "sidebarDepth": 2,
       "children": [
         "README.md",
         "class.md",
