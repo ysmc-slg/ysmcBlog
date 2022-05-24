@@ -191,4 +191,68 @@ filter需要一个参数`Predicate`，而`Predicate`是一个函数式接口(抽
 lambda表达式中参数`e`是list集合中的每一个`Employee`对象
 ```
 
+**limit(n)**：
+```java
+// 打印集合中前3个对象
+public void test(){
+  List<Employee> list = EmployeeData.getEmployees();
+  list.stream().limit(3).forEach(System.out::println);
+}
+```
+```java
+// 结果：
+Employee{id=1001, name='张三', age=34, salary=6000.38}
+Employee{id=1002, name='李四', age=12, salary=9876.12}
+Employee{id=1003, name='王五', age=33, salary=3000.82}
+```
+
+```js
+limit方法：Stream<T> limit(long maxSize);
+
+返回值也是一个Stream，参数是一个long类型的数字
+```
+
+**skip(n)**：
+```java
+// 跳过前3个对象
+public void test(){
+  List<Employee> list = EmployeeData.getEmployees();
+  list.stream().skip(3).forEach(System.out::println);
+}
+```
+```java
+// 结果：
+Employee{id=1004, name='赵六', age=26, salary=7657.37}
+Employee{id=1005, name='赵四', age=65, salary=5555.32}
+Employee{id=1006, name='比尔盖茨', age=42, salary=9500.43}
+Employee{id=1007, name='库克', age=26, salary=4333.32}
+Employee{id=1008, name='扎克伯格', age=35, salary=2500.32}
+```
+
+```js
+skip方法：Stream<T> skip(long n)
+
+返回值也是一个Stream，参数是一个long类型的数字
+```
+
+**distinct()**：
+```java
+public void test(){
+  List<Employee> list = EmployeeData.getEmployees();
+  list.add(new Employee(1010,"谢广坤",40,8000));
+  list.add(new Employee(1010,"谢广坤",41,8000));
+  list.add(new Employee(1010,"谢广坤",40,8000));
+  list.add(new Employee(1010,"谢广坤",40,8000));
+  list.add(new Employee(1010,"谢广坤",40,8000));
+
+  // 去掉集合中重复的对象
+  list.stream().distinct().forEach(System.out::println);
+}
+```
+```java
+// 结果
+Employee{id=1010, name='谢广坤', age=40, salary=8000.0}
+Employee{id=1010, name='谢广坤', age=41, salary=8000.0}
+```
+
 
