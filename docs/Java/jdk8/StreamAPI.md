@@ -121,7 +121,7 @@ public void test4(){
 
 ## 中间操作<Badge text="重要" type="error"/>
 
-多个中间操作可以连接起来形成一个流水线，除非流水线上触发终止操作，`否则中间操作不会执行任何的处理！而在终止操作时一次性全部处理，称为“惰性求值”。`
+多个中间操作可以连接起来形成一个流水线，除非流水线上触发终止操作，`否则中间操作不会执行任何的处理！而在终止操作时一次性全部处理，称为“惰性求值”`。
 
 ![中间操作](/blogImg/Stream2.png)
 
@@ -138,77 +138,6 @@ public void test4(){
 | limit(long maxSize) | 截断流，使其元素不超过给定数量 |
 | skip(long n) | 跳过元素，返回一个扔掉了前 n 个元素的流。<br>若流中元素不足 n 个，则返回一个空流。与 limit(n) 互补 |
 
-```java
-public class EmployeeData {
-	
-	public static List<Employee> getEmployees(){
-		List<Employee> list = new ArrayList<>();
-		
-		list.add(new Employee(1001, "张三", 34, 6000.38));
-		list.add(new Employee(1002, "李四", 12, 9876.12));
-		list.add(new Employee(1003, "王五", 33, 3000.82));
-		list.add(new Employee(1004, "赵六", 26, 7657.37));
-		list.add(new Employee(1005, "赵四", 65, 5555.32));
-		list.add(new Employee(1006, "比尔盖茨", 42, 9500.43));
-		list.add(new Employee(1007, "库克", 26, 4333.32));
-		list.add(new Employee(1008, "扎克伯格", 35, 2500.32));
-		
-		return list;
-	}
-}
-```
-**filter(Predicate p)**
-```java
-  // 查询员工表中薪资大于7000的员工信息
-  public void test(){
-    List<Employee> list = EmployeeData.getEmployees();
-    Stream<Employee> stream = list.stream();
-
-    stream.filter(e -> e.getSalary() > 7000).forEach(System.out::println);
-  }
-```
-
-```java
-// 结果：
-Employee{id=1002, name='李四', age=12, salary=9876.12}
-Employee{id=1004, name='赵六', age=26, salary=7657.37}
-Employee{id=1006, name='比尔盖茨', age=42, salary=9500.43}
-```
-
-由于Stream是`延迟执行`所以必须有`终止操作`，这里使用了`forEach`后面会详细讲解终止操作。
-
-::: tip 注意
-
-Stream<T> filter(Predicate<? super T> predicate);
-
-filter需要一个参数`Predicate`，而`Predicate`是一个函数式接口(抽象方法: boolean test(T t);)，所以可以已使用lambda表达式。
-
-lambda表达式中参数`e`是list集合中的每一个`Employee`对象
-
-:::
-
-**limit(n)**
-```java
-// 打印集合中前3个对象
-public void test(){
-  List<Employee> list = EmployeeData.getEmployees();
-  list.stream().limit(3).forEach(System.out::println);
-}
-```
-```java
-// 结果：
-Employee{id=1001, name='张三', age=34, salary=6000.38}
-Employee{id=1002, name='李四', age=12, salary=9876.12}
-Employee{id=1003, name='王五', age=33, salary=3000.82}
-```
-
-::: tip 注意
-
-limit方法：Stream<T> limit(long maxSize);
-
-返回值也是一个Stream，参数是一个long类型的数字
-
-:::
 
 
 
