@@ -1,6 +1,7 @@
 ---
 description: StreamAPI
 autoPrev: method-reference
+sidebarDepth: 2
 ---
 
 # StreamAPI
