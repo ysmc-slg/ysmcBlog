@@ -387,7 +387,7 @@ public class DataSourceAspect {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         } finally {
-            // 清楚线程中的内容
+            // 清除线程中的内容
             DynamicDataSourceContextHolder.clearDataSourceType();
         }
 
@@ -418,7 +418,7 @@ public class DataSourceAspect {
 
 ::: tip 说明
 
-1. 首先在 `pointcut()` 方法上定义切点，拦截所有带有 `@DataSource` 注解的方法，同事该注解也可以加在类上，如果该注解加在类上，就表示类中的所有方法都使用该数据源。
+1. 首先在 `pointcut()` 方法上定义切点，拦截所有带有 `@DataSource` 注解的方法，同时该注解也可以加在类上，如果该注解加在类上，就表示类中的所有方法都使用该数据源。
 
 2. 接下来我们定义了一个环绕通知，首先根据当前的切点，调用 `getDataSource` 方法获取到 `@DataSource` 注解，这个注解可能来自方法上也可能来自类上，方法上的优先级高于类上的优先级。如果拿到的注解不为空，则我们在 `DynamicDataSourceContextHolder` 中设置当前的数据源名称，设置完成后进行方法的调用；如果拿到的注解为空，那么就直接进行方法的调用，不再设置数据源了（将来会自动使用默认的数据源）。最后记得方法调用完成后，从 `ThreadLocal` 中移除数据
 
