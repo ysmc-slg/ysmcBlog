@@ -257,10 +257,10 @@ module.exports = {
       ]
     }
   ],
-  "/solution/aop/": [
+  "/solution/dyanmicDataSource/": [
     {
-      "text": "aop",
-      "title": "aop",
+      "text": "dataSource",
+      "title": "dataSource",
       "collapsable": false,
       "sidebarDepth": 1,
       "children": [

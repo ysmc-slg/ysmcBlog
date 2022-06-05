@@ -97,7 +97,10 @@ module.exports = [
   {
     text: '解决方案',
     children: [
-      { text: '自定义注解实现添加操作日志', link: '/solution/aop/' }
+      { 
+        text: '自定义动态数据源', 
+        link: '/solution/dyanmicDataSource/' 
+      }
     ],
     
   },
