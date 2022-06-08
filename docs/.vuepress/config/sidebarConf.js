@@ -267,5 +267,16 @@ module.exports = {
         "README.md"
       ]
     }
+  ],
+  "/springsecurity/": [
+    {
+      "text": "springsecurity",
+      "title": "springsecurity",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
+      ]
+    }
   ]
 };

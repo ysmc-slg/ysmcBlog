@@ -130,6 +130,10 @@ module.exports = [
   },
 
   {
+    text: 'SpringSecirity',link: '/springsecurity/'
+  },
+
+  {
     text: '前端',
     children: [
       { text: 'ES6新特性', link: '/Front-end/es6/' },
