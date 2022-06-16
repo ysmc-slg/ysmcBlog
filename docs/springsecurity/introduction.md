@@ -140,3 +140,38 @@ publicclass SecurityConfig extends WebSecurityConfigurerAdapter {
 
 一起来看下。
 
+### 服务端定义
+然后接下来我们继续完善前面的 `SecurityConfig` 类，继续重写它的 `configure(WebSecurity web)` 和 `configure(HttpSecurity http)` 方法，如下：
+ 
+ ```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/js/**", "/css/**","/images/**");
+    }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login.html")
+                .permitAll()
+                .and()
+                .csrf().disable();
+    }
+}
+
+```
+
+1. web.ignoring() 用来配置忽略掉的 URL 地址，一般对于静态文件，我们可以采用此操作。
+2. 如果我们使用 XML 来配置 Spring Security ，里边会有一个重要的标签 <http>，HttpSecurity 提供的配置方法 都对应了该标签。
+3. authorizeRequests 对应了 <intercept-url>。
+4. formLogin 对应了 <formlogin>。
+5. and 方法表示结束当前标签，上下文回到HttpSecurity，开启新一轮的配置。
+6. permitAll 表示登录相关的 `页面/接口` 不要被拦截。
+7. 最后记得关闭 csrf ，关于 csrf 问题我到后面专门和大家说。
+
+当我们定义了登录页面为 `/login.html` 的时候，Spring Security 也会帮我们自动注册一个 `/login.html` 的接口，这个接口是 POST 请求，用来处理登录逻辑。
+
