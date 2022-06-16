@@ -276,6 +276,7 @@ module.exports = {
       "sidebarDepth": 1,
       "children": [
         "README.md",
+        "introduction.md",
         "loginFlow.md"
       ]
     }

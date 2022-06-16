@@ -21,7 +21,7 @@ description: 初识SpringSecurity
 
 一个请求进入系统的流程如下图：
 
-![请求流程](/blogImg/springsecurity/3.png)
+![请求流程](/blogImg/springsecurity/4.png)
 
 下面分别介绍各个过滤器的功能。
 
@@ -41,3 +41,121 @@ description: 初识SpringSecurity
 | SessionManagementFilter  | 检测有用户登录认证时做相应的session管理 |
 | ExceptionTranslationFilter  | 处理AccessDeniedException访问异常和AuthenticationException认证异常 |
 | FilterSecurityInterceptor  | 检测用户是否具有访问资源路径的权限 |
+
+## 数据库管理
+
+![请求流程](/blogImg/springsecurity/5.png)
+
+上图展示的Spring Security核心处理流程。当一个用户登录时，会先进行身份认证，如果身份认证未通过会要求用户重新认证，当用户身份证通过后就会调用角色管理器判断他是否可以访问，这里，如果要实现数据库管理用户及权限，就需要自定义用户登录功能，Spring Security已经提供好了一个接口UserDetailsService。
+
+```java
+package org.springframework.security.core.userdetails;
+ 
+public interface UserDetailsService {
+	
+	/**
+	 * Locates the user based on the username. In the actual implementation, the search
+	 * may possibly be case sensitive, or case insensitive depending on how the
+	 * implementation instance is configured. In this case, the <code>UserDetails</code>
+	 * object that comes back may have a username that is of a different case than what
+	 * was actually requested..
+	 *
+	 * @param username the username identifying the user whose data is required.
+	 *
+	 * @return a fully populated user record (never <code>null</code>)
+	 *
+	 * @throws UsernameNotFoundException if the user could not be found or the user has no
+	 * GrantedAuthority
+	 */
+	UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+    
+}
+```
+​ UserDetailService该接口只有一个方法，通过方法名可以看出方法是通过用户名来获取用户信息的，但返回结果是UserDetails对象，UserDetails也是一个接口，接口中任何一个方法返回false用户的凭证就会被视为无效。
+
+```java
+package org.springframework.security.core.userdetails;
+ 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+ 
+import java.io.Serializable;
+import java.util.Collection;
+ 
+public interface UserDetails extends Serializable {
+	// ~ Methods
+	// ========================================================================================================
+ 
+	/**
+	 * 权限集合
+	 */
+	Collection<? extends GrantedAuthority> getAuthorities(); 
+ 
+	/**
+	 * 密码
+	 */
+	String getPassword(); 
+ 
+	/**
+	 * 用户名
+	 */
+	String getUsername(); 
+ 
+	/**
+   * 账户是否未过期
+   * @return
+  */
+	boolean isAccountNonExpired();
+ 
+	/**
+   * 账户是否未锁定
+   * @return
+  */
+	boolean isAccountNonLocked();
+ 
+	/**
+   * 密码是否未过期
+   * @return
+  */
+	boolean isCredentialsNonExpired();
+ 
+	/**
+   * 账户是否可用
+   * @return
+  */
+	boolean isEnabled(); 
+}
+```
+这里需要注意的是 `Authentication` 与 `UserDetails` 对象的区分，`Authentication` 对象才是 `Spring Security` 使用的进行安全访问控制用户信息的安全对象，实际上`Authentication`对象有未认证和已认证两种状态，在作为参数传入认证管理器的时候，它是一个为认证的对象，它从客户端获取用户的身份认证信息，如用户名、密码，可以是从一个登录页面，也可以是从 `cookie` 中获取，并由系统自动生成一个`Authentication` 对象，而这里的 `UserDetails` 代表的是一个用户安全信息的源，这个源可以是从数据库、LDAP服务器、CA中心返回，`Spring Security` 要做的就是将未认证的 `Authentication` 对象与`UserDetails` 对象进行匹配，成功后将 `UserDetails` 对象中的权限信息拷贝到 `Authentication` 中，组成一个完整的 `Authentication` 对象，与其他组件进行共享。
+
+```java
+package org.springframework.security.core;
+ 
+import java.io.Serializable;
+import java.security.Principal;
+import java.util.Collection;
+ 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
+ 
+public interface Authentication extends Principal, Serializable {
+ 
+    /**权限集合*/
+	Collection<? extends GrantedAuthority> getAuthorities();
+ 
+	/**登录密码*/
+	Object getCredentials();
+ 
+	/**获取认证一些额外信息*/
+	Object getDetails();
+ 
+	/**登录用户信息*/
+	Object getPrincipal();
+ 
+	/**是否认证通过*/
+	boolean isAuthenticated();
+
+	void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException;
+}
+```
+了解了Spring Security的上面三个对象，当我们需要数据库管理用户时，我们需要手动实现UserDetailsService对象中的loadUserByUsername方法，这就需要我们同时准备以下几张数据表，分别是用户表（user）、角色表（role）、权限表（permission）、用户和角色关系表（user_role）、权限和角色关系表（permission_role），UserDetails中的用户状态通过用户表里的属性去填充，UserDetails中的权限集合则是通过角色表、权限表、用户和角色关系表、权限和角色关系表构成的RBAC模型来提供，这样就可以把用户认证、用户权限集合放在数据库中进行管理了。

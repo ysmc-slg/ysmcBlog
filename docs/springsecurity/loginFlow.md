@@ -1,6 +1,6 @@
 ---
 description: SpringSecurity 登录流程
-autoPrev: README
+autoPrev: introduction
 ---
 # SpringSecurity 登录流程
 
