@@ -105,3 +105,38 @@ public void setPassword(String password) {
 
 此时重启项目，就可以使用自己定义的用户名/密码登录了。
 
+### 配置类
+
+创建一个配置文件类
+```java
+@Configuration
+publicclass SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+        .withUser("zxqs")
+                .password("123").roles("admin")
+                .and()
+                .withUser("zxqs2")
+                .password("123").roles("admin2");
+    }
+}
+```
+
+1. 首先我们自定义 SecurityConfig 继承自 WebSecurityConfigurerAdapter，重写里边的 configure 方法。有多个 configure 方法，重写参数为 AuthenticationManagerBuilder 的
+2. 首先我们提供了一个 PasswordEncoder 的实例，因为目前的案例还比较简单，后续会专门讲。因此我暂时先不给密码进行加密，所以返回 NoOpPasswordEncoder 的实例即可。
+3. configure 方法中，我们通过 inMemoryAuthentication 来开启在内存中定义用户，withUser 中是用户名，password 中则是用户密码，roles 中是用户角色。
+4. 如果需要配置多个用户，用 and 相连。
+
+配置完成后，再次启动项目，Java 代码中的配置会覆盖掉 XML 文件中的配置，此时再去访问 `/hello` 接口，就会发现只有 Java 代码中的用户名/密码才能访问成功。
+
+## 自定义表单登录
+默认的表单登录有点丑（实际上现在默认的表单登录比以前的好多了，以前的更丑）。
+
+但是很多时候我们依然绝对这个登录页面有点丑，那我们可以自定义一个登录页面。
+
+一起来看下。
+
