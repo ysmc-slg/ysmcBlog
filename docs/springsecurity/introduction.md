@@ -143,27 +143,7 @@ publicclass SecurityConfig extends WebSecurityConfigurerAdapter {
 ### 服务端定义
 然后接下来我们继续完善前面的 `SecurityConfig` 类，继续重写它的 `configure(WebSecurity web)` 和 `configure(HttpSecurity http)` 方法，如下：
  
- ```java
-@Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/js/**", "/css/**","/images/**");
-    }
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login.html")
-                .permitAll()
-                .and()
-                .csrf().disable();
-    }
-}
 
-```
 
 1. web.ignoring() 用来配置忽略掉的 URL 地址，一般对于静态文件，我们可以采用此操作。
 2. 如果我们使用 XML 来配置 Spring Security ，里边会有一个重要的标签 <http>，HttpSecurity 提供的配置方法 都对应了该标签。
@@ -175,3 +155,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 当我们定义了登录页面为 `/login.html` 的时候，Spring Security 也会帮我们自动注册一个 `/login.html` 的接口，这个接口是 POST 请求，用来处理登录逻辑。
 
+### 前端定义
+
+我们将登录页面的相关静态文件拷贝到 Spring Boot 项目的 resources/static 目录下
+
+相关代码在GitHub：https://github.com/lenve/spring-security-samples
+
+form 表单中，注意 action（登录接口） 为 /login.html ，其他的都是常规操作，我就不重复介绍了。
+
+好了，配置完成后，再去重启项目，此时访问任意页面，就会自动重定向到我们定义的这个页面上来，输入用户名密码就可以重新登录了。
