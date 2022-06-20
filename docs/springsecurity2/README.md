@@ -1,6 +1,5 @@
 ---
 description: 初识SpringSecurity
-sidebarDepth: 2
 ---
 
 ::: tip 声明
