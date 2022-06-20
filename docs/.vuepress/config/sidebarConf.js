@@ -287,7 +287,7 @@ module.exports = {
       "text": "springsecurity2",
       "title": "springsecurity2",
       "collapsable": false,
-      "sidebarDepth": 2,
+      "sidebarDepth": 1,
       "children": [
         "README.md",
       ]
