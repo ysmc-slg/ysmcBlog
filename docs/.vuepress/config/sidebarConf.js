@@ -268,17 +268,28 @@ module.exports = {
       ]
     }
   ],
-  "/springsecurity/": [
+  // "/springsecurity/": [
+  //   {
+  //     "text": "springsecurity",
+  //     "title": "springsecurity",
+  //     "collapsable": false,
+  //     "sidebarDepth": 1,
+  //     "children": [
+  //       "README.md",
+  //       "introduction.md",
+  //       "loginFrom.md",
+  //       "loginFrom.md"
+  //     ]
+  //   }
+  // ]
+  "/springsecurity2/": [
     {
-      "text": "springsecurity",
-      "title": "springsecurity",
+      "text": "springsecurity2",
+      "title": "springsecurity2",
       "collapsable": false,
       "sidebarDepth": 1,
       "children": [
         "README.md",
-        "introduction.md",
-        "loginFrom.md",
-        "loginFrom.md"
       ]
     }
   ]
