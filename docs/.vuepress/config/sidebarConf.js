@@ -277,7 +277,8 @@ module.exports = {
       "children": [
         "README.md",
         "introduction.md",
-        "loginFlow.md"
+        "loginFrom.md",
+        "loginFrom.md"
       ]
     }
   ]

@@ -4,6 +4,14 @@ autoPrev: README
 ---
 # SpringSecurity 入门
 
+::: tip 声明
+
+本文转载 微信公众号江南一点雨
+
+https://mp.weixin.qq.com/s?__biz=MzI1NDY0MTkzNQ==&mid=2247488138&idx=1&sn=25d18a61a14e4e6316537b6d45e43dd4&scene=21#wechat_redirect
+
+:::
+
 ## 创建项目
 
 首先新建一个 Spring Boot 项目，创建时引入 `Spring Security` 依赖和 `web` 依赖
@@ -117,11 +125,12 @@ publicclass SecurityConfig extends WebSecurityConfigurerAdapter {
     }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-        .withUser("zxqs")
-                .password("123").roles("admin")
-                .and()
-                .withUser("zxqs2")
-                .password("123").roles("admin2");
+        auth.inMemoryAuthentication()
+          .withUser("zxqs")
+            .password("123").roles("admin")
+            .and()
+            .withUser("zxqs2")
+            .password("123").roles("admin2");
     }
 }
 ```
@@ -163,14 +172,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 }
 ```
-
-1. web.ignoring() 用来配置忽略掉的 URL 地址，一般对于静态文件，我们可以采用此操作。
-2. 如果我们使用 XML 来配置 Spring Security ，里边会有一个重要的标签 `<http>`，HttpSecurity 提供的配置方法 都对应了该标签。
-3. authorizeRequests 对应了 `<intercept-url>`。
-4. formLogin 对应了 `<formlogin>`。
-5. and 方法表示结束当前标签，上下文回到HttpSecurity，开启新一轮的配置。
-6. permitAll 表示登录相关的 `页面/接口` 不要被拦截。
-7. 最后记得关闭 csrf ，关于 csrf 问题我到后面专门和大家说。
+1. auth.inMemoryAuthentication() 所有的请求都需要进行认证后才能访问
+2. web.ignoring() 用来配置忽略掉的 URL 地址，一般对于静态文件，我们可以采用此操作。
+3. 如果我们使用 XML 来配置 Spring Security ，里边会有一个重要的标签 `<http>`，HttpSecurity 提供的配置方法 都对应了该标签。
+4. authorizeRequests 对应了 `<intercept-url>`。
+5. formLogin 对应了 `<formlogin>`。
+6. and 方法表示结束当前标签，上下文回到HttpSecurity，开启新一轮的配置。
+7. permitAll 表示登录相关的 `页面/接口` 不要被拦截。
+8. 最后记得关闭 csrf ，关于 csrf 问题我到后面专门和大家说。
 
 当我们定义了登录页面为 `/login.html` 的时候，Spring Security 也会帮我们自动注册一个 `/login.html` 的接口，这个接口是 POST 请求，用来处理登录逻辑。
 

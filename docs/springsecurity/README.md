@@ -139,23 +139,20 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
  
 public interface Authentication extends Principal, Serializable {
- 
-    /**权限集合*/
 	Collection<? extends GrantedAuthority> getAuthorities();
- 
-	/**登录密码*/
 	Object getCredentials();
- 
-	/**获取认证一些额外信息*/
 	Object getDetails();
- 
-	/**登录用户信息*/
 	Object getPrincipal();
  
-	/**是否认证通过*/
 	boolean isAuthenticated();
 
 	void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException;
 }
 ```
+1. getAuthorities 方法用来获取用户的权限。
+2. getCredentials 方法用来获取用户凭证，一般来说就是密码。
+3. getDetails 方法用来获取用户携带的详细信息，可能是当前请求之类的东西。
+4. getPrincipal 方法用来获取当前用户，可能是一个用户名，也可能是一个用户对象。
+5. isAuthenticated 当前用户是否认证成功。
+
 了解了Spring Security的上面三个对象，当我们需要数据库管理用户时，我们需要手动实现UserDetailsService对象中的loadUserByUsername方法，这就需要我们同时准备以下几张数据表，分别是用户表（user）、角色表（role）、权限表（permission）、用户和角色关系表（user_role）、权限和角色关系表（permission_role），UserDetails中的用户状态通过用户表里的属性去填充，UserDetails中的权限集合则是通过角色表、权限表、用户和角色关系表、权限和角色关系表构成的RBAC模型来提供，这样就可以把用户认证、用户权限集合放在数据库中进行管理了。
