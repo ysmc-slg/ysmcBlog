@@ -290,6 +290,7 @@ module.exports = {
       "sidebarDepth": 1,
       "children": [
         "README.md",
+        "Authentication.md"
       ]
     }
   ]
