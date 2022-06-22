@@ -382,4 +382,179 @@ public class DefaultLogoutPageGeneratingFilter extends OncePerRequestFilter {
 
 通过前面的分析，相信大家对这个简单的案例已经有所了解，看似只是加了一个依赖，但实际上 Spring Security 和 Spring Boot 在背后都默默做了很多事情，当然还有很多没有介绍到的，我们将在后面的章节中和大家一起继续深究。
 
+## 登录表单配置
+理解了入门案例之后，接下来我们再来看一下登录表单的详细配置。首先创建一个新的 Spring Boot 项目，引入 Web 和 Spring Security 依赖，代码如下：
+
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+项目创建好之后，为了方便测试，需要在 application.properties 中添加如下配置，将登录用户名和密码固定下来：
+```properties
+spring.security.user.name=javaboy
+spring.security.user.password=123
+```
+接下来，我们在 resources/static 目录下创建一个 login.html 页面，这个是我们自定义的登录页面：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>登录</title>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
+			id="bootstrap-css">
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js">
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+		</script>
+	</head>
+	<style>
+		#login .container #login-row #login-column #login-box {
+			border: 1px solid #9C9C9C;
+			background-color: #EAEAEA;
+		}
+	</style>
+	<body>
+	<div id="login">
+		<div class="container">
+			<div id="login-row" class="row justify-content-center align-items-center">
+				<div id="login-column" class="col-md-6">
+					<div id="login-box" class="col-md-12">
+						<form id="login-form" class="form" action="/doLogin" method="post">
+							<h3 class="text-center text-info">登录</h3>
+							<div class="form-group">
+								<label for="username" class="text-info">用户名:</label><br>
+								<input type="text" name="uname" id="username" class="form-control">
+							</div>
+							<div class="form-group">
+								<label for="password" class="text-info">密码:</label><br>
+								<input type="text" name="passwd" id="password" class="form-control">
+							</div>
+							<div class="form-group">
+								<input type="submit" name="submit" class="btn btn-info btn-md" value="登录">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+```
+这个 login.html 中的核心内容就是一个登录表单，登录表单中有三个需要注意的地方：
+1. form 的 `action`，这里给出的是 `/doLogin`，表示表单要提交到 `/doLogin` 接口上。
+2. 用户名输入框的 name 属性值为 `uname`，当然这个值是可以自定义的，这里采用了 `uname`。
+3. 密码输入框的 name 属性值为 `passwd`，`passwd` 也是可以自定义的。
+
+`login.html` 定义好之后，接下来定义两个测试接口，作为受保护的资源。当用户登录成功后，就可以访问到受保护的资源。接口定义如下：
+```java
+@RestController
+public class LoginController {
+	@RequestMapping("/index")
+	public String index() {
+		return "login success";
+	}
+	@RequestMapping("/hello")
+	public String hello() {
+		return "hello spring security";
+	} 
+}
+```
+
+最后再提供一个 Spring Security 的配置类：
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+	http.authorizeRequests()
+				.anyRequest().authenticated()
+				.and()
+				.formLogin()
+				.loginPage("/login.html")
+				.loginProcessingUrl("/doLogin")
+				.defaultSuccessUrl("/index ")
+				.failureUrl("/login.html")
+				.usernameParameter("uname")
+				.passwordParameter("passwd")
+				.permitAll()
+				.and()
+				.csrf().disable();
+	} 
+}
+```
+在 Spring Security 中，如果我们需要自定义配置，基本上都是继承自 `WebSecurityConfigurerAdapter` 来实现的，当然 `WebSecurityConfigurerAdapter` 本身的配置还是比较复杂，同时也是比较丰富的，这里先不做过多的展开，仅就结合上面的代码来解释，在下一个小节中我们将会对这里的配置再做更加详细的介绍。
+
+1. 首先 `configure` 方法中是一个链式配置，当然也可以不用链式配置，每一个属性配置完毕后再从 `http.` 重新开始写起
+2. authorizeRequests() 方法表示开启权限配置（该方法的含义其实比较复杂，我们在后面还会再次介绍该方法），anyRequest().authenticated()表示所有的请求都要认证之后才能访问。
+3. `and()` 方法会返回 HttpSecurityBuilder 对象的一个子类（实际上就是 HttpSecurity），所以 `and()` 方法相当于又回到 HttpSecurity 实例，重新开启新一轮的配置。如果觉得 `and()` 方法很难理解，也可以 不用 `and()` 方法 ，在 `.anyRequest().authenticated()` 配置完成后直接用分号（;）结束，然后通过 `http.formLogin()` 继续配置表单登录。
+4. formLogin() 表示开启表单登录配置， `loginPage` 用来配置登录页面地址 ；`loginProcessingUrl` 用来配置登录接口地址；`defaultSuccessUrl` 表示登录成功后的跳转地址；`failureUrl` 表示登录失败后的跳转地址；`usernameParameter` 表示登录用户名的参数名称；`passwordParameter` 表示登录密码的参数名称；`permitAll` 表示跟登录相关的页面和接口不做拦截，直接通过。需要注意的是，`loginProcessingUrl`、`usernameParameter`、`passwordParameter` 需要和 `login.html` 中登录表单的配置一致。
+5. 最后的 `csrf().disable()` 表示禁用 CSRF 防御功能，Spring Security 自带了 CSRF 防御机制，但是我们这里为了测试方便，先将 CSRF 防御机制关闭，后面将会详细介绍 CSRF 攻击与防御问题。
+
+配置完成后，启动 Spring Boot 项目，浏览器地址栏中输入 http://localhost:8080/index，会自动跳转到 http://localhost:8080/login.html 页面（为什么跳转到login.html 在[流程分析](./Authentication.html#流程分析)中说过 ），如图 2-5 所示。输入用户名和密码进行登录（用户名为 javaboy，密码为 123），登录成功之后，就可以访问到 index 页面了，如图 2-6 所示。
+
+![登录](/blogImg/springsecurity/登录.jpg)
+
+经过上面的配置，我们已经成功自定义了一个登录页面出来，用户在登录成功之后，就可以访问受保护的资源了。
+
+### 配置细节
+
+这里还有一些配置的细节需要说一下，在前面的配置中，我们用 `defaultSuccessUrl` 表示用户登录成功后的跳转地址，用 `failureUrl` 表示用户登录失败后的跳转地址。关于登录成功和登录失败，除了这两个方法可以配置之外，还有另外两个方法也可以配置。
+
+#### 登录成功
+当用户登录成功之后，除了 `defaultSuccessUrl` 方法可以实现登录成功后的跳转之外，`successForwardUrl` 也可以实现登录成功后的跳转，代码如下：
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	 @Override
+	 protected void configure(HttpSecurity http) throws Exception {
+			http.authorizeRequests()
+			.anyRequest().authenticated()
+			.and()
+			.formLogin()
+			.loginPage("/login.html")
+			.loginProcessingUrl("/doLogin")
+			.successForwardUrl("/index ")
+			.failureUrl("/login.html")
+			.usernameParameter("uname")
+			.passwordParameter("passwd")
+			.permitAll()
+			.and()
+			.csrf().disable();
+	 } 
+ }
+```
+
+defaultSuccessUrl 和 successForwardUrl 的区别如下：
+
+1. defaultSuccessUrl 表示用户登录成功后，会自动重定向到登录之前的地址上，如果用户本身就是直接访问的登录页面，则登陆成功后就会重定向到 `defaultSuccessUrl` 指定页面中。例如，用户在未认证的情况下，访问了 `/hello` 页面，此时会自动重定向到登录页面，当用户登录成功后，就会自动重定向到/hello 页面；而用户如果一开始就访问登录页面，则登录成功后就会自动重定向到 `defaultSuccessUrl` 所指定的页面中。
+2. `successForwardUrl` 则不会考虑用户之前的访问地址，只要用户登录成功，就会通过服务器端跳转到 `successForwardUrl` 所指定的页面。
+3. `defaultSuccessUrl` 有一个重载方法，如果重载方法的第二个参数传入 `true`，则 `defaultSuccessUrl` 的效果与 `successForwardUrl` 类似，即不考虑用户之前的访问地址，只要登录成功，就重定向到 `defaultSuccessUrl` 所指定的页面。不同之处在于，`defaultSuccessUrl` 是通过重定向实现的跳转（客户端跳转），而 `successForwardUrl` 则是通过服务器端跳转实现的。
+
+无论是 `defaultSuccessUrl` 还是 `successForwardUrl`，最终所配置的都是 `AuthenticationSuccessHandler` 接口的实例。Spring Security 中专门提供了 `AuthenticationSuccessHandler` 接口用来处理登录成功事项：
+```java
+public interface AuthenticationSuccessHandler {
+
+	default void onAuthenticationSuccess(HttpServletRequest request,
+			HttpServletResponse response, FilterChain chain, Authentication authentication)
+			throws IOException, ServletException{
+		onAuthenticationSuccess(request, response, authentication);
+		chain.doFilter(request, response);
+	}
+
+	void onAuthenticationSuccess(HttpServletRequest request,HttpServletResponse response, Authentication authentication) throws IOException, ServletException;
+
+}
+```
+
+
+ 
+
 
