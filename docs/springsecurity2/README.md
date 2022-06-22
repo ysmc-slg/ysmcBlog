@@ -102,7 +102,7 @@ AccessDecisionVoter 和 AccessDecisionManager 都有众多的实现类，在 Acc
 
 在 Spring Security 中，用户请求一个资源（通常是一个网络接口或者一个 Java 方法）所需要的角色会被封装成一个 ConfigAttribute 对象，在 ConfigAttribute 中只有一个 getAttribute 方法，该方法返回一个 String 字符串，就是角色的名称。一般来说，角色名称都带有一个 ROLE_ 前缀，投票器 AccessDecisionVoter 所做的事情，其实就是比较用户所具备的角色和请求某个资源所需的 ConfigAttribute 之间的关系。
 
-### web 安全
+### web安全
 
 在 Spring Security 中，认证、授权等功能都是基于过滤器来完成的。表 1-1 列出了 Spring Security 中常见的过滤器，注意这里说的是否默认加载是指引入 Spring Security 依赖之后，开发者不做任何配置时，会自动加载的过滤器。
 

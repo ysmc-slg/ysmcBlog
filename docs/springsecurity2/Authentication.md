@@ -61,12 +61,12 @@ Using generated security password: 8ef9c800-17cf-47a3-9984-8ff936db6dd8
 
 上面的流程分析是对添加完 Spring Security 依赖，什么都没设置，系统默认进行的流程。我们其实可以进行一些自定义配置，如：
 
-前后端分离项目中，在用户未认证的情况下，不会跳转到 `/login` 页面，而是返回 `用户未认证`，至于前端怎样处理就不是我们管的了。处理这个问题一般会创建一个类实现 `LoginUrlAuthenticationEntryPoint` 接口，在类中实现认证失败的操作，当认证失败后就会进入自定义的类中。所以上面的 4、5 就不会执行了。
+前后端分离项目中，在用户未认证的情况下，不会跳转到 `/login` 页面，而是返回 `用户未认证`，至于前端怎样处理就不是我们管的了。处理这个问题一般会创建一个类实现 `AuthenticationEntryPoint` 接口，在类中实现认证失败的操作，当认证失败后就会进入自定义的类中。所以上面的 4、5 就不会执行了。
 
 还有，登录页面也是可以配置的，下面的文章会专门展开讲解
 
 ### 原理分析
-在 `快速入门` 中，虽然只是引入了一个依赖，代码不多，但是 Spring Boot 背后却默默做了很多事情：
+在 [快速入门](./Authentication.html#快速入门) 中，虽然只是引入了一个依赖，代码不多，但是 Spring Boot 背后却默默做了很多事情：
 
 * 开启 Spring Security 自动化配置，开启后，会自动创建一个名为 springSecurityFilterChain 的过滤器，幵注入到 Spring 容器中，这个过滤器将负责所有的安全管理，包括用户的认证、授权、重定向到登录页面等（springSecurityFilterChain 实际上代理了 Spring Security 中的过滤器链）
 * 创建一个 UserDetailsService 实例，UserDetailsService 负责提供用户数据，默认的用户数据是基于内存的用户，用户名为 user，密码则是随机生成的 UUID 字符串。
@@ -154,7 +154,9 @@ public class UserDetailsServiceAutoConfiguration {
     public InMemoryUserDetailsManager inMemoryUserDetailsManager(SecurityProperties properties, ObjectProvider<PasswordEncoder> passwordEncoder) {
         User user = properties.getUser();
         List<String> roles = user.getRoles();
-        return new InMemoryUserDetailsManager(new UserDetails[]{org.springframework.security.core.userdetails.User.withUsername(user.getName()).password(this.getOrDeducePassword(user, (PasswordEncoder)passwordEncoder.getIfAvailable())).roles(StringUtils.toStringArray(roles)).build()});
+        return new InMemoryUserDetailsManager(
+				User.withUsername(user.getName()).password(getOrDeducePassword(user, passwordEncoder.getIfAvailable()))
+						.roles(StringUtils.toStringArray(roles)).build());
     }
 
     private String getOrDeducePassword(User user, PasswordEncoder encoder) {
@@ -205,14 +207,13 @@ spring.security.user.roles=admin,user
 后用户具备 admin 和 user 两个角色。
 
 #### 默认页面生成
-
-在 `快速入门` 小节的案例中，一共存在两个默认页面，一个就是图 2-1 所示的登录页面，另外一个则是注销登录页面。当用户登录成功之后，在浏览器中输入 http://localhost:8080/logout 就
+[快速入门](./Authentication.html#快速入门) 小节的案例中，一共存在两个默认页面，一个就是图 2-1 所示的登录页面，另外一个则是注销登录页面。当用户登录成功之后，在浏览器中输入 http://localhost:8080/logout 就
 可以看到注销登录页面，如图 2-4 所示。
 
 
 ![注销登录页面](/blogImg/springsecurity/注销登录页面.jpg)
 
-那么这两个页面是从哪里来的呢？这里剖析一下。在 `上篇文章` 中，我们介绍了 Spring Security 中常见的过滤器，在这些常见的过滤器中就包含两个和页面相关的过滤器：DefaultLoginPageGeneratingFilter 和 DefaultLogoutPageGeneratingFilter。
+那么这两个页面是从哪里来的呢？这里剖析一下。在 [上篇文章](./README.html#web 安全) 中，我们介绍了 Spring Security 中常见的过滤器，在这些常见的过滤器中就包含两个和页面相关的过滤器：DefaultLoginPageGeneratingFilter 和 DefaultLogoutPageGeneratingFilter。
 
 通过过滤器的名字就可以分辨出 DefaultLoginPageGeneratingFilter 过滤器用来生成默认的登录页面，DefaultLogoutPageGeneratingFilter 过滤器则用来生成默认的注销页面。
 
