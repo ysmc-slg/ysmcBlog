@@ -553,6 +553,60 @@ public interface AuthenticationSuccessHandler {
 
 }
 ```
+由上述代码可以看到，`AuthenticationSuccessHandler` 接口中一共定义了两个方法，其中一个是 default 方法，此方法是 Spring Security 5.2 开始加入进来的，在处理特定的认证请求 `Authentication Filter` 中会用到；另外一个非 default 方法，则用来处理登录成功的具体事项，其中 `request` 和 `response` 参数好理解，`authentication` 参数保存了登录成功的用户信息。我们将在后面的文章中详细介绍 authentication 参数。
+
+`AuthenticationSuccessHandler` 接口共有三个实现类，如图 2-7 所示。
+
+![AuthenticationSuccessHandler实现类](/blogImg/springsecurity/AuthenticationSuccessHandler实现类.jpg)
+
+1. `SimpleUrlAuthenticationSuccessHandler` 继承自 `AbstractAuthenticationTargetUrlRequestHandler`，通过 `AbstractAuthenticationTargetUrlRequestHandler` 中的 `handle` 方法实现请求重定向。
+2. `SavedRequestAwareAuthenticationSuccessHandler` 在 `SimpleUrlAuthenticationSuccessHandler` 的基础上增加了请求缓存的功能，可以记录之前请求的地址，进而在登录成功后重定向到一开始访问的地址。
+3. `ForwardAuthenticationSuccessHandler` 的实现则比较容易，就是一个服务端跳转。
+
+我们来重点分析 `SavedRequestAwareAuthenticationSuccessHandler` 和 `ForwardAuthenticationSuccessHandler` 的实现。
+
+当通过 `defaultSuccessUrl` 来设置登录成功后重定向的地址时，实际上对应的实现类就是 `SavedRequestAwareAuthenticationSuccessHandler`，代码如下：
+```java
+public class SavedRequestAwareAuthenticationSuccessHandler extends
+		SimpleUrlAuthenticationSuccessHandler {
+	protected final Log logger = LogFactory.getLog(this.getClass());
+
+	private RequestCache requestCache = new HttpSessionRequestCache();
+
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request,
+			HttpServletResponse response, Authentication authentication)
+			throws ServletException, IOException {
+		SavedRequest savedRequest = requestCache.getRequest(request, response);
+
+		if (savedRequest == null) {
+			super.onAuthenticationSuccess(request, response, authentication);
+
+			return;
+		}
+		String targetUrlParameter = getTargetUrlParameter();
+		if (isAlwaysUseDefaultTargetUrl()
+				|| (targetUrlParameter != null && StringUtils.hasText(request
+						.getParameter(targetUrlParameter)))) {
+			requestCache.removeRequest(request, response);
+			super.onAuthenticationSuccess(request, response, authentication);
+
+			return;
+		}
+
+		clearAuthenticationAttributes(request);
+
+		// Use the DefaultSavedRequest URL
+		String targetUrl = savedRequest.getRedirectUrl();
+		logger.debug("Redirecting to DefaultSavedRequest Url: " + targetUrl);
+		getRedirectStrategy().sendRedirect(request, response, targetUrl);
+	}
+
+	public void setRequestCache(RequestCache requestCache) {
+		this.requestCache = requestCache;
+	}
+}
+```
 
 
  
