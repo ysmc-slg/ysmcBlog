@@ -563,7 +563,7 @@ public interface AuthenticationSuccessHandler {
 2. `SavedRequestAwareAuthenticationSuccessHandler` 在 `SimpleUrlAuthenticationSuccessHandler` 的基础上增加了请求缓存的功能，可以记录之前请求的地址，进而在登录成功后重定向到一开始访问的地址。
 3. `ForwardAuthenticationSuccessHandler` 的实现则比较容易，就是一个服务端跳转。
 
-我们来重点分析 `SavedRequestAwareAuthenticationSuccessHandler` 和 `ForwardAuthenticationSuccessHandler` 的实现。
+我们来重点分析 `SavedRequestAwareAuthenticationSuccessHandler` 和 `ForwardAuthenticationSuccessHandler` 的实现。
 
 当通过 `defaultSuccessUrl` 来设置登录成功后重定向的地址时，实际上对应的实现类就是 `SavedRequestAwareAuthenticationSuccessHandler`，代码如下：
 ```java
@@ -607,6 +607,16 @@ public class SavedRequestAwareAuthenticationSuccessHandler extends
 	}
 }
 ```
+这里的核心方法就是 `onAuthenticationSuccess`：
+
+1. 首先从 `requestCache` 中获取缓存下来的请求，如果没有获取到缓存请求，就说明用户在访问登录页面之前并没有访问其他页面，此时直接调用父类的`onAuthenticationSuccess` 方法来处理，最终会重定向到 `defaultSuccessUrl` 指定的地址。
+2. 接下来会获取一个 `targetUrlParameter`，这个是用户显式指定的、希望登录成功后重定向的地址，例如用户发送的登录请求是 http://localhost:8080/doLogin?target=/hello，这就表示当用户登录成功之后，希望自动重定向到 `/hello` 这个接口。`getTargetUrlParameter` 就是要获取重定向地址参数的 `key`，也就是上面的 `target`，拿到 `target` 之后，就可以获取到重定向地址了。
+3. 如果 `targetUrlParameter` 存在，或者用户设置了 `alwaysUseDefaultTargetUrl` 为 true，这个时候缓存下来的请求就没有意义了。此时会直接调用父类的 `onAuthenticationSuccess` 方法完成重定向。
+   * `targetUrlParameter` 存在，则直接重定向到 `targetUrlParameter` 指定的地址；
+   * `alwaysUseDefaultTargetUrl` 为 true，则直接重定向到 `defaultSuccessUrl` 指定的地址；
+   * `targetUrlParameter` 存在并且 `alwaysUseDefaultTargetUrl` 为 true，则重定向到 `defaultSuccessUrl` 指定的地址
+
+4. 如果前面的条件都不满足，那么最终会从缓存请求 `savedRequest` 中获取重定向地址，然后进行重定向操作。
 
 
  
