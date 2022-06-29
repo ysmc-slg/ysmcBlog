@@ -618,7 +618,545 @@ public class SavedRequestAwareAuthenticationSuccessHandler extends
 
 4. 如果前面的条件都不满足，那么最终会从缓存请求 `savedRequest` 中获取重定向地址，然后进行重定向操作。
 
+这就是 `SavedRequestAwareAuthenticationSuccessHandler` 的实现逻辑，开发者也可以配置自己的 `SavedRequestAwareAuthenticationSuccessHandler`，代码如下：
 
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login.html")
+                .loginProcessingUrl("/doLogin")
+                .successHandler(successHandler())
+                .failureUrl("/login.html")
+                .usernameParameter("uname")
+                .passwordParameter("passwd")
+                .permitAll()
+                .and()
+                .csrf().disable();
+    }
+
+    SavedRequestAwareAuthenticationSuccessHandler successHandler(){
+        SavedRequestAwareAuthenticationSuccessHandler handler = new SavedRequestAwareAuthenticationSuccessHandler();
+        handler.setDefaultTargetUrl("/hi");
+        handler.setTargetUrlParameter("target");
+        return handler;
+    }
+}
+```
+**注意**：
+
+在配置时指定了 `targetUrlParameter` 为 `target`，这样用户就可以在登录请求中，通过 `target` 来指定跳转地址，然后需要修改一下前面 `login.html` 中的 `form` 表单：
+
+```html
+<form id="login-form" class="form" action="/doLogin?target=/hello" method="post">
+		<h3 class="text-center text-info">登录</h3>
+		<div class="form-group">
+				<label for="username" class="text-info">用户名:</label><br>
+				<input type="text" name="uname" id="username" class="form-control">
+		</div>
+		<div class="form-group">
+				<label for="password" class="text-info">密码:</label><br>
+				<input type="text" name="passwd" id="password" class="form-control">
+		</div>
+		<div class="form-group">
+				<input type="submit" name="submit" class="btn btn-info btn-md" value="登录">
+		</div>
+</form>
+```
+在 from 表单中，action 修改为 `/doLogin?target=/hello`，这样当用户登录成功之后，就始终跳转到 `/hello` 接口了。
+
+当我们通过 `successForwardUrl` 来设置登录成功后重定向的地址时，实际上对应的实现类就是 `ForwardAuthenticationSuccessHandler`，`ForwardAuthenticationSuccessHandler` 的源码特别简单，就是一个服务端转发，代码如下：
+
+```java
+public class ForwardAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
+	private final String forwardUrl;
+
+	public ForwardAuthenticationSuccessHandler(String forwardUrl) {
+		Assert.isTrue(UrlUtils.isValidRedirectUrl(forwardUrl),
+				() -> "'" + forwardUrl + "' is not a valid forward URL");
+		this.forwardUrl = forwardUrl;
+	}
+
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+		request.getRequestDispatcher(forwardUrl).forward(request, response);
+	}
+}
+```
+
+由上述代码可以看到，主要功能就是调用 `getRequestDispatcher` 方法进行服务端转发。
+
+`AuthenticationSuccessHandler` 默认的三个实现类无论是哪一个，都是用来处理页面跳转的。有时候页面跳转并不能满足我们的需求，特别是现在流行的前后端分离开发中，用户登录成功后，就不再需要页面跳转了，只需要给前端返回一个 JSON 数据即可，告诉前端登录成功还是登录失败，前端收到消息之后自行处理。像这样的需求，我们可以通过自定义 `AuthenticationSuccessHandler` 的实现类来完成：
+
+```java
+public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHandler{
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, 
+		HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+			response.setContentType("application/json;charset=utf-8");
+			Map<String, Object> resp = new HashMap<>();
+			resp.put("status", 200);
+			resp.put("msg", "登录成功!");
+			ObjectMapper om = new ObjectMapper();
+			String s = om.writeValueAsString(resp);
+			response.getWriter().write(s);
+	 } 
+ }
+```
+在自定义的 MyAuthenticationSuccessHandler 中，重写 `onAuthenticationSuccess` 方法，在该方法中，通过 HttpServletResponse 对象返回一段登录成功的 JSON 字符串给前端即可。最后，在 SecurityConfig 中配置自定义的 MyAuthenticationSuccessHandler，代码如下：
+
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login.html")
+                .loginProcessingUrl("/doLogin")
+                .successHandler(new MyAuthenticationSuccessHandler())
+                .failureUrl("/login.html")
+                .usernameParameter("uname")
+                .passwordParameter("passwd")
+                .permitAll()
+                .and()
+                .csrf().disable();
+    }
+}
+```
+
+配置完成后，重启项目。此时，当用户成功登录之后，就不会进行页面跳转了，而是返回一段 JSON 字符串。
+
+
+#### 登录失败
+
+接下来来看登录失败的处理逻辑。为了方便在前端页面展示登录失败的异常信息，我们首先在项目的 `pom.xml` 文件中引入 `thymeleaf` 依赖，代码如下：
+```xml
+<dependency>
+ <groupId>org.springframework.boot</groupId>
+ <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+```
+然后在 `resources/templates` 目录下新建 `mylogin.html`，代码如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>登录</title>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min. css" rel="stylesheet"
+			id="bootstrap-css">
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js">
+		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+		</script>
+	</head>
+	<style>
+		#login .container #login-row #login-column #login-box {
+			border: 1px solid #9C9C9C;
+			background-color: #EAEAEA;
+		}
+	</style>
+	<body>
+		<div id="login">
+			<div class="container">
+				<div id="login-row" class="row justify-content-center align-items-center">
+					<div id="login-column" class="col-md-6">
+						<div id="login-box" class="col-md-12">
+							<form id="login-form" class="form" action="/doLogin" method="post">
+								<h3 class="text-center text-info">登录</h3>
+								<div th:text="${SPRING_SECURITY_LAST_EXCEPTION}">
+								</div>
+								<div class="form-group">
+									<label for="username" class="text-info">用户名:</label><br>
+									<input type="text" name="uname" id="username" class="form-control">
+								</div>
+								<div class="form-group">
+									<label for="password" class="text-info">密码:</label><br>
+									<input type="text" name="passwd" id="password" class="form-control">
+								</div>
+								<div class="form-group">
+									<input type="submit" name="submit" class="btn btn-info btn-md" value="登录">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+```
+mylogin.html 和前面的 login.html 基本类似，前面的 login.html 是静态页面，这里的 mylogin.html 是 thymeleaf 模板页面，mylogin.html 页面在 form 中多了一个 div，用来展示登录失败时候的异常信息，登录失败的异常信息会放在 request 中返回到前端，开发者可以将其直接提取出来展示。
+
+既然 mylogin.html 是动态页面，就不能像静态页面那样直接访问了，需要我们给 mylogin.html 页面提供一个访问控制器：
+
+```java
+@Controller
+public class MyLoginController {
+    @RequestMapping("/mylogin.html")
+    public String mylogin() {
+        return "mylogin";
+    }
+}
+```
+最后再在 SecurityConfig 中配置登录页面，代码如下：
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/mylogin.html")
+                .loginProcessingUrl("/doLogin")
+                .defaultSuccessUrl("/hello")
+                .failureUrl("/mylogin.html")
+                .usernameParameter("uname")
+                .passwordParameter("passwd")
+                .permitAll()
+                .and()
+                .csrf().disable();
+    }
+
+}
+```
+`failureUrl` 表示登录失败后重定向到 `mylogin.html` 页面。重定向是一种客户端跳转，重定向不方便携带请求失败的异常信息（只能放在 URL 中）。
+
+如果希望能够在前端展示请求失败的异常信息，可以使用下面这种方式：
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/mylogin.html")
+                .loginProcessingUrl("/doLogin")
+                .defaultSuccessUrl("/hello")
+                .failureForwardUrl("/mylogin.html")
+                .usernameParameter("uname")
+                .passwordParameter("passwd")
+                .permitAll()
+                .and()
+                .csrf().disable();
+    }
+
+}
+```
+`failureForwardUrl` 方法从名字上就可以看出，这种跳转是一种服务器端跳转，服务器端跳转的好处是可以携带登录异常信息。如果登录失败，自动跳转回登录页面后，就可以将错误信息展示出来，如图 2-8 所示。
+
+![faillogin](/blogImg/springsecurity/faillogin.jpg)
+
+无论是 `failureUrl` 还是 `failureForwardUrl`，最终所配置的都是 `AuthenticationFailureHandler` 接口的实现。Spring Security 中提供了 `AuthenticationFailureHandler` 接口，用来规范登录失败的实现：
+
+`AuthenticationFailureHandler` 接口中只有一个 `onAuthenticationFailure` 方法，用来处理登录失败请求，request 和 response 参数很好理解，最后的 `exception` 则表示登录失败的异常信息。Spring Security 中为 `AuthenticationFailureHandler` 一共提供了五个实现类，如下图。
+
+![FailureHandler](/blogImg/springsecurity/FailureHandler.jpg)
+
+1. SimpleUrlAuthenticationFailureHandler 默认的处理逻辑就是通过重定向跳转到登录页面，当然也可以通过配置 forwardToDestination 属性将重定向改为服务器端跳转，failureUrl 方法的底层实现逻辑就是 SimpleUrlAuthenticationFailureHandler。 
+2. ExceptionMappingAuthenticationFailureHandler 可以实现根据不同的异常类型，映射到不同的路径。
+3. ForwardAuthenticationFailureHandler 表示通过服务器端跳转来重新回到登录页面，failureForwardUrl 方法的底层实现逻辑就是 ForwardAuthenticationFailureHandler。 
+4. AuthenticationEntryPointFailureHandler 是 Spring Security 5.2 新引进的处理类，可以通过 AuthenticationEntryPoint 来处理登录异常。
+5. DelegatingAuthenticationFailureHandler 可以实现为不同的异常类型配置不同的登录失败处理回调
+
+这里举一个简单的例子。假如不使用 `failureForwardUrl` 方法，同时又想在登录失败后通过服务器端跳转回到登录页面，那么可以自定义 `SimpleUrlAuthenticationFailureHandler` 配置，并将 `forwardToDestination` 属性设置为 true，代码如下： 
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/mylogin.html")
+                .loginProcessingUrl("/doLogin")
+                .defaultSuccessUrl("/hello")
+                .failureHandler(failureHandler())
+                .usernameParameter("uname")
+                .passwordParameter("passwd")
+                .permitAll()
+                .and()
+                .csrf().disable();
+    }
+
+    SimpleUrlAuthenticationFailureHandler failureHandler(){
+        SimpleUrlAuthenticationFailureHandler handler = new SimpleUrlAuthenticationFailureHandler("mylogin.html");
+        handler.setUseForward(true);
+        return handler;
+    }
+
+}
+```
+
+这样配置之后，如果用户再次登录失败，就会通过服务端跳转重新回到登录页面，登录页面也会展示相应的错误信息，效果和 failureForwardUrl 一致。
+
+SimpleUrlAuthenticationFailureHandler 的源码也很简单，我们一起来看一下实现逻辑（源码比较长，这里列出来核心部分）：
+```java
+public class SimpleUrlAuthenticationFailureHandler implements
+		AuthenticationFailureHandler {
+	protected final Log logger = LogFactory.getLog(getClass());
+
+	private String defaultFailureUrl;
+	private boolean forwardToDestination = false;
+	private boolean allowSessionCreation = true;
+	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
+	public SimpleUrlAuthenticationFailureHandler() {
+	}
+
+	public SimpleUrlAuthenticationFailureHandler(String defaultFailureUrl) {
+		setDefaultFailureUrl(defaultFailureUrl);
+	}
+	public void onAuthenticationFailure(HttpServletRequest request,
+			HttpServletResponse response, AuthenticationException exception)
+			throws IOException, ServletException {
+
+		if (defaultFailureUrl == null) {
+			logger.debug("No failure URL set, sending 401 Unauthorized error");
+
+			response.sendError(HttpStatus.UNAUTHORIZED.value(),
+				HttpStatus.UNAUTHORIZED.getReasonPhrase());
+		}
+		else {
+			saveException(request, exception);
+
+			if (forwardToDestination) {
+				logger.debug("Forwarding to " + defaultFailureUrl);
+
+				request.getRequestDispatcher(defaultFailureUrl)
+						.forward(request, response);
+			}
+			else {
+				logger.debug("Redirecting to " + defaultFailureUrl);
+				redirectStrategy.sendRedirect(request, response, defaultFailureUrl);
+			}
+		}
+	}
+	protected final void saveException(HttpServletRequest request,
+			AuthenticationException exception) {
+		if (forwardToDestination) {
+			request.setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, exception);
+		}
+		else {
+			HttpSession session = request.getSession(false);
+
+			if (session != null || allowSessionCreation) {
+				request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION,
+						exception);
+			}
+		}
+	}
+
+	public void setUseForward(boolean forwardToDestination) {
+		this.forwardToDestination = forwardToDestination;
+	}
+
+```
+
+从这段源码中可以看到，当用户构造 SimpleUrlAuthenticationFailureHandler 对象的时候，就传入了 defaultFailureUrl，也就是登录失败时要跳转的地址。在 onAuthenticationFailure 方法中，如果发现 defaultFailureUrl 为 null，则直接通过 response 返回异常信息，否则调用 saveException 方法。在 saveException 方法中，如果 forwardToDestination 属性设置为 true，表示通过服务器端跳转回到登录页面，此时就把异常信息放到 request 中 。 再回到 onAuthenticationFailure 方法中，如果用户设置了 forwardToDestination 为 true，就通过服务器端跳转回到登录页面，否则通过重定向回到登录页面。
+
+如果是前后端分离开发，登录失败时就不需要页面跳转了，只需要返回 JSON 字符串给前端即可，此时可以通过自定义 AuthenticationFailureHandler 的实现类来完成，代码如下：
+
+```java
+public class MyAuthenticationFailureHandler implements AuthenticationFailureHandler {
+	@Override
+	public void onAuthenticationFailure(HttpServletRequest request,HttpServletResponse response,AuthenticationException exception) throws IOException, ServletException {
+		response.setContentType("application/json;charset=utf-8");
+		Map<String, Object> resp = new HashMap<>();
+		resp.put("status", 500);
+		resp.put("msg", "登录失败!" + exception.getMessage());
+		ObjectMapper om = new ObjectMapper();
+		String s = om.writeValueAsString(resp);
+		response.getWriter().write(s);
+	}
+}
+```
+然后在 SecurityConfig 中进行配置即可：
+
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+					.anyRequest().authenticated()
+					.and()
+					.formLogin()
+					.loginPage("/mylogin.html")
+					.loginProcessingUrl("/doLogin")
+					.defaultSuccessUrl("/index.html")
+					.failureHandler(new MyAuthenticationFailureHandler())
+					.usernameParameter("uname")
+					.passwordParameter("passwd")
+					.permitAll()
+					.and()
+					.csrf().disable();
+		} 
+ }
+```
+配置完成后，当用户再次登录失败，就不会进行页面跳转了，而是直接返回 JSON 字符串，如图 2-10 所示。
+
+![handler](/blogImg/springsecurity/handler.jpg)
+
+
+#### 注销登录
+
+Spring Security 中提供了默认的注销页面，当然开发者也可以根据自己的需求对注销登录进行定制。
+
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+					.anyRequest().authenticated()
+					.and()
+					.formLogin()
+					//省略其他配置
+					.and()
+					.logout()
+					.logoutUrl("/logout")
+					.invalidateHttpSession(true)
+					.clearAuthentication(true)
+					.logoutSuccessUrl("/mylogin.html")
+					.and()
+					.csrf().disable();
+		} 
+ }
+```
+
+1. 通过.logout()方法开启注销登录配置。
+2. logoutUrl 指定了注销登录请求地址，默认是 GET 请求，路径为/logout。 
+3. invalidateHttpSession 表示是否使 session 失效，默认为 true。 
+4. clearAuthentication 表示是否清除认证信息，默认为 true。 
+5. logoutSuccessUrl 表示注销登录后的跳转地址。
+
+配置完成后，再次启动项目，登录成功后，在浏览器中输入 http://localhost:8080/logout 就可以发起注销登录请求了。注销成功后，会自动跳转到 mylogin.html 页面。
+
+如果项目有需要，开发者也可以配置多个注销登录的请求，同时还可以指定请求的方法：
+
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                //省略其他配置
+                .and()
+                .logout()
+                .logoutRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/logout1", "GET"),
+                                        new AntPathRequestMatcher("/logout2", "POST")))
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutSuccessUrl("/mylogin.html")
+                .and()
+                .csrf().disable();
+    } 
+}
+```
+
+上面这个配置表示注销请求路径有两个：
+
+* 第一个是/logout1，请求方法是 GET。 
+* 第二个是/logout2，请求方法是 POST。
+
+使用任意一个请求都可以完成登录注销。
+
+如果项目是前后端分离的架构，注销成功后就不需要页面跳转了，只需将注销成功的信息返回给前端即可，此时我们可以自定义返回内容：
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                //省略其他配置
+                .and()
+                .logout()
+                .logoutRequestMatcher(new OrRequestMatcher(
+                        new AntPathRequestMatcher("/logout1", "GET"),
+                        new AntPathRequestMatcher("/logout2", "POST")))
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutSuccessHandler((req,resp,auth)->{
+                    resp.setContentType("application/json;charset=utf-8");
+                    Map<String, Object> result = new HashMap<>();
+                    result.put("status", 200);
+                    result.put("msg", "注销成功!");
+                    ObjectMapper om = new ObjectMapper();
+                    String s = om.writeValueAsString(result);
+                    resp.getWriter().write(s);
+                })
+                .and()
+                .csrf().disable();
+    } 
+}
+```
+配置 logoutSuccessHandler 和 logoutSuccessUrl 类似于前面所介绍的 successHandler 和defaultSuccessUrl 之间的关系，只是类不同而已，因此这里不再赘述，读者可以按照我们前面的分析思路自行分析。
+
+配置完成后，重启项目，登录成功后再去注销登录，无论是使用/logout1 还是/logout2 进行注销，只要注销成功后，就会返回一段 JSON 字符串。
+
+如果开发者希望为不同的注销地址返回不同的结果，也是可以的，配置如下：
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                //省略其他配置
+                .and()
+                .logout()
+                .logoutRequestMatcher(new OrRequestMatcher(
+                        new AntPathRequestMatcher("/logout1", "GET"),
+                        new AntPathRequestMatcher("/logout2", "POST")))
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .defaultLogoutSuccessHandlerFor((req,resp,auth)->{
+                    resp.setContentType("application/json;charset=utf-8");
+                    Map<String, Object> result = new HashMap<>();
+                    result.put("status", 200);
+                    result.put("msg", "使用 logout1 注销成功!");
+                    ObjectMapper om = new ObjectMapper();
+                    String s = om.writeValueAsString(result);
+                    resp.getWriter().write(s);
+                },new AntPathRequestMatcher("/logout1","GET"))
+                .defaultLogoutSuccessHandlerFor((req,resp,auth)->{
+                    resp.setContentType("application/json;charset=utf-8");
+                    Map<String, Object> result = new HashMap<>();
+                    result.put("status", 200);
+                    result.put("msg", "使用 logout2 注销成功!");
+                    ObjectMapper om = new ObjectMapper();
+                    String s = om.writeValueAsString(result);
+                    resp.getWriter().write(s);
+                },new AntPathRequestMatcher("/logout2","POST"))
+                .and()
+                .csrf().disable();
+    } 
+}
+```
+通过 defaultLogoutSuccessHandlerFor 方法可以注册多个不同的注销成功回调函数，该方法第一个参数是注销成功回调，第二个参数则是具体的注销请求。当用户注销成功后，使用了哪个注销请求，就给出对应的响应信息。
  
 
 
