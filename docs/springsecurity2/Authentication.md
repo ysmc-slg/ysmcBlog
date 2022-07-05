@@ -1157,6 +1157,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 }
 ```
 通过 defaultLogoutSuccessHandlerFor 方法可以注册多个不同的注销成功回调函数，该方法第一个参数是注销成功回调，第二个参数则是具体的注销请求。当用户注销成功后，使用了哪个注销请求，就给出对应的响应信息。
+
+### 登录用户数据获取
+
+登录成功后，在后续的业务逻辑中，开发者可能还需要获取登录成功的用户对象，如果不使用任何安全管理框架，那么可以将用户信息保存在 HttpSession 中，以后需要的时候直接从 HttpSession 中获取数据。在 Spring Security 中，用户登录信息本质上还是保存在 HttpSession 中，但是为了方便使用 Spring Security 对 HttpSession 中的用户信息进行了封装，封装之后，开发者若再想获取用户登录数据就会有两种不同的思路：
+
+1. 从 `SecurityContextHolder` 中获取
+2. 从当前请求对象中获取
+
+这里列出来的两种方式是主流的做法，开发者也可以使用一些非主流的方式获取登录成功后的用户信息，例如直接从 HttpSession 中获取用户登录数据。
+
+无论是那种获取方式，都离不开一个对象：`Authentication`。在 Spring Security 中，Authentication 对象主要有两方面的功能：
+
+1. 作为 `AuthenticationManager` 的输入参数，提供用户身份认证的凭证，当它作为一个输入参数时，他的 `isAuthentication` 方法返回 `false`，表示用户还未认证。
  
 
 
