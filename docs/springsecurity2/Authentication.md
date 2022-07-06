@@ -1170,6 +1170,81 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 无论是那种获取方式，都离不开一个对象：`Authentication`。在 Spring Security 中，Authentication 对象主要有两方面的功能：
 
 1. 作为 `AuthenticationManager` 的输入参数，提供用户身份认证的凭证，当它作为一个输入参数时，他的 `isAuthentication` 方法返回 `false`，表示用户还未认证。
- 
+2. 代表已经经过身份认证的用户，此时的 `Authentication` 可以从 `SecurityContext` 中获取。
 
+一个 `Authentication` 对象包含三个方面的信息：
 
+1. principal：定义认证的用户。如果用户使用 `用户名/密码` 的方式登录，principal 通常就是一个 `UserDetails` 对象。
+2. credentials：登录凭证，一般就是密码。当用户登录成功之后，登录凭证会被自动擦除，以防止泄露。
+3. authorities：用户被授予的权限信息。
+
+java 本身提供了 `Principal` 接口用来描述认证主体，`Principal` 可以代表一个公司、个人或者登录 ID。Spring Security 中定义了 `Authentication` 接口用来规范登录用户信息，`Authentication` 继承自 `Principal`。
+
+```java
+public interface Authentication extends Principal, Serializable {
+	Collection<? extends GrantedAuthority> getAuthorities();
+	Object getCredentials();
+	Object getDetails();
+	Object getPrincipal();
+	boolean isAuthenticated();
+	void setAuthenticated(boolean isAuthenticated);
+}
+```
+这里接口中定义的方法都很好理解：
+* getAuthorities 方法：用来获取用户权限
+* getCredentials 方法：用来获取用户凭证，一般来说就是密码。
+* getDetails 方法：用来获取用户的详细信息，可能是当前的请求之类
+* getPrincipal 方法：用来获取当前用户信息，可能是一个用户名，也可能是一个用户对象
+* isAuthenticated 方法：当前用户是否认证成功
+
+可以看到，在 Spring Security 中，只要获取到 `Authentication` 对象，就可以获取到登录用户的详细信息。
+
+不同的认证方式对应不同的 `Authentication` 实例，Spring Security 中的 `Authentication` 实现类如图 2-11 所示。
+
+![AbstractAuthenticationToken](/blogImg/springsecurity/AbstractAuthenticationToken.jpg)
+
+1. AbstractAuthenticationToken：该类实现了 `Authentication` 和 `CredentialsContainer` 两个接口，在 `AbstractAuthenticationToken` 中对 `Authentication` 接口定义的各个数据获取方法进行了实现 `CredentialsContainer` 则提供了登录凭证擦除方法。
+2. RememberMeAuthenticationToken：如果用户使用 `RememberMe` 的方式登录，登录信息将封装在 `RememberMeAuthenticationToken` 中。
+3. TestingAuthenticationToken：单元测试时封装对象。
+4. AnonymousAuthenticationToken：匿名登录时封装的用户对象
+5. RunAsUserToken：替换验证身份时封装的用户对象
+6. UsernamePasswordAuthenticationToken：表单登录时封装的用户对象
+7. JaasAuthenticationToken：JAAS 认证时封装的用户对象
+8. PreAuthenticatedAuthenticationToken：Pre-Authentication 场景下封装的用户对象。
+
+在这些 Authentication 的实例中，最常见的有两个：`UsernamePasswordAuthenticationToken` 和 `RememberMeAuthenticationToken`。在[快速入门](./Authentication.html#快速入门) 案例对应的用户认证对象就是 `UsernamePasswordAuthenticationToken`。
+
+了解了 Authentication 对象之后，接下来我们来看一下如何在登录成功后获取用户登录信息，即 Authentication 对象。
+
+#### 从 SecurityContextHolder 中获取
+
+我们在 [快速入门](./Authentication.html#登录表单配置) 案例的基础上，在添加一个 UserController，内容如下：
+
+```java
+@RestController
+public class UserController {
+    @GetMapping("/user")
+    public void userInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        System.out.println("name = " + name);
+        System.out.println("authorities = " + authorities);
+    }
+}
+```
+配置完成后，启动项目，登陆成功后，访问 `/user` 接口，控制台就会打印出登录用户信息，我们目前没有给用户配置角色，所以默认的用户角色为空数组，如图 2-12 所示
+
+![2-12](/blogImg/springsecurity/2-12.jpg)
+
+这里为了演示方便，我们在 Conroller 中获取登录用户信息，可以发现，`SecurityContextHolder.getContext()` 是一个静态方法，也就意味着我们随时随地都可以获取到登录用户信息，在 service 层也可以获取到登录用户信息（在实际项目中，大部分情况下也都是在 service 层获取登录用户信息）。
+
+##### SecurityContextHolder
+
+`SecurityContextHolder` 中存储的是 `SecurityContext`，`SecurityContext` 中存储的则是 `Authentication`，三者的关系如图 2-13 所示。
+
+![2-13](/blogImg/springsecurity/2-13.jpg)
+
+这幅图清晰地描述了 SecurityContextHolder、SecurityContext 以及 Authentication 三者之间的关系。
+
+首先在
