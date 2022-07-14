@@ -1247,4 +1247,6 @@ public class UserController {
 
 这幅图清晰地描述了 SecurityContextHolder、SecurityContext 以及 Authentication 三者之间的关系。
 
-首先在
+首先在 SecurityContextHolder 中存放的是 SecurityContext，SecurityContextHolder 中定义了三种不同的数据存储策略，这实际上是一种典型的策略模式：
+
+1. MODE_THREADLOCAL：这种策略是将 SecurityContext 存放在 ThreadLocal 中
