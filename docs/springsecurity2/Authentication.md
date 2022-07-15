@@ -1249,4 +1249,20 @@ public class UserController {
 
 首先在 SecurityContextHolder 中存放的是 SecurityContext，SecurityContextHolder 中定义了三种不同的数据存储策略，这实际上是一种典型的策略模式：
 
-1. MODE_THREADLOCAL：这种策略是将 SecurityContext 存放在 ThreadLocal 中
+1. MODE_THREADLOCAL：这种策略是将 SecurityContext 存放在 ThreadLocal 中，ThreadLocal 的特点是在哪个线程中存储就要在哪个线程中读取，这其实非常适合 Web 应用，因为在默认情况下，一个请求无论经过多少 Filter 到达 Servlet，都是由一个线程来处理的。这也是 SecurityContextHolder 的默认存储策略，这种存储策略意味着如果在具体的业务代码中，开启了子线程，在子线程中去获取登陆用户数据，就会获取不到。
+2. MODE_INHERITABLETHREADLOCAL：这种存储模式适用于多线程环境，如果希望在子线程中也能够获取到登录用户数据，那么可以使用这种存储模式。
+3. MODE_GLOBAL：这种存储模式实际上是将数据保存在一个静态变量中，在 JavaWEB 开发中，这种模式很少使用到。
+
+Spring Security 中定义了 `SecurityContextHolderStrategy` 接口用来规范存储策略中的方法，我们来看一下：
+
+```java
+public interface SecurityContextHolderStrategy {
+
+	void clearContext();
+	SecurityContext getContext();
+	void setContext(SecurityContext context);
+	SecurityContext createEmptyContext();
+
+}
+```
+
