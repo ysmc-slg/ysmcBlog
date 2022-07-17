@@ -40,6 +40,10 @@ module.exports = [
       { 
         text: '自定义动态数据源', 
         link: '/solution/dyanmicDataSource/' 
+      },
+      { 
+        text: '自定义日志注解', 
+        link: '/solution/log/' 
       }
     ],
     

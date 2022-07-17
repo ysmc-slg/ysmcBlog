@@ -268,6 +268,17 @@ module.exports = {
       ]
     }
   ],
+  "/solution/log/": [
+    {
+      "text": "log",
+      "title": "log",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
+      ]
+    }
+  ],
   // "/springsecurity/": [
   //   {
   //     "text": "springsecurity",
