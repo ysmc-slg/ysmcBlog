@@ -279,6 +279,17 @@ module.exports = {
       ]
     }
   ],
+  "/solution/asyncManager/": [
+    {
+      "text": "asyncManager",
+      "title": "asyncManager",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
+      ]
+    }
+  ],
   // "/springsecurity/": [
   //   {
   //     "text": "springsecurity",

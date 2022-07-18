@@ -44,6 +44,10 @@ module.exports = [
       { 
         text: '自定义日志注解', 
         link: '/solution/log/' 
+      },
+      { 
+        text: '异步管理器', 
+        link: '/solution/asyncManager/' 
       }
     ],
     
