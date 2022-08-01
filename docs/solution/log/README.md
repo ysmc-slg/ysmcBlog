@@ -497,7 +497,7 @@ public class AsyncFactory {
 }
 ```
 
-`SpringUtils.getBean` 获取被 Spring 管理的 Bean，具体信息移步：
+`SpringUtils.getBean` 获取被 Spring 管理的 Bean。如果不了解怎样在非 Spring 容器中获取 Spring 中的 Bean，可以参考：[Aware](../../ssm/spring/Aware.html)
 
 
 ```java
