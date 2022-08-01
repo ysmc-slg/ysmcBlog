@@ -467,7 +467,7 @@ public class LogAspect {
 `getControllerMethodDescription()` 中获取注解上的信息给 `operLog` 赋值，如果需要保存参数信息，需要在 `setRequestValue()` 方法中对请求方式进行判断，如果是 `POST` 或 `PUT` 方式，获取请求体中的全部参数调用 `argsArrayToString()` 方法遍历参数，同时在`isFilterObject()` 中判断是否需要将参数过滤，因为文件上传对象等参数只是一个二进制代码，没有意义所以要过滤掉，最后将参数转成 JSON 进行拼接。如是 `GET` 等其他方式，直接获取地址栏的参数进行赋值。最后将返回值也进行赋值。
 
 
-最后执行 `AsyncManager.me().execute(AsyncFactory.recordOper(operLog));` ，关于异步的操作可以看这篇文章 [异步管理器](./asyncManager)
+最后执行 `AsyncManager.me().execute(AsyncFactory.recordOper(operLog));` ，关于异步的操作可以看这篇文章 [异步管理器](../asyncManager)
 
 ```java
 /**
