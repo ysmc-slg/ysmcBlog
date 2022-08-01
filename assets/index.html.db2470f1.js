@@ -1,1 +1,0 @@
-const e={key:"v-5e1b5ce1",path:"/solution/asyncManager/",title:"\u5F02\u6B65\u7BA1\u7406\u5668",lang:"zh-CN",frontmatter:{description:"\u5F02\u6B65\u7BA1\u7406\u5668"},excerpt:"",headers:[],filePathRelative:"solution/asyncManager/README.md",git:{updatedTime:1658134607e3,contributors:[{name:"ysmc",email:"494786209@qq.com",commits:1}]}};export{e as data};
