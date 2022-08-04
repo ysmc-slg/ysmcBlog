@@ -1218,7 +1218,7 @@ public interface Authentication extends Principal, Serializable {
 
 #### 从 SecurityContextHolder 中获取
 
-我们在 [快速入门](./Authentication.html#登录表单配置) 案例的基础上，在添加一个 UserController，内容如下：
+我们在 [登录表单配置](./Authentication.html#登录表单配置) 案例的基础上，在添加一个 UserController，内容如下：
 
 ```java
 @RestController
@@ -1265,4 +1265,312 @@ public interface SecurityContextHolderStrategy {
 
 }
 ```
+
+接口中一共定义了四个方法：
+
+1. clearContext：该方法用来清除存储的 `SecurityContext` 对象。
+2. getContext：该方法用来获取存储的 `SecurityContext` 对象。
+3. setContext：改方法用来设置存储的 `SecurityContext` 对象。
+4. createEmptyContext：该方法则用来创建一个空的 `SecurityContext` 对象。
+
+在 Spring Security 中，`SecurityContextHolderStrategy` 接口一共有三个实现类，对应了三种不同的存储策略，如图 2-14 所示
+
+![2-14](/blogImg/springsecurity/2-14.jpg)
+
+每一种实现类都对应了不同的实现策略，我们先来看一下 `ThreadLocalSecurityContextHolderStrategy`：
+
+```java
+final class ThreadLocalSecurityContextHolderStrategy implements
+		SecurityContextHolderStrategy {
+
+	private static final ThreadLocal<SecurityContext> contextHolder = new ThreadLocal<>();
+
+	public void clearContext() {
+		contextHolder.remove();
+	}
+
+	public SecurityContext getContext() {
+		SecurityContext ctx = contextHolder.get();
+
+		if (ctx == null) {
+			ctx = createEmptyContext();
+			contextHolder.set(ctx);
+		}
+
+		return ctx;
+	}
+
+	public void setContext(SecurityContext context) {
+		Assert.notNull(context, "Only non-null SecurityContext instances are permitted");
+		contextHolder.set(context);
+	}
+
+	public SecurityContext createEmptyContext() {
+		return new SecurityContextImpl();
+	}
+}
+```
+
+`ThreadLocalSecurityContextHolderStrategy` 实现了 `SecurityContextHolderStrategy` 接口，并实现了接口中的方法，存储数据的载体就是一个 `ThreadLocal`，所以针对 `SecurityContext` 的清空、获取以及存储，都是在 ThreadLocal 中进行操作，例如清空就是调用 ThreadLocal 的 remove 方法。SecurityContext 是一个接口，它只有一个实现类 `SecurityContextImpl`，所以创建就直接创建一个 SecurityContextImpl 对象即可。
+
+再来看 `InheritableThreadLocalSecurityContextHolderStrategy`：
+
+```java
+final class InheritableThreadLocalSecurityContextHolderStrategy implements
+		SecurityContextHolderStrategy {
+
+	private static final ThreadLocal<SecurityContext> contextHolder = new InheritableThreadLocal<>();
+
+	public void clearContext() {
+		contextHolder.remove();
+	}
+
+	public SecurityContext getContext() {
+		SecurityContext ctx = contextHolder.get();
+
+		if (ctx == null) {
+			ctx = createEmptyContext();
+			contextHolder.set(ctx);
+		}
+
+		return ctx;
+	}
+
+	public void setContext(SecurityContext context) {
+		Assert.notNull(context, "Only non-null SecurityContext instances are permitted");
+		contextHolder.set(context);
+	}
+
+	public SecurityContext createEmptyContext() {
+		return new SecurityContextImpl();
+	}
+}
+```
+`InheritableThreadLocalSecurityContextHolderStrategy`和`ThreadLocalSecurityContextHolderStrategy` 的实现策略基本一致，不同的是存储数据的载体变了，在 `InheritableThreadLocalSecurityContextHolderStrategy` 中存储数据的载体变成了 `InheritableThreadLocal`。`InheritableThreadLocal` 继承自 `ThreadLocal`，但是多了一个特性，就是在子线程创建的一瞬间，会自动将父线程中的数据复制到子线程中。该存储策略正式利用了这一特性，实现了在子线程中获取登录用户信息的功能。
+
+最后再来看一下 `GlobalSecurityContextHolderStrategy`：
+
+```java
+final class GlobalSecurityContextHolderStrategy implements SecurityContextHolderStrategy {
+
+	private static SecurityContext contextHolder;
+
+	public void clearContext() {
+		contextHolder = null;
+	}
+
+	public SecurityContext getContext() {
+		if (contextHolder == null) {
+			contextHolder = new SecurityContextImpl();
+		}
+
+		return contextHolder;
+	}
+
+	public void setContext(SecurityContext context) {
+		Assert.notNull(context, "Only non-null SecurityContext instances are permitted");
+		contextHolder = context;
+	}
+
+	public SecurityContext createEmptyContext() {
+		return new SecurityContextImpl();
+	}
+}
+```
+`GlobalSecurityContextHolderStrategy` 的实现就更简单了，用一个静态变量来保存 `SecurityContext`，所以它也可以在多线程环境下使用。但是一般在 Web 开发中，这种存储策略使用得较少。
+
+最后在看一下 SecurityContextHolder 的源码：
+
+```java
+public class SecurityContextHolder {
+	
+	public static final String MODE_THREADLOCAL = "MODE_THREADLOCAL";
+	public static final String MODE_INHERITABLETHREADLOCAL = "MODE_INHERITABLETHREADLOCAL";
+	public static final String MODE_GLOBAL = "MODE_GLOBAL";
+	public static final String SYSTEM_PROPERTY = "spring.security.strategy";
+	private static String strategyName = System.getProperty(SYSTEM_PROPERTY);
+	private static SecurityContextHolderStrategy strategy;
+	private static int initializeCount = 0;
+
+	static {
+		initialize();
+	}
+
+	public static void clearContext() {
+		strategy.clearContext();
+	}
+
+	
+	public static SecurityContext getContext() {
+		return strategy.getContext();
+	}
+
+	
+	public static int getInitializeCount() {
+		return initializeCount;
+	}
+
+	private static void initialize() {
+		if (!StringUtils.hasText(strategyName)) {
+			// Set default
+			strategyName = MODE_THREADLOCAL;
+		}
+
+		if (strategyName.equals(MODE_THREADLOCAL)) {
+			strategy = new ThreadLocalSecurityContextHolderStrategy();
+		}
+		else if (strategyName.equals(MODE_INHERITABLETHREADLOCAL)) {
+			strategy = new InheritableThreadLocalSecurityContextHolderStrategy();
+		}
+		else if (strategyName.equals(MODE_GLOBAL)) {
+			strategy = new GlobalSecurityContextHolderStrategy();
+		}
+		else {
+			// Try to load a custom strategy
+			try {
+				Class<?> clazz = Class.forName(strategyName);
+				Constructor<?> customStrategy = clazz.getConstructor();
+				strategy = (SecurityContextHolderStrategy) customStrategy.newInstance();
+			}
+			catch (Exception ex) {
+				ReflectionUtils.handleReflectionException(ex);
+			}
+		}
+
+		initializeCount++;
+	}
+
+	public static void setContext(SecurityContext context) {
+		strategy.setContext(context);
+	}
+
+
+	public static void setStrategyName(String strategyName) {
+		SecurityContextHolder.strategyName = strategyName;
+		initialize();
+	}
+
+	
+	public static SecurityContextHolderStrategy getContextHolderStrategy() {
+		return strategy;
+	}
+
+	public static SecurityContext createEmptyContext() {
+		return strategy.createEmptyContext();
+	}
+
+	@Override
+	public String toString() {
+		return "SecurityContextHolder[strategy='" + strategyName + "'; initializeCount="
+				+ initializeCount + "]";
+	}
+}
+```
+
+从这段代码中可以看到，SecurityContextHolder 定义了三个静态常量用来描述三种不同的存储策略；存储策略 `strategy` 会在静态代码块中进行初始化，根据不同的 `strategyName` 初始化不同的存储策略；`strategyName` 变量表示目前正在使用的存储策略，开发者可以通过配置系统变量或者调用 `setStrategyName` 来修改 SecurityContextHolder 中的存储策略，调用 `setStrategyName` 后会重新初始化 `strategy`。
+
+默认情况下，如果开发者视图从子进程中获取当前登录用户数据，就会获取失败，代码如下：
+
+```java
+@RestController
+public class HelloController {
+
+    @GetMapping("/user")
+    public void userInfo() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Collection<? extends GrantedAuthority> authorities =
+                authentication.getAuthorities();
+        System.out.println("name = " + name);
+        System.out.println("authorities = " + authorities);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Authentication authentication =
+                        SecurityContextHolder.getContext().getAuthentication();
+                if (authentication == null) {
+                    System.out.println("获取用户信息失败");
+                    return;
+                }
+                String name = authentication.getName();
+                Collection<? extends GrantedAuthority> authorities =
+                        authentication.getAuthorities();
+                String threadName = Thread.currentThread().getName();
+                System.out.println(threadName + ":name = " + name);
+                System.out.println(threadName + ":authorities = " + authorities);
+            }
+        }).start();
+    }
+}
+```
+
+在子线程中尝试获取登录用户数据时，获取到的数据为 null，如图 2-15 所示。
+
+![2-15](/blogImg/springsecurity/2-15.jpg)
+
+子线程之所以获取不到登录用户信息，就是因为数据存储在 `ThreadLocal` 中，存储和读取不是同一个线程，所以获取不到。如果希望子线程也能获取到登录用户信息，可以将 `SecurityContextHolder` 中存储策略改为 `MODE_INHERITABLETHREADLOCAL`，这样就支持多线程 环境下获取登录用户信息了。
+
+默认的存储策略是通过 System.getProperty 加载的，因此我们可以通过配置系统变量来修改默认的存储策略，以 IntelliJ IDEA 为例，首先点击启动按钮，选择 Edit Configurations 按钮，如图 2-16 所示，然后在打开的选项中，配置 VM options 参数，添加如下一行，配置界面按钮如图 2-17 所示。
+
+```properties
+-Dspring.security.strategy=MODE_INHERITABLETHREADLOCAL
+```
+![2-16](/blogImg/springsecurity/2-16.jpg)
+
+![2-17](/blogImg/springsecurity/2-17.jpg)
+
+这样，在 `SecurityContextHolder` 中通过 `System.getProperty` 加载到默认的存储策略就支持多线程了。
+
+配置完成之后，再次启动项目，此时访问 `/user` 接口，即使在子线程中，也可以获取登录用户信息了。
+
+![2-18](/blogImg/springsecurity/2-18.jpg)
+
+既然 `SecurityContextHolder` 默认是将用户信息存储在 `ThreadLocal` 中，在 Spring Boot 中不同的请求都是不同的线程处理的，那为什么每一次请求都还能从 SecurityContextHolder 中获取到登录用户信息呢？这就不得不提到 Spring Security 过滤器链中重要的一环————`SecurityContextPersistenceFilter`。
+
+默认情况下，在 SpringSecurity 过滤器链中，`SecurityContextPersistenceFilter` 是第二道防线，位于`WebAsyncManagerIntegrationFilter` 之后。从 `SecurityContextPersistenceFilter` 这个过滤器的名字上就可以推断出出来，它的作用是为了存储 `SecurityContext` 而设计的。
+
+整体上来说，`SecurityContextPersistenceFilter` 主要做两件事：
+
+1. 当一个请求来到时，从 `HttpSession` 中获取 `SecurityContext` 并存入 `SecurityContextHolder` 中，这样同一个请求在后续处理过程中，开发者始终可以通过 `SecurityContextHolder` 获取到当前登录用户信息。
+2. 当一个请求处理完毕时，从 `SecurityContextHolder` 中获取 `SecurityContext` 并存入 `HttpSession`(主要针对异步Servlet) 中，方便下一个请求到来时，再从 HttpSession 中拿出来使用，同时擦除 `SecurityContextHolder` 中的登录用户信息。
+
+::: tip 注意
+
+在 SecurityContextPersistenceFilter 过滤器中，当一个请求处理完毕时，从SecurityContextHolder 中获取 SecurityContext 存入 HttpSession 中，这一步的操作主要是针对异步 Servlet。如果不是异步 Servlet，在响应提交时，就会将 SecurityContext 保存到 HttpSession 中了，而不会等到在 SecurityContextPersistenceFilter 过滤器中再去存储
+
+:::
+
+这就是 `SecurityContextPersistenceFilter` 大致上做的事情，在正式开始介绍 SecurityContextPersistenceFilter 之前，需要先介绍另外一个接口，这就是 `SecurityContextRepository` 接口。
+
+将 `SecurityContext` 存入 `HttpSession`，或者从 `HttpSession` 中加载数据并转为 `SecurityContext` 对象，这些事情都是由 `SecurityContextRepository` 接口的实现类完成的，因此这里我们就先从 `SecurityContextRepository` 接口开始看起。
+
+首先我们来看一下 SecurityContextRepository 接口的定义：
+
+```java
+public interface SecurityContextRepository {
+
+	SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder);
+
+	void saveContext(SecurityContext context, HttpServletRequest request, HttpServletResponse response);
+
+	boolean containsContext(HttpServletRequest request);
+
+}
+```
+`SecurityContextRepository` 接口中一共定义了三个方法：
+
+1. loadContext：这个方法用来加载 `SecurityContext` 对象出来，对于没有登录的用户，这里会返回一个空的 `SecurityContext` 对象，注意空的 `SecurityContext` 对象是指 `SecurityContext` 中不存在 `Authentication` 对象，而不是该方法返回 null.
+2. saveContext：该方法用来保存一个 SecurityContext 对象。
+3. containsContex：该方法可以判断 SecurityContext 对象是否存在。
+
+在 SpringSecurity 框架中，为 `SecurityContextRepository` 接口一共提供了三个实现类，如图 2-19 所示。
+
+![2-19](/blogImg/springsecurity/2-19.jpg)
+
+在这三个实现类中，`TestSecurityContextRepository` 为单元测试提供支持
+
+
+
+
 
