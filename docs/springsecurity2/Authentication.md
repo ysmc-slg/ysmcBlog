@@ -1571,7 +1571,9 @@ public interface SecurityContextRepository {
 在这三个实现类中，`TestSecurityContextRepository` 为单元测试提供支持
 
 
-<img :src="$withBase('http://img.zxqs.top/20220810102339.png')" alt="foo">
+<img :src="$withBase('https://public-1310720021.cos.ap-shanghai.myqcloud.com/img/https/user-images.githubusercontent.com/76736580/2022-08-07-16:45:47*182370493-7767d697-e566-4c49-92cb-05d165ab2436*9.png')" alt="foo">
+
+![img](https://public-1310720021.cos.ap-shanghai.myqcloud.com/img/https/user-images.githubusercontent.com/76736580/2022-08-07-16:45:47*182370493-7767d697-e566-4c49-92cb-05d165ab2436*9.png)
 
 
 
