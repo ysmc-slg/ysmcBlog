@@ -147,7 +147,8 @@ module.exports = {
         "conditionalAnnotation.md",
         "beanScope.md",
         "Aware.md",
-        "AOP.md"
+        "AOP.md",
+        "spel.md"
       ]
     }
   ],
