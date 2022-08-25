@@ -1568,11 +1568,161 @@ public interface SecurityContextRepository {
 
 ![2-19](/blogImg/springsecurity/2-19.jpg)
 
-在这三个实现类中，`TestSecurityContextRepository` 为单元测试提供支持
+在这三个实现类中，`TestSecurityContextRepository` 为单元测试提供支持；NullSecurityContextRepository 实现类中，loadContext 方法总是返回一个空的 SecurityContext 对象，saveContext 方 法未做任何实现， containsContext 方 法 总 是 返 回 false ， 所 以 NullSecurityContextRepository 实现类实际上未做 SecurityContext 的存储工作。
 
-![img](https://img.zxqs.top/20220810114336.png)
+在 Spring Security 中默认使用的实现类是 HttpSessionSecurityContextRepository，通过 HttpSessionSecurityContextRepository 实现了将 SecurityContext 存储到 HttpSession 以及从 HttpSession 中加载 SecurityContext 出来。这里我们来重点看一下 HttpSessionSecurityContextRepository 类。
+
+没写完
 
 
+#### 从当前请求对象中获取
+
+接下来我们来看一下登录数据获取方式 —— 从当前请求中获取。代码如下：
+
+```java
+@RequestMapping("/authentication")
+public void authentication(Authentication authentication) {
+ 	System.out.println("authentication = " + authentication);
+}
+@RequestMapping("/principal")
+public void principal(Principal principal) {
+ 	System.out.println("principal = " + principal);
+}
+```
+
+开发者可以直接在 `Controller` 的请求参数中放入 `Authentication` 对象来获取登录用户信息。通过前面的讲解，大家已经知道 Authentication 是 Principal 的子类，所以也可以直接在请求参
+数中放入 Principal 来接收当前登录用户信息。需要注意的是，即使参数是 Principal，真正的实例依然是 Authentication 的实例。
+
+Controller 中方法的参数都是当前请求 HttpServletRequest 带来的。毫无疑问，前面的 Authentication 和 Principal 参数也都是 HttpServletRequest 带来的，那么这些数据到底是何时放入 HttpServletRequest 的呢？又是以何种形式存在的呢？接下来我们一起分析一下。
+
+在 Servlet 规范中，最早有三个和安全管理相关的方法：
+
+```java
+public String getRemoteUser();
+public boolean isUserInRole(String role);
+public java.security.Principal getUserPrincipal();
+```
+1. getRemoteUser：获取登录用户名
+2. isUserInRole：判断当前登录用户是否具备一个指定的角色
+3. getUserPrincipal：获取当前认证主体。
+
+从 Servlet 3.0 开始，在这三个方法的基础之上，又增加了三个和安全管理相关的方法：
+
+```java
+public boolean authenticate(HttpServletResponse response)
+ throws IOException, ServletException;
+public void login(String username, String password) throws ServletException;
+public void logout() throws ServletException;
+```
+
+1. authenticate：判断当前请求是否成功。
+2. login：执行登录操作
+3. logout：执行注销操作
+
+不过 HttpServletRequest 只是一个接口，这些安全认证相关的方法，在不同环境下会有不同的实现。
+
+如果是一个普通的 WEB 项目，不使用任何框架，HttpServletRequest 默认实现类是 Tomcat 中的 `RequestFacade`，从这个类的名字上就可以看出来，这是一个使用了 Facade 模式（外观模式）的类，真正提供底层服务的是 Tomcat 中的 Request 对象，只不过这个 Request 对象在实现 Servlet 规范的同时，还定义了很多 Tomcat 内部的方法，为了避免开发者直接调用到这些内部方法，这里使用了外观模式。
+
+如果使用了 Spring Security 框架，那么我们在 Controller 参数中拿到的 HttpServletRequest 实例将是 `Servlet3SecurityContextHolderAwareRequestWrapper`，很显然，这是被 SpringSecurity 封装过的请求。
+
+我们来看一下 `Servlet3SecurityContextHolderAwareRequestWrapper` 的继承关系，如图 2-21 所示。
+
+![2-21](https://img.zxqs.top/20220825154447.png)
+
+`SecurityContextHolderAwareRequestWrapper` 类主要实现了 `Servlet 3.0` 之前和安全管理相关的三个方法，也就是 `getRemoteUser()`、`isUserInRole(String)` 以及 `getUserPrincipal()`。Servlet 3.0 中新增的三个安全管理相关的方法， 则在 `Servlet3SecurityContextHolderAwareRequestWrapper` 类中实现。获取用户登录信息主要和前面三个方法有关，因此这里我们主要来看一下 `SecurityContextHolderAwareRequestWrapper` 类中相关方法的实现。
+
+```java
+public class SecurityContextHolderAwareRequestWrapper extends HttpServletRequestWrapper {
+
+	private final AuthenticationTrustResolver trustResolver;
+
+	private final String rolePrefix;
 
 
+	public SecurityContextHolderAwareRequestWrapper(HttpServletRequest request,
+			String rolePrefix) {
+		this(request, new AuthenticationTrustResolverImpl(), rolePrefix);
+	}
 
+	public SecurityContextHolderAwareRequestWrapper(HttpServletRequest request,
+			AuthenticationTrustResolver trustResolver, String rolePrefix) {
+		super(request);
+		Assert.notNull(trustResolver, "trustResolver cannot be null");
+		this.rolePrefix = rolePrefix;
+		this.trustResolver = trustResolver;
+	}
+
+	private Authentication getAuthentication() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (!trustResolver.isAnonymous(auth)) {
+			return auth;
+		}
+
+		return null;
+	}
+
+	@Override
+	public String getRemoteUser() {
+		Authentication auth = getAuthentication();
+
+		if ((auth == null) || (auth.getPrincipal() == null)) {
+			return null;
+		}
+
+		if (auth.getPrincipal() instanceof UserDetails) {
+			return ((UserDetails) auth.getPrincipal()).getUsername();
+		}
+
+		return auth.getPrincipal().toString();
+	}
+
+	@Override
+	public Principal getUserPrincipal() {
+		Authentication auth = getAuthentication();
+
+		if ((auth == null) || (auth.getPrincipal() == null)) {
+			return null;
+		}
+
+		return auth;
+	}
+
+	private boolean isGranted(String role) {
+		Authentication auth = getAuthentication();
+
+		if (rolePrefix != null && role != null && !role.startsWith(rolePrefix)) {
+			role = rolePrefix + role;
+		}
+
+		if ((auth == null) || (auth.getPrincipal() == null)) {
+			return false;
+		}
+
+		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+
+		if (authorities == null) {
+			return false;
+		}
+
+		for (GrantedAuthority grantedAuthority : authorities) {
+			if (role.equals(grantedAuthority.getAuthority())) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isUserInRole(String role) {
+		return isGranted(role);
+	}
+
+	@Override
+	public String toString() {
+		return "SecurityContextHolderAwareRequestWrapper[ " + getRequest() + "]";
+	}
+```
+
+1. getAuthentication：该方法用来获取当前登录对象 Authentication，获取方式就是前面讲的从 `SecurityContextHolder` 中获取。如果不是匿名对象就返回，否则就返回null。
