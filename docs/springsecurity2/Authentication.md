@@ -1726,3 +1726,266 @@ public class SecurityContextHolderAwareRequestWrapper extends HttpServletRequest
 ```
 
 1. getAuthentication：该方法用来获取当前登录对象 Authentication，获取方式就是前面讲的从 `SecurityContextHolder` 中获取。如果不是匿名对象就返回，否则就返回null。
+2. getRemoteUser：该方法返回可当前登录用户的用户名；如果 Authentication 对象中存储的 Principal 是当前登录用户对象，则返回用户名；如果 Authentication 对象中存储的 Principal 是当前登录用户名（字符串），则直接返回即可。
+3. getUserPrincipal：返回当前登录用户对象，其实就是 Authentication 的实例。
+4. isGranted：该方法是一个私有方法，作用是判断当前登录用户是否具备某一个指定的角色。判断逻辑也很简单，先对传入进来的角色进行预处理，有点情况下可能需要添加 `ROLE_` 前缀，然后调用 `Authentication#getAuthorities`方法获取当前登录用户具备的所有角色，然后在和传进来的参数进行比较。
+5. isUserInRole：该方法调用 isGranted 方法，进而实现判断当前用户是否具备某一个指定角色的功能。
+
+在使用了 Spring Security 之后，我们通过 HttpServletRequest 就可以获取到很多当前登录用户信息了，代码如下：
+
+```java
+@RequestMapping("/info")
+public void info(HttpServletRequest req) {
+	String remoteUser = req.getRemoteUser();
+	Authentication auth = ((Authentication) req.getUserPrincipal());
+	boolean admin = req.isUserInRole("admin");
+	System.out.println("remoteUser = " + remoteUser);
+	System.out.println("auth.getName() = " + auth.getName());
+	System.out.println("admin = " + admin);
+}
+```
+
+打印结果如下：
+```text
+remoteUser = zxq
+auth.getName() = zxq
+admin = false
+```
+前面我们直接将 Authentication 或者 Principal 写到 Controller 参数中，实际上就是 SpringMVC 框架从 `Servlet3SecurityContextHolderAwareRequestWrapper` 中提取的用户信息。
+
+那么 Spring Security 是如何将默认的请求对象转化为 `Servlet3SecurityContextHolderAwareRequestWrapper` 的呢？这就涉及 Spring Security 过滤器链中另外一个重要的过滤器——
+`SecurityContextHolderAwareRequestFilter`。
+
+该过滤器的主要作用就是对 HttpServletRequest 请求进行再包装，重写 HttpServletRequest 中和安全管理相关的方法。HttpServletRequest 在整个请求过程中会被包装多次，每一次的包装都会给它增添新的功能。
+
+我们来看一下 `SecurityContextHolderAwareRequestFilter` 过滤器的源码：
+
+```java
+public class SecurityContextHolderAwareRequestFilter extends GenericFilterBean {
+
+	private String rolePrefix = "ROLE_";
+
+	private HttpServletRequestFactory requestFactory;
+
+	private AuthenticationEntryPoint authenticationEntryPoint;
+
+	private AuthenticationManager authenticationManager;
+
+	private List<LogoutHandler> logoutHandlers;
+
+	private AuthenticationTrustResolver trustResolver = new AuthenticationTrustResolverImpl();
+
+	public void setRolePrefix(String rolePrefix) {
+		Assert.notNull(rolePrefix, "Role prefix must not be null");
+		this.rolePrefix = rolePrefix;
+		updateFactory();
+	}
+
+	public void setAuthenticationEntryPoint(AuthenticationEntryPoint authenticationEntryPoint) {
+		this.authenticationEntryPoint = authenticationEntryPoint;
+	}
+
+	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+		this.authenticationManager = authenticationManager;
+	}
+
+
+	public void setLogoutHandlers(List<LogoutHandler> logoutHandlers) {
+		this.logoutHandlers = logoutHandlers;
+	}
+
+	@Override
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+			throws IOException, ServletException {
+		chain.doFilter(this.requestFactory.create((HttpServletRequest) req, (HttpServletResponse) res), res);
+	}
+
+	@Override
+	public void afterPropertiesSet() throws ServletException {
+		super.afterPropertiesSet();
+		updateFactory();
+	}
+
+	private void updateFactory() {
+		String rolePrefix = this.rolePrefix;
+		this.requestFactory = createServlet3Factory(rolePrefix);
+	}
+
+	public void setTrustResolver(AuthenticationTrustResolver trustResolver) {
+		Assert.notNull(trustResolver, "trustResolver cannot be null");
+		this.trustResolver = trustResolver;
+		updateFactory();
+	}
+
+	private HttpServletRequestFactory createServlet3Factory(String rolePrefix) {
+		HttpServlet3RequestFactory factory = new HttpServlet3RequestFactory(rolePrefix);
+		factory.setTrustResolver(this.trustResolver);
+		factory.setAuthenticationEntryPoint(this.authenticationEntryPoint);
+		factory.setAuthenticationManager(this.authenticationManager);
+		factory.setLogoutHandlers(this.logoutHandlers);
+		return factory;
+	}
+
+}
+```
+从源码中可以看到，在 `SecurityContextHolderAwareRequestFilter#doFilter` 方法中，会调用 `requestFactory.create` 方法对请求重新进行包装。requestFactory 就是 `HttpServletRequestFactory` 接口的实例 `HttpServlet3RequestFactory`，它的 `create` 方法里边就直接创建一个 `Servlet3SecurityContextHolderAwareRequestWrapper` 实例。
+
+对请求的 HttpServletRequest 包装之后，接下来在过滤器链中传递 HttpServletRequest 对象，它的 `getRemoteUser()`，`isUserInRole()` 以及 `getUserPrincipal()` 方法就可以直接使用了。
+
+HttpServletRequest 中 `getUserPrincipal()` 方法有了返回值之后，最终在 Spring MVC 的 `ServletRequestMethodArgumentResolver#resolveArgument(Class<?>, HttpServletRequest)` 方法中进行默认参数解析，自动解析出 Principal 对象。开发者在 Controller 中既可以通过 Principal 来接收参数，也可以通过 Authentication 对象来接受。
+
+### 用户定义
+
+在前面的案例中，我们的登录用户是基于配置文件来配置的（本质是基于内存），但是在实际开发中，这种方式肯定是不可取的，在实际项目中，用户信息肯定要存入数据库之中。Spring Security 支持多种用户定义方式，接下来我们就逐个来看一下这些定义方式。自定义用户其实就是使用 `UserDetailsService` 的不同实现类来提供用户数据，同时将配置好的 `UserDetailsService` 配置给 `AuthenticationManagerBuilder`，系统再将 `UserDetailsService` 提供给 `AuthenticationProvider` 使用。
+
+#### 基于内存
+
+前面案例中用户的定义本质上还是基于内存，只是我们没有将 `InMemoryUserDetailsManager` 类明确抽出来自定义，现在我们通过自定义 `InMemoryUserDetailsManager` 来看一下基于内存的用户是如何自定义的。
+
+重写 `WebSecurityConfigurerAdapter` 类的 `cinfigure(AuthenticationManagetBuilder)` 方法，内容如下：
+
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+        manager.createUser(User.withUsername("ysmc").password("{noop}123").roles("admin").build());
+        manager.createUser(User.withUsername("zxq").password("{noop}123").roles("user").build());
+        
+        auth.userDetailsService(manager);
+    }
+}
+```
+
+首先构造一个 `InMemoryUserDetailsManager` 实例，调用该实例的 createUser 方法来创建用户对象，我们在这里分别设置了用户名、密码以及用户角色。需要注意的是，用户密码加了一个 {noop} 前缀，表示密码不加密（关于密码加密问题，以后介绍）。
+
+配置完成后，启动项目，此时就可以使用这里配置的两个用户登录了。
+
+`InMemoryUserDeatilsManager` 部分代码如下：
+
+```java
+public class InMemoryUserDetailsManager implements UserDetailsManager, UserDetailsPasswordService {
+
+	private final Map<String, MutableUserDetails> users = new HashMap<>();
+
+	@Override
+	public void createUser(UserDetails user) {
+		Assert.isTrue(!userExists(user.getUsername()), "user should not exist");
+		this.users.put(user.getUsername().toLowerCase(), new MutableUser(user));
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		UserDetails user = this.users.get(username.toLowerCase());
+		if (user == null) {
+			throw new UsernameNotFoundException(username);
+		}
+		return new User(user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(),
+				user.isCredentialsNonExpired(), user.isAccountNonLocked(), user.getAuthorities());
+	}
+
+}
+
+```
+
+代码非常简单，它间接实现了 `UserDetailsService` 接口并重写了里边的 `loadUserByUsername` 方法，`createUser`方法就是将创建的用户存储到变量 map 中，key 就是用户名，value 则是用户对象。`loadUserByUsername` 方法则根据用户名（key）读取用户对象，最后返回一个 `User`，其实也就是 `UserDetails`。
+
+#### 基于 JdbcUserDetailsManager 
+JdbcUserDetailsManager 支持将用户数据持久化到数据库，同时它封装了一系列操作用户的方法，例如用户的添加、更新、查找等。
+
+SpringSecurity 中为 JdbcUserDetailsManager 提供了数据库脚本，位置在 `org/springframework/security/core/userdetails/jdbc/users.ddl`，内容如下：
+
+```sql
+create table users(username varchar_ignorecase(50) not null 
+primary key,
+password varchar_ignorecase(500) not null,
+enabled boolean not null);
+
+create table authorities (username varchar_ignorecase(50) not null,
+authority varchar_ignorecase(50) not null,
+constraint fk_authorities_users 
+foreign key(username) references users(username));
+create unique index ix_auth_username on authorities (username,authority);
+```
+一共创建了两张表，users表存放用户信息，authorities 表存放用户角色。但是大家注意 SQL 的数据类型中有一个 `varchar_ignorecase`，这个其实是针对 HSQLDB 的数据类型，我们这里使用的是 MySQL 数据库，所以这里手动将 `varchar_ignorecase` 类型修改为 `varchar` 类型，然后去数据库中执行修改后的脚本。
+
+另一方面，由于要将数据存入数据库中，所以我们的项目也要提供数据库支持，JdbcUserDetailsManager 底层实际上就是使用 JdbcTemplate 来完成的，所以我们要添加两个依赖：
+```xml
+<dependency>
+ <groupId>org.springframework.boot</groupId>
+ <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+<dependency>
+ <groupId>mysql</groupId>
+ <artifactId>mysql-connector-java</artifactId>
+</dependency>
+```
+
+然后在 `resources/application.properties` 中配置数据库连接信息：
+
+```properties
+spring.datasource.username=root
+spring.datasource.password=123
+spring.datasource.url=jdbc:mysql:///security?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+```
+
+1. 当引入 `spring-boot-starter-jdbc` 并配置了数据库连接信息后，一个 `DataSource` 实例就有了，这里首先引入 DataSource 实例。
+2. 在 configure 方法中，创建一个 JdbcUserDetailsManager 实例，在创建时传入 DataSource 实例。通过 userExists 方法可以判断一个用户是否存在，该方法本质上就是去数据库中查询对应的用户；如果用户不存在，则通过 createUser 方法创建一个用户，该方法本质上就是向数据库中添加一个用户。
+3. 最后将manager实例设置到 auth 对象中。
+
+配置完成后，重启项目，如果项目启动成功，数据库中就会自动添加进来两条数据，如图
+
+![image-20220826162407075](https://img.zxqs.top/20220826162410.png)
+
+此时，我们就可以使用 用户名和密码 进行登录测试了。
+
+在 JdbcUserDetailsManager 的继承体系中，首先是 `JdbcDaoImpl` 实现了 `UserDetailsService` 接口，并实现了基本的 `loadUserByUsername` 方法。JdbcUserDetailsManager 则 继承 自 `JdbcDaoImpl`，同时完善了数据库操作，又封装了用户的增删改查方法。这里，我们以 `loadUserByUsername` 为例，看一下源码，其余的增删改操作相对来说都比较容易，这里就不再赘述了。
+
+`JdbcDaoImpl#loadUserByUsername`：
+```java
+@Override
+public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	List<UserDetails> users = loadUsersByUsername(username);
+	if (users.size() == 0) {
+		this.logger.debug("Query returned no results for user '" + username + "'");
+		throw new UsernameNotFoundException(this.messages.getMessage("JdbcDaoImpl.notFound",
+				new Object[] { username }, "Username {0} not found"));
+	}
+	UserDetails user = users.get(0); // contains no GrantedAuthority[]
+	Set<GrantedAuthority> dbAuthsSet = new HashSet<>();
+	if (this.enableAuthorities) {
+		dbAuthsSet.addAll(loadUserAuthorities(user.getUsername()));
+	}
+	if (this.enableGroups) {
+		dbAuthsSet.addAll(loadGroupAuthorities(user.getUsername()));
+	}
+	List<GrantedAuthority> dbAuths = new ArrayList<>(dbAuthsSet);
+	addCustomAuthorities(user.getUsername(), dbAuths);
+	if (dbAuths.size() == 0) {
+		this.logger.debug("User '" + username + "' has no authorities and will be treated as 'not found'");
+		throw new UsernameNotFoundException(this.messages.getMessage("JdbcDaoImpl.noAuthority",
+				new Object[] { username }, "User {0} has no GrantedAuthority"));
+	}
+	return createUserDetails(username, user, dbAuths);
+}
+
+protected List<UserDetails> loadUsersByUsername(String username) {
+	// @formatter:off
+	RowMapper<UserDetails> mapper = (rs, rowNum) -> {
+		String username1 = rs.getString(1);
+		String password = rs.getString(2);
+		boolean enabled = rs.getBoolean(3);
+		return new User(username1, password, enabled, true, true, true, AuthorityUtils.NO_AUTHORITIES);
+	};
+	// @formatter:on
+	return getJdbcTemplate().query(this.usersByUsernameQuery, mapper, username);
+}
+```
+1. 首先根据用户名，调用 loadUsersByUsername 方法去数据库中查询用户，查询出来的是一个 List 集合，集合中如果没有数据，说明用户不存在，则直接抛出异常。
+2. 如果集合中存在数据，则将集合中的第一条数据拿出来，然后再去查询用户角色，最后根据这些信息创建一个新的 UserDetails 出来。
+3. 需要注意的是，这里还引入了分组的概念，不过考虑到 JdbcUserDetailsManager 并非我们实际项目中的主流方案，因此这里不做过多介绍。
+
+这就是使用 JdbcUserDetailsManager 做数据持久化。这种方式看起来简单，都不用开发者自己写 SQL，但是局限性比较大，无法灵活地定义用户表、角色表等，而在实际开发中，我 们还是希望能够灵活地掌控数据表结构，因此 JdbcUserDetailsManager 使用场景非常有限。
+
+
