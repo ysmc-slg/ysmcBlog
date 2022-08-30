@@ -1982,10 +1982,416 @@ protected List<UserDetails> loadUsersByUsername(String username) {
 	return getJdbcTemplate().query(this.usersByUsernameQuery, mapper, username);
 }
 ```
-1. 首先根据用户名，调用 loadUsersByUsername 方法去数据库中查询用户，查询出来的是一个 List 集合，集合中如果没有数据，说明用户不存在，则直接抛出异常。
+1. 首先根据用户名，调用 `loadUsersByUsername` 方法去数据库中查询用户，查询出来的是一个 List 集合，集合中如果没有数据，说明用户不存在，则直接抛出异常。
 2. 如果集合中存在数据，则将集合中的第一条数据拿出来，然后再去查询用户角色，最后根据这些信息创建一个新的 UserDetails 出来。
 3. 需要注意的是，这里还引入了分组的概念，不过考虑到 JdbcUserDetailsManager 并非我们实际项目中的主流方案，因此这里不做过多介绍。
 
 这就是使用 JdbcUserDetailsManager 做数据持久化。这种方式看起来简单，都不用开发者自己写 SQL，但是局限性比较大，无法灵活地定义用户表、角色表等，而在实际开发中，我 们还是希望能够灵活地掌控数据表结构，因此 JdbcUserDetailsManager 使用场景非常有限。
 
+#### 基于MyBatis
 
+使用 MyBatista 做数据持久化是目前大多数企业应用采取的方法，Spring Security 中结合MyBatista 可以灵活地定制用户表以及角色表，我们对此进行详细介绍。
+
+首先需要设计三张表，分别是用户表、角色表以及用户角色关联表，三张表的关系图如 2-24 所示。
+
+![2-24](https://img.zxqs.top/20220829132942.png)
+
+用户和角色是多对多的关系，我们使用 `user_role` 将两者关联起来。
+
+数据库脚本如下：
+```sql
+CREATE TABLE `role` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `name` varchar(32) DEFAULT NULL,
+ `nameZh` varchar(32) DEFAULT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `username` varchar(32) DEFAULT NULL,
+ `password` varchar(255) DEFAULT NULL,
+ `enabled` tinyint(1) DEFAULT NULL,
+ `accountNonExpired` tinyint(1) DEFAULT NULL,
+ `accountNonLocked` tinyint(1) DEFAULT NULL,
+ `credentialsNonExpired` tinyint(1) DEFAULT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user_role` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `uid` int(11) DEFAULT NULL,
+ `rid` int(11) DEFAULT NULL,
+ PRIMARY KEY (`id`),
+ KEY `uid` (`uid`),
+ KEY `rid` (`rid`)
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
+对于角色表，三个字段从上往下含义分别为`角色id`、角色英文名以及角色中文名称。
+
+对于用户表，七个字段从上往下含义依次为：用户id、用户名、用户密码、账户是否可用、账户是否没有过期、账户是否没有锁定以及凭证（密码）是否没有过期
+
+数据库创建完成后，可以向数据库中添加几条模拟数据，代码如下：
+
+```sql
+INSERT INTO `role` (`id`, `name`, `nameZh`)
+VALUES
+ (1,'ROLE_dba','数据库管理员'),
+ (2,'ROLE_admin','系统管理员'),
+ (3,'ROLE_user','用户');
+
+
+INSERT INTO `user` (`id`, `username`, `password`, `enabled`, 
+ `accountNonExpired`, `accountNonLocked`, `credentialsNonExpired`)
+VALUES
+ (1,'root','{noop}123',1,1,1,1),
+ (2,'admin','{noop}123',1,1,1,1),
+ (3,'sang','{noop}123',1,1,1,1);
+
+
+INSERT INTO `user_role` (`id`, `uid`, `rid`)
+VALUES
+ (1,1,1),
+ (2,1,2),
+ (3,2,2),
+ (4,3,3);
+```
+
+这样，数据库的准备工作就算完成了。
+
+在 Spring Security 项目中，我们需要引入 MyBatis 和 MySQL 依赖，代码如下：
+```xml
+<dependency>
+ <groupId>org.mybatis.spring.boot</groupId>
+ <artifactId>mybatis-spring-boot-starter</artifactId>
+ <version>2.1.3</version>
+</dependency>
+<dependency>
+ <groupId>mysql</groupId>
+ <artifactId>mysql-connector-java</artifactId>
+</dependency>
+```
+
+同时在 `resources/application.properties` 中配置数据库基本连接信息：
+
+```properties
+spring.datasource.username=root
+spring.datasource.password=123
+spring.datasource.url=jdbc:mysql:///security02?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+```
+
+接下来创建用户类和角色类：
+```java
+public class User implements UserDetails {
+	private Integer id;
+	private String username;
+	private String password;
+	private Boolean enabled;
+	private Boolean accountNonExpired;
+	private Boolean accountNonLocked;
+	private Boolean credentialsNonExpired;
+	private List<Role> roles = new ArrayList<>();
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		for (Role role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role.getName()));
+		}
+		return authorities;
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	@Override
+	public String getUsername() {
+		return username;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return accountNonExpired;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return accountNonLocked;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return credentialsNonExpired;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enabled;
+	}
+	//省略其他 getter/setter
+}
+```
+
+```java
+public class Role {
+	private Integer id;
+	private String name;
+	private String nameZh;
+	//省略 getter/setter
+}
+```
+
+自定义用户类需要实现 `UserDetails` 接口，并实现接口中的方法，其中 roles 属性用来保存用户所具备的角色信息，由于系统获取用户角色调用的方法是 `getAuthorities`，所以我们在`getAuthorities` 方法中将 roles 中的角色转为系统可以识别的对象并返回。
+
+User 类中的 isXXX 方法可以当成 get 方法对待，不需要再给这些属性生成 get 方法
+
+接下来我们自定义 `UserDetailsService` 以及对应的数据库查询方法：
+```java
+@Service
+public class MyUserDetailsService implements UserDetailsService {
+ 	@Autowired
+ 	UserMapper userMapper;
+ 	@Override
+ 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+ 		User user = userMapper.loadUserByUsername(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("用户不存在");
+		}
+ 		user.setRoles(userMapper.getRolesByUid(user.getId()));
+ 		return user;
+ } 
+}
+```
+
+```java
+@Mapper
+public interface UserMapper {
+ List<Role> getRolesByUid(Integer id);
+ User loadUserByUsername(String username);
+}
+```
+
+自定义 `MyUserDetailsService` 实现 `UserDetailsService` 接口，并实现该接口中的方法 `loadUserByUsername`，该方法就是根据用户名去数据库中加载用户，如果从数据库中没有查到用户，则抛出 `UsernameNotFoundException` 异常；如果查询到用户了，则给用户设置roles 属性。
+
+UserMapper 中定义了两个方法用于支持 `MyUserDetailsService` 中的查询操作。
+
+最后，在 `UserMapper.xml` 中定义查询 SQL，代码如下：
+
+```xml
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.formlogin.mapper.UserMapper">
+ 	<select id="loadUserByUsername" resultType="org.javaboy.formlogin.model.User">
+ 		select * from user where username=#{username};
+ 	</select>
+
+ 	<select id="getRolesByUid" resultType="org.javaboy.formlogin.model.Role">
+ 		select r.* from role r,user_role ur where r.`id`=ur.`rid`
+ 	</select>
+</mapper>
+```
+
+为了方便，我们将 `UserMapper.xml` 文件和 `UserMapper` 接口放在了相同的包下。为了防止 Maven 打包时自动忽略了 XML 文件，还需要在 pom.xml 中添加如下配置：
+
+```xml
+<build>
+ <resources>
+		<resource>
+			<directory>src/main/java</directory>
+			<includes>
+			<include>**/*.xml</include>
+			</includes>
+		</resource>
+		<resource>
+			<directory>src/main/resources</directory>
+		</resource>
+ </resources>
+</build>
+```
+最后一步，就是在 `SecurityConfig` 中注入 `UserDetailsService`：
+
+```java
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+		@Autowired
+		MyUserDetailsService myUserDetailsService;
+		@Override
+		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+			auth.userDetailsService(myUserDetailsService);
+		}
+
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.authorizeRequests()
+		  //省略
+		} 
+ }
+```
+
+配置 `UserDetailsService` 的方式和前面配置 `JdbcUserDeatilsManager` 的方式基本一致，只不过配置对象变成了 `myUserDetailsService` 而已。
+
+至此，整个配置工作就完成了。
+
+接下来启动项目，利用数据库中添加的模拟用户进行登录测试，就可以成功登录了。测试方式和前面一致，这里不在赘述。
+
+#### 基于 Spring Data JPA
+
+考虑到在 Spring Boot 技术栈中有不少人使用 Spring Data JPA，因此这里针对Spring Security + Spring Data JPA 也做一个简单介绍，具体思路和基于 MyBatis 的整合类似。
+
+首先引入 Spring Data JPA 的依赖和 MySQL 依赖：
+
+```xml
+<dependency>
+ <groupId>org.springframework.boot</groupId>
+ <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+ <groupId>mysql</groupId>
+ <artifactId>mysql-connector-java</artifactId>
+</dependency>
+```
+然后在 `resources/application.properties` 中配置数据库和 JPA，代码如下：
+
+```properties
+spring.datasource.username=root
+spring.datasource.password=123
+spring.datasource.url=jdbc:mysql:///security03?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+spring.jpa.database=mysql
+spring.jpa.database-platform=mysql
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+```
+
+数据库的配置还是和以前一样，JPA 的配置则主要配置了数据库平台，数据表更新方式、是否打印 SQL 以及对应的数据库方言。
+
+使用 Spring Data JPA 的好处是我们不用提前准备 SQL 脚本，所以接下来配置两个数据库实体类即可：
+
+```java
+@Entity(name = "t_user")
+public class User implements UserDetails {
+ @Id
+ @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String username;
+	private String password;
+	private boolean accountNonExpired;
+	private boolean accountNonLocked;
+	private boolean credentialsNonExpired;
+	private boolean enabled;
+ @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
+ 	private List<Role> roles;
+
+ @Override
+ public Collection<? extends GrantedAuthority> getAuthorities() {
+	List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+	for (Role role : getRoles()) {
+		authorities.add(new SimpleGrantedAuthority(role.getName()));
+ }
+ 	return authorities;
+ }
+
+ @Override
+ public String getPassword() {
+ 	return password;
+ }
+
+ @Override
+ public String getUsername() {
+ 	return username;
+ }
+ @Override
+ public boolean isAccountNonExpired() {
+ 	return accountNonExpired;
+ }
+ @Override
+ public boolean isAccountNonLocked() {
+	return accountNonLocked;
+ }
+ @Override
+ public boolean isCredentialsNonExpired() {
+ 	return credentialsNonExpired;
+ }
+ @Override
+ public boolean isEnabled() {
+ 	return enabled;
+ }
+ //省略 getter/setter
+}
+
+```
+```java
+@Entity(name = "t_role")
+public class Role {
+ @Id
+ @GeneratedValue(strategy = GenerationType.IDENTITY)
+ private Long id;
+ private String name;
+ private String nameZh;
+ //省略 getter/setter
+}
+```
+
+这两个实体类和前面 MyBatis 中实体类的配置类似，需要注意的是 roles 属性上多了一个多对多配置。
+
+接下来配置 UserDetailsService，并提供数据查询方法：
+
+```java
+@Service
+public class MyUserDetailsService implements UserDetailsService {
+ @Autowired
+ UserDao userDao;
+ @Override
+ public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+ User user = userDao.findUserByUsername(username);
+ if (user == null) {
+ 	throw new UsernameNotFoundException("用户不存在");
+ }
+ 	return user;
+ } 
+}
+
+```
+```java
+public interface UserDao extends JpaRepository<User,Integer> {
+ User findUserByUsername(String username);
+}
+```
+`MyUserDetailsService` 的定义也和前面的类似，不同之处在于数据查询方法的变化。定义UserDao 继承自 JpaRepository，并定义一个 `findUserByUsername`方法，剩下的事情 Spring Data JPA 框架会帮我们完成。
+
+最后，再在 SecurityConfig 中配置 `MyUserByUsername` 方法，配置方式和 MyBatis 一模一样。
+
+使用了 Spring Data JPA 之后，当项目启动时，会自动在数据库中创建相关表，而不用我们自己去写脚本，这也是使用 Spring Data JPA 的方便之处。
+
+为了测试方便，我们可以在单元测试中执行如下代码，想数据库中添加测试数据。
+
+```java
+@Autowired
+UserDao userDao;
+@Test
+void contextLoads() {
+  User u1 = new User();
+  u1.setUsername("javaboy");
+  u1.setPassword("{noop}123");
+  u1.setAccountNonExpired(true);
+  u1.setAccountNonLocked(true);
+  u1.setCredentialsNonExpired(true);
+  u1.setEnabled(true);
+  List<Role> rs1 = new ArrayList<>();
+  Role r1 = new Role();
+  r1.setName("ROLE_admin");
+  r1.setNameZh("管理员");
+  rs1.add(r1);
+  u1.setRoles(rs1);
+  userDao.save(u1);
+}
+```
+
+测试数据添加成功之后，接下来启动项目，使用测试数据进行登录测试。
+
+
+至此，四种不同的用户定义方式就介绍完了。这四种方式，异曲同工，只是数据存储的方式不一样而已，其他的执行流程都是一样的。
