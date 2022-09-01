@@ -265,3 +265,129 @@ public abstract class AbstractUserDetailsAuthenticationProvider implements
 6. `additionalAuthenticationChecks` 是一个抽象方法，主要就是校验密码，具体的实现在 `DaoAuthenticationProvider` 中。
 7. `authenticate` 方法就是核心的校验方法了。在方法中，首先从登录数据中获取用户名，然后根据用户名去缓存中查询用户对象，如果查询不到，则根据用户名调用 `retrieveUser` 方法从数据库中加载用户；如果没有加载到用户，则抛出异常（用户不存在异常会被隐藏）。拿到用户对象之后，首先调用 `preAuthenticationChecks.check` 方法进行用户状态检查，然后调用 `additionalAuthenticationChecks` 方法进行密码的校验操作，最后调用 `postAuthenticationChecks.check` 方法检查密码是否过期，当所有步骤都顺利完成后，调用 `createSuccessAuthentication` 方法创建一个认证后的 `UsernamePasswordAuthenticationToken` 对象并返回，认证后的对象中包含了认证主体、凭证以及角色等信息。
 
+这就是 `AbstractUserDetailsAuthenticationProvider` 类的工作流程，有几个抽象方法是在 `DaoAuthenticationProvider` 中实现的，我们再来看一下 `DaoAuthenticationProvider` 中的定义：
+
+```java
+public class DaoAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+	private static final String USER_NOT_FOUND_PASSWORD = "userNotFoundPassword";
+	private PasswordEncoder passwordEncoder;
+	private volatile String userNotFoundEncodedPassword;
+	private UserDetailsService userDetailsService;
+	private UserDetailsPasswordService userDetailsPasswordService;
+
+	public DaoAuthenticationProvider() {
+		setPasswordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder());
+	}
+
+
+	@SuppressWarnings("deprecation")
+	protected void additionalAuthenticationChecks(UserDetails userDetails,
+			UsernamePasswordAuthenticationToken authentication)
+			throws AuthenticationException {
+		if (authentication.getCredentials() == null) {
+			logger.debug("Authentication failed: no credentials provided");
+
+			throw new BadCredentialsException(messages.getMessage(
+					"AbstractUserDetailsAuthenticationProvider.badCredentials",
+					"Bad credentials"));
+		}
+
+		String presentedPassword = authentication.getCredentials().toString();
+
+		if (!passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
+			logger.debug("Authentication failed: password does not match stored value");
+
+			throw new BadCredentialsException(messages.getMessage(
+					"AbstractUserDetailsAuthenticationProvider.badCredentials",
+					"Bad credentials"));
+		}
+	}
+
+	protected void doAfterPropertiesSet() {
+		Assert.notNull(this.userDetailsService, "A UserDetailsService must be set");
+	}
+
+	protected final UserDetails retrieveUser(String username,
+			UsernamePasswordAuthenticationToken authentication)
+			throws AuthenticationException {
+		prepareTimingAttackProtection();
+		try {
+			UserDetails loadedUser = this.getUserDetailsService().loadUserByUsername(username);
+			if (loadedUser == null) {
+				throw new InternalAuthenticationServiceException(
+						"UserDetailsService returned null, which is an interface contract violation");
+			}
+			return loadedUser;
+		}
+		catch (UsernameNotFoundException ex) {
+			mitigateAgainstTimingAttack(authentication);
+			throw ex;
+		}
+		catch (InternalAuthenticationServiceException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw new InternalAuthenticationServiceException(ex.getMessage(), ex);
+		}
+	}
+
+	@Override
+	protected Authentication createSuccessAuthentication(Object principal,
+			Authentication authentication, UserDetails user) {
+		boolean upgradeEncoding = this.userDetailsPasswordService != null
+				&& this.passwordEncoder.upgradeEncoding(user.getPassword());
+		if (upgradeEncoding) {
+			String presentedPassword = authentication.getCredentials().toString();
+			String newPassword = this.passwordEncoder.encode(presentedPassword);
+			user = this.userDetailsPasswordService.updatePassword(user, newPassword);
+		}
+		return super.createSuccessAuthentication(principal, authentication, user);
+	}
+
+	private void prepareTimingAttackProtection() {
+		if (this.userNotFoundEncodedPassword == null) {
+			this.userNotFoundEncodedPassword = this.passwordEncoder.encode(USER_NOT_FOUND_PASSWORD);
+		}
+	}
+
+	private void mitigateAgainstTimingAttack(UsernamePasswordAuthenticationToken authentication) {
+		if (authentication.getCredentials() != null) {
+			String presentedPassword = authentication.getCredentials().toString();
+			this.passwordEncoder.matches(presentedPassword, this.userNotFoundEncodedPassword);
+		}
+	}
+
+	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+		Assert.notNull(passwordEncoder, "passwordEncoder cannot be null");
+		this.passwordEncoder = passwordEncoder;
+		this.userNotFoundEncodedPassword = null;
+	}
+
+	protected PasswordEncoder getPasswordEncoder() {
+		return passwordEncoder;
+	}
+
+	public void setUserDetailsService(UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
+
+	protected UserDetailsService getUserDetailsService() {
+		return userDetailsService;
+	}
+
+	public void setUserDetailsPasswordService(
+			UserDetailsPasswordService userDetailsPasswordService) {
+		this.userDetailsPasswordService = userDetailsPasswordService;
+	}
+}
+```
+在 `DaoAuthenticationProvider` 中：
+
+1. 首先定义了 `USER_NOT_FOUND_PASSWORD` 常量，这个是当用户查找失败时的默认密码；`passwordEncoder` 是一个密码加密和对比工具，这个在后面会介绍；`userNotFoundEncodedPassword` 变量则用来保存默认密码加密后的值；`userDetailsService` 是一个用户查找工具，`userDetailsPasswordService` 则用来提供密码修改服务。
+2. 在 `DaoAuthenticationProvider` 的构造方法中，默认就会指定 `PasswordEncoder`，当然开发者也可以通过 `set` 方法自定义 PasswordEncoder。
+3. `additionalAuthenticationChecks` 方法主要进行密码校验，该方法第一个参数 `userDetails` 是从数据库中查询出来的用户对象，第二个参数 `authentication` 是登录用户输入的参数。从这两个参数中分别提取出来用户密码，然后调用 `passwordEncoder.matches` 方法进行密码比对。
+4. `retrieveUser` 方法是获取用户对象的方法，具体做法就是调用 `UserDetailsService#loadUserByUsername` 方法去数据库中查询。
+5. 在 `retrieveUser` 方法中，有一个值得关注的地方。在该方法一开始，首先会调用 `prepareTimingAttackProtection` 方法，该方法的作用是使用 PasswordEncoder 对常量 `USER_NOT_FOUND_PASSWORD` 进行加密，将加密结果保存在 `userNotFoundEncodedPassword` 变量中。当根据用户名查找用户时，如果抛出了 `UsernameNotFoundException` 异常，则调用 `mitigateAgainstTimingAttack` 方法进行密码对比。但这时用户都没查找到，怎么对比密码？需要注意，在调用 `mitigateAgainstTimingAttack` 方法进行密码对比时，使用了 `userNotFoundEncodedPassword` 变量作为默认密码和登录请求传来的用户密码比对。这是一个一开始就注定要失败的密码对比，那么为什么还要进行比对呢？这主要是为了避免旁道攻击（Side-channel attack）。如果根据用户名查找用户失败，就直接抛出异常而不进行密码比对，那么黑客经过大量的测试，就会发现有点请求消耗时间明显小于其他请求，那么进而可以得出该请求的用户是一个不存在的用户名（（因为用户名不存在，所以不需要密码比对，进而节省时间），这样就可以获取到系统信息。为了避免这一问题，所以当用户查找失败时，也会调用`mitigateAgainstTimingAttack` 方法进行密码比对，这样就可以迷惑黑客。
+6. `createSuccessAuthentication` 方法则是在登录成功后，创建一个全新的 `UsernamePasswordAuthenticationToken` 对象，同时会判断是否需要进行密码升级，如果需要进行密码升级，就会在该方法中进行加密方案升级。
+
+
