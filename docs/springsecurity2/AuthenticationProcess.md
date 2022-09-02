@@ -390,4 +390,107 @@ public class DaoAuthenticationProvider extends AbstractUserDetailsAuthentication
 5. 在 `retrieveUser` 方法中，有一个值得关注的地方。在该方法一开始，首先会调用 `prepareTimingAttackProtection` 方法，该方法的作用是使用 PasswordEncoder 对常量 `USER_NOT_FOUND_PASSWORD` 进行加密，将加密结果保存在 `userNotFoundEncodedPassword` 变量中。当根据用户名查找用户时，如果抛出了 `UsernameNotFoundException` 异常，则调用 `mitigateAgainstTimingAttack` 方法进行密码对比。但这时用户都没查找到，怎么对比密码？需要注意，在调用 `mitigateAgainstTimingAttack` 方法进行密码对比时，使用了 `userNotFoundEncodedPassword` 变量作为默认密码和登录请求传来的用户密码比对。这是一个一开始就注定要失败的密码对比，那么为什么还要进行比对呢？这主要是为了避免旁道攻击（Side-channel attack）。如果根据用户名查找用户失败，就直接抛出异常而不进行密码比对，那么黑客经过大量的测试，就会发现有点请求消耗时间明显小于其他请求，那么进而可以得出该请求的用户是一个不存在的用户名（（因为用户名不存在，所以不需要密码比对，进而节省时间），这样就可以获取到系统信息。为了避免这一问题，所以当用户查找失败时，也会调用`mitigateAgainstTimingAttack` 方法进行密码比对，这样就可以迷惑黑客。
 6. `createSuccessAuthentication` 方法则是在登录成功后，创建一个全新的 `UsernamePasswordAuthenticationToken` 对象，同时会判断是否需要进行密码升级，如果需要进行密码升级，就会在该方法中进行加密方案升级。
 
+通过对 `AbstractUserDetailsAuthenticationProvider` 和 `DaoAuthenticationProvider` 的讲解，相信大家已经明白 AuthenticationProvider 中的认证逻辑了。
+
+#### ProviderManager
+
+`ProviderManager` 是 `AuthenticationManager` 的一个重要实现类。在开始学习之前，我们先通过一幅图来了解一下 `ProviderManager` 和 `AuthenticationProvider` 之间的关系，如图 3-1 所示
+
+![3-1](https://img.zxqs.top/20220902095013.png)
+
+在 Spring Security 中，由于系统可能同时支持多种不同的认证方式，例如同时支持 用户名/密码 认证、RemberMe 认证、手机号码动态认证等，而不同的认证方式对应了不同的 `AuthenticationProvider`，所以一个完整的认证流程可能有多个 `AuthenticationProvider` 来提供。
+
+多个 `AuthenticationProvider` 将组成一个列表，这个列表将由 `ProviderManager` 代理。换句话说，在 `ProviderManager` 中存在一个 `AuthenticationProvider` 列表，在 `ProviderManager` 中遍历列表中的每一个 `AuthenticationProvider` 去执行身份认证，最终得到认证结果。
+
+`ProviderManager` 本身也可以再配置一个 `AuthenticationManager` 作为 `parent`，这样当 `ProviderManager` 认证失败之后，就可以进入到 `parent` 中再次进行认证。理论上来说，`ProviderManager` 的 `parent` 可以是任意类型的 `AuthenticationManager`，但是通常都是由 `ProviderManager` 来扮演 `parent` 的角色，也就是 `ProviderManager` 是 `ProviderManager` 的 `parent`。
+
+`ProviderManager` 本身也可以有多个，多个 `ProviderManager` 共用同一个 `parent`，当存在多个过滤器链的时候非常有用。当存在多个过滤器链时，不同的路径可能对应不同的认证方式，但是不同路径可能又会同时存在一些共有的认证方式，这些共有的认证方式可以在 `parent` 中统一处理。
+
+根据上面的介绍，我们绘出新的 `ProviderManager` 和 `AuthenticationProvider` 关系图，如图 3-2 所示。
+
+![3-2](https://img.zxqs.top/20220902133215.png)
+
+我们重点看一下 `ProviderManager` 中的 `authenticate` 方法：
+
+```java
+@Override
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		Class<? extends Authentication> toTest = authentication.getClass();
+		AuthenticationException lastException = null;
+		AuthenticationException parentException = null;
+		Authentication result = null;
+		Authentication parentResult = null;
+		int currentPosition = 0;
+		int size = this.providers.size();
+		for (AuthenticationProvider provider : getProviders()) {
+			if (!provider.supports(toTest)) {
+				continue;
+			}
+			if (logger.isTraceEnabled()) {
+				logger.trace(LogMessage.format("Authenticating request with %s (%d/%d)",
+						provider.getClass().getSimpleName(), ++currentPosition, size));
+			}
+			try {
+				result = provider.authenticate(authentication);
+				if (result != null) {
+					copyDetails(authentication, result);
+					break;
+				}
+			}
+			catch (AccountStatusException | InternalAuthenticationServiceException ex) {
+				prepareException(ex, authentication);
+				
+				throw ex;
+			}
+			catch (AuthenticationException ex) {
+				lastException = ex;
+			}
+		}
+		if (result == null && this.parent != null) {
+			
+			try {
+				parentResult = this.parent.authenticate(authentication);
+				result = parentResult;
+			}
+			catch (ProviderNotFoundException ex) {
+				
+			}
+			catch (AuthenticationException ex) {
+				parentException = ex;
+				lastException = ex;
+			}
+		}
+		if (result != null) {
+			if (this.eraseCredentialsAfterAuthentication && (result instanceof CredentialsContainer)) {
+				
+				((CredentialsContainer) result).eraseCredentials();
+			}
+
+			if (parentResult == null) {
+				this.eventPublisher.publishAuthenticationSuccess(result);
+			}
+
+			return result;
+		}
+
+		if (lastException == null) {
+			lastException = new ProviderNotFoundException(this.messages.getMessage("ProviderManager.providerNotFound",
+					new Object[] { toTest.getName() }, "No AuthenticationProvider found for {0}"));
+		}
+		if (parentException == null) {
+			prepareException(lastException, authentication);
+		}
+		throw lastException;
+	}
+```
+
+1. 首先获取 authentication 对象的类型。
+2. 分别定义当前认证过程抛出的异常、parent 中认证时抛出的异常、当前认证结果以及 parent 中认证结果对应的变量
+3. getProviders 方法用来获取当前 ProviderManager 所代理的所有的 AuthenticationProvider 对象，遍历这些 AuthenticationProvider 对象进行身份认证。
+4. 判断当前 `AuthenticationProvider` 是否支持当前 Authentication 对象，要是不支持，则继续处理列表中的下一个 AuthenticationProvider 对象。
+5. 调用 `provider.authenticate` 方法进行身份认证，如果认证成功，返回认证后的 Authentication 对象，同时调用 `copyDetails` 方法给 `Authentication` 对象的 `details` 属性赋值。由于节能是多个AuthenticationProvider 执行认证操作，所以如果抛出异常，则通过 `lastException` 变量来记录。
+6. 在 for 循环执行完成后，如果 `result` 还是没有值，说明所有的 AuthenticationProvider 都认证失败，
+
+
+
 
