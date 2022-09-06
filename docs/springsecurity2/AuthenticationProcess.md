@@ -392,7 +392,7 @@ public class DaoAuthenticationProvider extends AbstractUserDetailsAuthentication
 
 通过对 `AbstractUserDetailsAuthenticationProvider` 和 `DaoAuthenticationProvider` 的讲解，相信大家已经明白 AuthenticationProvider 中的认证逻辑了。
 
-#### ProviderManager
+### ProviderManager
 
 `ProviderManager` 是 `AuthenticationManager` 的一个重要实现类。在开始学习之前，我们先通过一幅图来了解一下 `ProviderManager` 和 `AuthenticationProvider` 之间的关系，如图 3-1 所示
 
@@ -497,7 +497,7 @@ public class DaoAuthenticationProvider extends AbstractUserDetailsAuthentication
 
 现在，大家已经熟悉了 Authentication、AuthenticationManager、AuthenticationProvider 以 及 ProviderManager 的工作原理了，接下来的问题就是这些组件如何跟登录关联起来？这就涉 及一个重要的过滤器—— `AbstractAuthenticationProcessingFilter`。
 
-#### AbstractAuthenticationProcessingFilter
+### AbstractAuthenticationProcessingFilter
 
 作为 Spring Security 过滤器中的一环，`AbstractAuthenticationProcessingFilter` 可以用来处理任何提交给它的身份认证，图 3-3 描述了 `AbstractAuthenticationProcessingFilter` 的工作流程。
 
