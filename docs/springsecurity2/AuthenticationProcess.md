@@ -489,7 +489,251 @@ public class DaoAuthenticationProvider extends AbstractUserDetailsAuthentication
 3. getProviders 方法用来获取当前 ProviderManager 所代理的所有的 AuthenticationProvider 对象，遍历这些 AuthenticationProvider 对象进行身份认证。
 4. 判断当前 `AuthenticationProvider` 是否支持当前 Authentication 对象，要是不支持，则继续处理列表中的下一个 AuthenticationProvider 对象。
 5. 调用 `provider.authenticate` 方法进行身份认证，如果认证成功，返回认证后的 Authentication 对象，同时调用 `copyDetails` 方法给 `Authentication` 对象的 `details` 属性赋值。由于节能是多个AuthenticationProvider 执行认证操作，所以如果抛出异常，则通过 `lastException` 变量来记录。
-6. 在 for 循环执行完成后，如果 `result` 还是没有值，说明所有的 AuthenticationProvider 都认证失败，
+6. 在 for 循环执行完成后，如果 `result` 还是没有值，说明所有的 AuthenticationProvider 都认证失败，此时如果 parent 不为空，则调用 parent 的 authenticate 方法进行认证。
+7. 接下来，如果 `result` 不为空，就将 result 中的凭证擦除，防止泄露。如果使用了 用户名/密码的方式登录，那么所谓的擦除实际上即使将密码字段设置为null，同时将登录成功的事件发布出去（发布登录成功事件需要 parentResult 为 null。如果 parentResult 不为 null，表示在 parent 中已经认证成功了，认证成功的事件也已经在 parent 中发布出去了，这样会导致认证成功的事件重复发布）。如果用户认证成功，此时就将 result 返回，后面的代码也就不再执行了。
+8. 如果前面没能返回 result，说明认证失败。如果 `lastException` 为 null，说明 `parent` 为 null 或者 没有认证亦或者认证失败了但是没有抛出异常，此时构造 `ProviderNotFoundException` 异常赋值给 `lastException`。
+9. 如果 parentException 为 null，发布认证失败事件（如果 parentException 不为 null，则说明认证失败事件已经发布过了）
+10. 最后抛出 lastException 异常。
+
+现在，大家已经熟悉了 Authentication、AuthenticationManager、AuthenticationProvider 以 及 ProviderManager 的工作原理了，接下来的问题就是这些组件如何跟登录关联起来？这就涉 及一个重要的过滤器—— `AbstractAuthenticationProcessingFilter`。
+
+#### AbstractAuthenticationProcessingFilter
+
+作为 Spring Security 过滤器中的一环，`AbstractAuthenticationProcessingFilter` 可以用来处理任何提交给它的身份认证，图 3-3 描述了 `AbstractAuthenticationProcessingFilter` 的工作流程。
+
+![3-3](https://img.zxqs.top/20220905165139.png)
+
+图中显示的流程是一个通用的架构。`AbstractAuthenticationProcessingFilter` 作为一个抽象类，如果使用用户名/密码的方式登录，那么它对应的实现类是 `UsernamePasswordAuthenticationFilter`，构造出来的 Authentication 对象则是 UsernamePassworldAuthenticationToken。至于 AuthenticationManager，前面已经说过，一般情况下它的实现类就是 `ProviderManager`，这里在 `ProviderManager` 中进行认证，认证成功就会进入认证成功的回调，否则进入失败的回调。因此，我们可以对上面的流程图再做进一步细化，如图 3-4 所示。
+
+![3-4](https://img.zxqs.top/20220906140032.png)
+
+前面所涉及的认证流程基本上就是这样，我们来大致梳理一下：
+
+1. 当用户提交登录请求时，UsernamePasswordAuthenticationFilter 会从当前请求 HttpServletRequest 中提取出登录 用户名/密码，然后创建一个 UsernamePasswordAuthenticationToken 对象。
+2. UsernamePasswordAuthenticationToken 对象被传入 ProviderManager 中进行具体的认证操作
+3. 如果认证失败，则 SecurityContextHolder 中相关信息将被删除，登录失败回调也会被调用
+4. 如果认证成功，则会进行登录信息存储、Session并发处理、登录成功事件发布以及登录成功方法回调等操作。
+
+这是认证的一个大致流程。接下来我们结合 `AbstractAuthenticationProcessingFilter` 和 `UsernamePasswordAuthenticationFilter` 的源码来看一下。
+
+先来看 `AbstractAuthenticationProcessingFilter` 源码：
+
+```java
+public abstract class AbstractAuthenticationProcessingFilter extends GenericFilterBean implements ApplicationEventPublisherAware, MessageSourceAware {
+
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+			throws IOException, ServletException {
+
+		HttpServletRequest request = (HttpServletRequest) req;
+		HttpServletResponse response = (HttpServletResponse) res;
+
+		if (!requiresAuthentication(request, response)) {
+			chain.doFilter(request, response);
+
+			return;
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("Request is to process authentication");
+		}
+
+		Authentication authResult;
+
+		try {
+			authResult = attemptAuthentication(request, response);
+			if (authResult == null) {
+				// return immediately as subclass has indicated that it hasn't completed
+				// authentication
+				return;
+			}
+			sessionStrategy.onAuthentication(authResult, request, response);
+		}
+		catch (InternalAuthenticationServiceException failed) {
+			logger.error(
+					"An internal error occurred while trying to authenticate the user.",
+					failed);
+			unsuccessfulAuthentication(request, response, failed);
+
+			return;
+		}
+		catch (AuthenticationException failed) {
+			// Authentication failed
+			unsuccessfulAuthentication(request, response, failed);
+
+			return;
+		}
+
+		// Authentication success
+		if (continueChainBeforeSuccessfulAuthentication) {
+			chain.doFilter(request, response);
+		}
+
+		successfulAuthentication(request, response, chain, authResult);
+	}
+
+	protected boolean requiresAuthentication(HttpServletRequest request,
+			HttpServletResponse response) {
+		return requiresAuthenticationRequestMatcher.matches(request);
+	}
+
+	public abstract Authentication attemptAuthentication(HttpServletRequest request,
+			HttpServletResponse response) throws AuthenticationException, IOException,
+			ServletException;
+
+	protected void successfulAuthentication(HttpServletRequest request,
+			HttpServletResponse response, FilterChain chain, Authentication authResult)
+			throws IOException, ServletException {
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("Authentication success. Updating SecurityContextHolder to contain: "
+					+ authResult);
+		}
+
+		SecurityContextHolder.getContext().setAuthentication(authResult);
+
+		rememberMeServices.loginSuccess(request, response, authResult);
+
+		// Fire event
+		if (this.eventPublisher != null) {
+			eventPublisher.publishEvent(new InteractiveAuthenticationSuccessEvent(
+					authResult, this.getClass()));
+		}
+
+		successHandler.onAuthenticationSuccess(request, response, authResult);
+	}
+
+	protected void unsuccessfulAuthentication(HttpServletRequest request,
+			HttpServletResponse response, AuthenticationException failed)
+			throws IOException, ServletException {
+		SecurityContextHolder.clearContext();
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("Authentication request failed: " + failed.toString(), failed);
+			logger.debug("Updated SecurityContextHolder to contain null Authentication");
+			logger.debug("Delegating to authentication failure handler " + failureHandler);
+		}
+
+		rememberMeServices.loginFail(request, response);
+
+		failureHandler.onAuthenticationFailure(request, response, failed);
+	}
+}
+```
+1. 首先通过 requiresAuthentication 方法来判断当前请求是不是登录认证请求，如果是认证请求，就执行接下来的认证代码；如果不是认证请求，则直接继续走剩余的过滤器即可。
+2. 调用 attemptAuthentication 方法来获取一个经过认证后的 Authentication 对象，attemptAuthentication 方法是一个抽象方法，具体实现在它的子类 UsernamePasswordAuthenticationFilter 中
+3. 认证成功后，通过 sessionStrategy.onAuthentication 来处理 session 并发问题。
+4. `continueChainBeforeSuccessfulAuthentication` 变量用来判断请求是否还需要继续向下走。默认情况下该参数的值为 false，即认证成功后，后续的过滤器将不再执行了。
+5. `unsuccessfulAuthentication` 用来处理认证失败事宜，主要做了三件事
+   * 从 SecurityContextHolder 中清除数据；
+   * 清除 Cookie 等信息；
+   * 调用认证失败的回调方法
+
+6. `successfulAuthentication` 方法主要用来处理认证成功事宜，主要做了四件事
+   * 向 SecurityContextHolder 中存入用户信息
+   * 处理 Cookie
+   * 发布认证成功事件，这个事件类型是 `InteractiveAuthenticationSuccessEvent`，表示通过一些自动交互方式认证成功，例如通过 RememberMe 的方式登录。
+   * 调用认证成功的回调方法。
+
+这就是 `AbstractAuthenticationProcessingFilter` 大致上所做的事情，还有一个抽象方法 attemptAuthentication 是在它的继承类 UsernamePasswordAuthenticationFilter 中实现的，接下来我们来看一下 UsernamePasswordAuthenticationFilter 类：
+
+```java
+public class UsernamePasswordAuthenticationFilter extends
+		AbstractAuthenticationProcessingFilter {
+
+	public static final String SPRING_SECURITY_FORM_USERNAME_KEY = "username";
+	public static final String SPRING_SECURITY_FORM_PASSWORD_KEY = "password";
+
+	private String usernameParameter = SPRING_SECURITY_FORM_USERNAME_KEY;
+	private String passwordParameter = SPRING_SECURITY_FORM_PASSWORD_KEY;
+	private boolean postOnly = true;
+
+
+	public UsernamePasswordAuthenticationFilter() {
+		super(new AntPathRequestMatcher("/login", "POST"));
+	}
+
+
+	public Authentication attemptAuthentication(HttpServletRequest request,
+			HttpServletResponse response) throws AuthenticationException {
+		if (postOnly && !request.getMethod().equals("POST")) {
+			throw new AuthenticationServiceException(
+					"Authentication method not supported: " + request.getMethod());
+		}
+
+		String username = obtainUsername(request);
+		String password = obtainPassword(request);
+
+		if (username == null) {
+			username = "";
+		}
+
+		if (password == null) {
+			password = "";
+		}
+
+		username = username.trim();
+
+		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
+				username, password);
+
+		// Allow subclasses to set the "details" property
+		setDetails(request, authRequest);
+
+		return this.getAuthenticationManager().authenticate(authRequest);
+	}
+
+
+	@Nullable
+	protected String obtainPassword(HttpServletRequest request) {
+		return request.getParameter(passwordParameter);
+	}
+
+
+	@Nullable
+	protected String obtainUsername(HttpServletRequest request) {
+		return request.getParameter(usernameParameter);
+	}
+
+
+	protected void setDetails(HttpServletRequest request,
+			UsernamePasswordAuthenticationToken authRequest) {
+		authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
+	}
+
+
+	public void setUsernameParameter(String usernameParameter) {
+		Assert.hasText(usernameParameter, "Username parameter must not be empty or null");
+		this.usernameParameter = usernameParameter;
+	}
+
+	public void setPasswordParameter(String passwordParameter) {
+		Assert.hasText(passwordParameter, "Password parameter must not be empty or null");
+		this.passwordParameter = passwordParameter;
+	}
+
+	public void setPostOnly(boolean postOnly) {
+		this.postOnly = postOnly;
+	}
+
+	public final String getUsernameParameter() {
+		return usernameParameter;
+	}
+
+	public final String getPasswordParameter() {
+		return passwordParameter;
+	}
+}
+```
+1. 首先声明了默认情况下登录表单的用户名字段和密码字段，用户名字段的key默认是username，密码字段的key默认是password。当然，这两个字段也可以自定义，自定义的方 式 就 是 我 们 在 SecurityConfig 中 配 置 的 .usernameParameter("uname") 和 .passwordParameter("passwd") 参考 [登录表单配置](./Authentication.html#配置细节)
+2. 在 UsernamePasswordAuthenticationFilter 过滤器构建的时候，指定了当前过滤器只用来处理登录请求，默认的登录请求是 `/login`，当然开发者也可以自行配置。
+3. 接下来就是最重要的 attemptAuthentication 方法了，在该方法中，首先确认请求是 post 类型；然后通过 obtainUsername 和 obtainPassword 方法分别从请求中提取出用户名和密码，具体的提取过程就是调用 request.getParameter 方法；拿到登录请求传来的用户名/密码之后，构造出一个 authRequest，然后调用 getAuthenticationManager().authenticate 方法进行认证，这就进入到我们前面所说的 ProviderManager 的流程中了，具体认证过程就不再赘述了。
+
+以上就是整个认证流程。
+
+搞懂了认证流程，那么接下来如果想要自定义一些认证方式，就会非常容易了，比如定义多个数据源、添加登录校验码等。下面，我们将通过两个案例，来活学活用上面所讲的认证流程。
+
+
+
 
 
 
