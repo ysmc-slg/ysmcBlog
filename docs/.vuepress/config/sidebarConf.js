@@ -314,7 +314,8 @@ module.exports = {
       "children": [
         "README.md",
         "Authentication.md",
-        "AuthenticationProcess.md"
+        "AuthenticationProcess.md",
+        "FilterChain.md"
       ]
     }
   ]
