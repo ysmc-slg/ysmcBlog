@@ -57,3 +57,130 @@ public interface SecurityFilterChain {
 * getFilters：该方法返回一个List集合，集合中存放的就是SpringSecurity中的过滤器。换言之，如果 matches 方法返回 true，那么 request 请求就会在 getFilters 方法返回的 Filter 集合中被处理。
 
 `SecurityFilterChain` 只有一个默认的实现类就是 `DefaultSecurityFilterChain`，其中定义了两个属性，并具体实现了 SecurityFilterChain中的两个方法：
+
+```java
+public final class DefaultSecurityFilterChain implements SecurityFilterChain {
+	private static final Log logger = LogFactory.getLog(DefaultSecurityFilterChain.class);
+	private final RequestMatcher requestMatcher;
+	private final List<Filter> filters;
+
+	public DefaultSecurityFilterChain(RequestMatcher requestMatcher, Filter... filters) {
+		this(requestMatcher, Arrays.asList(filters));
+	}
+
+	public DefaultSecurityFilterChain(RequestMatcher requestMatcher, List<Filter> filters) {
+		logger.info("Creating filter chain: " + requestMatcher + ", " + filters);
+		this.requestMatcher = requestMatcher;
+		this.filters = new ArrayList<>(filters);
+	}
+
+	public RequestMatcher getRequestMatcher() {
+		return requestMatcher;
+	}
+
+	public List<Filter> getFilters() {
+		return filters;
+	}
+
+	public boolean matches(HttpServletRequest request) {
+		return requestMatcher.matches(request);
+	}
+
+	@Override
+	public String toString() {
+		return "[ " + requestMatcher + ", " + filters + "]";
+	}
+}
+```
+
+可以看到，在 DefaultSecurityFilterChain 的构造方法中，需要传入两个对象，一个是请求匹配器 requestMatcher，另一个则是过滤器集合或者过滤器filters。这个实现类比较简单，这里就不再赘述了。
+
+**注意：**
+
+需要注意的是，在一个 SpringSecurity 项目中，SecurityFilterChain 的实例可能会有多个，我们后面会详细分析，并演示多个SecurityFilterChain 实例的情况。
+
+### SecurityBuilder
+
+SpringSecurity 中所有需要构建的对象都可以通过SecurityBuilder 来实现，默认的过滤器链、代理过滤器、AuthenticationManager 等，都可以通过 SecurityBuilder 来构建。
+
+SecurityBuilder 的实现类如图 4-2 所示。
+
+![4-2](https://img.zxqs.top/20220908130244.png)
+
+我们先来看 SecurityBuilder 的源码：
+
+```java
+public interface SecurityBuilder<O> {
+
+	O build() throws Exception;
+}
+```
+
+SecurityBuilder 中只有一个 build 方法，就是对象构建方法，即使对象构建方法。build 方法的返回值，就是具体构建的对象泛型O，也就是说不同的 SecurityBuilder 将来会构建不同的对象。
+
+#### HttpSecurityBuilder
+
+HttpSecurityBuilder 是用来构建 HttpSecurity 对象的，HttpSecurityBuildder 的定义如下：
+
+```java
+public interface HttpSecurityBuilder<H extends HttpSecurityBuilder<H>> extends SecurityBuilder<DefaultSecurityFilterChain> {
+
+	<C extends SecurityConfigurer<DefaultSecurityFilterChain, H>> C getConfigurer(Class<C> clazz);
+	<C extends SecurityConfigurer<DefaultSecurityFilterChain, H>> C removeConfigurer(Class<C> clazz);
+	<C> void setSharedObject(Class<C> sharedType, C object);
+	<C> C getSharedObject(Class<C> sharedType);
+	H authenticationProvider(AuthenticationProvider authenticationProvider);
+	H userDetailsService(UserDetailsService userDetailsService) throws Exception;
+	H addFilterAfter(Filter filter, Class<? extends Filter> afterFilter);
+	H addFilterBefore(Filter filter, Class<? extends Filter> beforeFilter);
+	H addFilter(Filter filter);
+}
+```
+
+1. HttpSecurityBuilder 对象本身定义时就有一个泛型，这个泛型是 `HttpSecurityBuilder` 的子类，由于默认情况下 HttpSecurityBuilder 的实现类只有一个 HttpSecurity，所以可以暂且把接口中的 H 都当成 HttpSecurity 来理解。
+2. HttpSecurityBuilder 继承自 SecurityBuilder 接口，同时也指定了 SecurityBuilder 中的泛型为 DefaultSecurityFilterChain，也就是说，HttpSecurityBuilder 最终想要构建的对象是DefaultSecurityFilterChain。
+3. getConfigurer 方法用来获取一个配置器，所谓的配置器就是 xxxConfigurer，
+4. removeConfigurer方法用来移除一个配置器（相当于从 SpringSecurity 过滤器链中移除一个过滤器）
+5. setSharedObject/getSharedObject 这两个方法用来设置或者获取一个可以在多个配置器之间共享的对象。
+6. authenticationProvider 方法可以用来配置一个认证器 AuthenticationProvider
+7. userDetailsService 方法可以用来配置一个数据源 UserDetailsService。
+8. addFilterAfter/addFilterBefore 方法表示在某一个过滤器之后或者之前添加一个自定义的过滤器
+9. addFilter 方法可以添加一个过滤器，这个过滤器必须是 SpringSecurity 框架提供的过滤器的一个实例或者扩展，添加完成后，会自动进行过滤器的排序。
+
+#### AbstractSecurityBuilder
+
+AbstractSecurityBuilder 实现了 SecurityBuilder 接口，并对build做了完善，并对build做了完善，确保只Build。我们来看一下 AbstractSecurityBuilder 源码：
+
+
+```java
+public abstract class AbstractSecurityBuilder<O> implements SecurityBuilder<O> {
+	private AtomicBoolean building = new AtomicBoolean();
+
+	private O object;
+
+	public final O build() throws Exception {
+		if (this.building.compareAndSet(false, true)) {
+			this.object = doBuild();
+			return this.object;
+		}
+		throw new AlreadyBuiltException("This object has already been built");
+	}
+
+	public final O getObject() {
+		if (!this.building.get()) {
+			throw new IllegalStateException("This object has not been built");
+		}
+		return this.object;
+	}
+
+	protected abstract O doBuild() throws Exception;
+}
+```
+由上述代码可以看到，在AbstractSecurityBuilder类中：
+
+1. 首先声明了 building 变量，可以确保即使在多线程环境下，配置类也只构建一次。
+2. 对 build 方法进行重写，并且设置为 final，这样AbstractSecurityBuilder的子类中将不能再次重写build方法。在build方法内部，通过 building 变量来控制配置类只构建一次，具体的构建工作则交给 doBuild 方法去完成。
+3. getObject 方法用来返回构建的对象。
+4. doBuild方法则是具体的构建方法，该方法在 AbstractSecurityBuilder中是一个抽象方法，具体的实现在其子类中。
+
+一言以蔽之，AbstractSecurityBuilder的作用是确保目标对象只 被构建一次。
