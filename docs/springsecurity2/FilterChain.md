@@ -184,3 +184,270 @@ public abstract class AbstractSecurityBuilder<O> implements SecurityBuilder<O> {
 4. doBuild方法则是具体的构建方法，该方法在 AbstractSecurityBuilder中是一个抽象方法，具体的实现在其子类中。
 
 一言以蔽之，AbstractSecurityBuilder的作用是确保目标对象只 被构建一次。
+
+#### AbstractConfiguredSecurityBuilder
+
+`AbstractConfiguredSecurityBuilder` 类的源码就稍微长一点，我 们分别来看。
+
+首先在 `AbstractConfiguredSecurityBuilder` 中声明了一个枚举类，用来描述构建过程的不同状态：
+
+```java
+private enum BuildState {
+		
+  UNBUILT(0),
+  INITIALIZING(1),
+  CONFIGURING(2),
+  BUILDING(3),
+  BUILT(4);
+  private final int order;
+  BuildState(int order) {
+    this.order = order;
+  }
+
+  public boolean isInitializing() {
+    return INITIALIZING.order == order;
+  }
+
+  public boolean isConfigured() {
+    return order >= CONFIGURING.order;
+  }
+}
+```
+
+可以看到，整个构建过程一共有五种不同的状态：
+
+1. UNBUILT：配置类构建前。
+2. INITIALIZING：初始化中（初始化完成之前是这个状态）
+3. CONFIGURING：配置中（开始构建之前是这个状态）
+4. BUILDING：构建中
+5. BUILT：构建完成
+
+这个枚举类里边还提供了两个判断方法，`isInitializing` 表示是否正在初始化中，`isConfigured` 方法表示是否已完成配置。
+
+AbstractConfiguredSecurityBuilder 中还声明了 configurers 变量，用来保存所有的配置类。针对 configurers 变量，我们可以进行添加配置、移除配置等操作，相关方法如下：
+
+```java
+public abstract class AbstractConfiguredSecurityBuilder<O, B extends SecurityBuilder<O>>
+		extends AbstractSecurityBuilder<O> {
+	private final Log logger = LogFactory.getLog(getClass());
+
+	private final LinkedHashMap<Class<? extends SecurityConfigurer<O, B>>, List<SecurityConfigurer<O, B>>> configurers = new LinkedHashMap<>();
+	private final List<SecurityConfigurer<O, B>> configurersAddedInInitializing = new ArrayList<>();
+
+	private final Map<Class<?>, Object> sharedObjects = new HashMap<>();
+
+	private final boolean allowConfigurersOfSameType;
+
+	private BuildState buildState = BuildState.UNBUILT;
+
+	private ObjectPostProcessor<Object> objectPostProcessor;
+
+	protected AbstractConfiguredSecurityBuilder(
+			ObjectPostProcessor<Object> objectPostProcessor) {
+		this(objectPostProcessor, false);
+	}
+
+	protected AbstractConfiguredSecurityBuilder(
+			ObjectPostProcessor<Object> objectPostProcessor,
+			boolean allowConfigurersOfSameType) {
+		Assert.notNull(objectPostProcessor, "objectPostProcessor cannot be null");
+		this.objectPostProcessor = objectPostProcessor;
+		this.allowConfigurersOfSameType = allowConfigurersOfSameType;
+	}
+
+
+	public O getOrBuild() {
+		if (isUnbuilt()) {
+			try {
+				return build();
+			}
+			catch (Exception e) {
+				logger.debug("Failed to perform build. Returning null", e);
+				return null;
+			}
+		}
+		else {
+			return getObject();
+		}
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public <C extends SecurityConfigurerAdapter<O, B>> C apply(C configurer)
+			throws Exception {
+		configurer.addObjectPostProcessor(objectPostProcessor);
+		configurer.setBuilder((B) this);
+		add(configurer);
+		return configurer;
+	}
+
+
+	public <C extends SecurityConfigurer<O, B>> C apply(C configurer) throws Exception {
+		add(configurer);
+		return configurer;
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public <C> void setSharedObject(Class<C> sharedType, C object) {
+		this.sharedObjects.put(sharedType, object);
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	public <C> C getSharedObject(Class<C> sharedType) {
+		return (C) this.sharedObjects.get(sharedType);
+	}
+
+	
+	public Map<Class<?>, Object> getSharedObjects() {
+		return Collections.unmodifiableMap(this.sharedObjects);
+	}
+
+
+	@SuppressWarnings("unchecked")
+	private <C extends SecurityConfigurer<O, B>> void add(C configurer) {
+		Assert.notNull(configurer, "configurer cannot be null");
+
+		Class<? extends SecurityConfigurer<O, B>> clazz = (Class<? extends SecurityConfigurer<O, B>>) configurer
+				.getClass();
+		synchronized (configurers) {
+			if (buildState.isConfigured()) {
+				throw new IllegalStateException("Cannot apply " + configurer
+						+ " to already built object");
+			}
+			List<SecurityConfigurer<O, B>> configs = allowConfigurersOfSameType ? this.configurers
+					.get(clazz) : null;
+			if (configs == null) {
+				configs = new ArrayList<>(1);
+			}
+			configs.add(configurer);
+			this.configurers.put(clazz, configs);
+			if (buildState.isInitializing()) {
+				this.configurersAddedInInitializing.add(configurer);
+			}
+		}
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public <C extends SecurityConfigurer<O, B>> List<C> getConfigurers(Class<C> clazz) {
+		List<C> configs = (List<C>) this.configurers.get(clazz);
+		if (configs == null) {
+			return new ArrayList<>();
+		}
+		return new ArrayList<>(configs);
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	public <C extends SecurityConfigurer<O, B>> List<C> removeConfigurers(Class<C> clazz) {
+		List<C> configs = (List<C>) this.configurers.remove(clazz);
+		if (configs == null) {
+			return new ArrayList<>();
+		}
+		return new ArrayList<>(configs);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <C extends SecurityConfigurer<O, B>> C getConfigurer(Class<C> clazz) {
+		List<SecurityConfigurer<O, B>> configs = this.configurers.get(clazz);
+		if (configs == null) {
+			return null;
+		}
+		if (configs.size() != 1) {
+			throw new IllegalStateException("Only one configurer expected for type "
+					+ clazz + ", but got " + configs);
+		}
+		return (C) configs.get(0);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <C extends SecurityConfigurer<O, B>> C removeConfigurer(Class<C> clazz) {
+		List<SecurityConfigurer<O, B>> configs = this.configurers.remove(clazz);
+		if (configs == null) {
+			return null;
+		}
+		if (configs.size() != 1) {
+			throw new IllegalStateException("Only one configurer expected for type "
+					+ clazz + ", but got " + configs);
+		}
+		return (C) configs.get(0);
+	}
+
+	@SuppressWarnings("unchecked")
+	public O objectPostProcessor(ObjectPostProcessor<Object> objectPostProcessor) {
+		Assert.notNull(objectPostProcessor, "objectPostProcessor cannot be null");
+		this.objectPostProcessor = objectPostProcessor;
+		return (O) this;
+	}
+
+	protected <P> P postProcess(P object) {
+		return this.objectPostProcessor.postProcess(object);
+	}
+
+	@Override
+	protected final O doBuild() throws Exception {
+		synchronized (configurers) {
+			buildState = BuildState.INITIALIZING;
+
+			beforeInit();
+			init();
+
+			buildState = BuildState.CONFIGURING;
+
+			beforeConfigure();
+			configure();
+
+			buildState = BuildState.BUILDING;
+
+			O result = performBuild();
+
+			buildState = BuildState.BUILT;
+
+			return result;
+		}
+	}
+
+
+	protected void beforeInit() throws Exception {
+	}
+
+	
+	protected void beforeConfigure() throws Exception {
+	}
+
+	
+	protected abstract O performBuild() throws Exception;
+
+	@SuppressWarnings("unchecked")
+	private void init() throws Exception {
+		Collection<SecurityConfigurer<O, B>> configurers = getConfigurers();
+
+		for (SecurityConfigurer<O, B> configurer : configurers) {
+			configurer.init((B) this);
+		}
+
+		for (SecurityConfigurer<O, B> configurer : configurersAddedInInitializing) {
+			configurer.init((B) this);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void configure() throws Exception {
+		Collection<SecurityConfigurer<O, B>> configurers = getConfigurers();
+
+		for (SecurityConfigurer<O, B> configurer : configurers) {
+			configurer.configure((B) this);
+		}
+	}
+
+	private Collection<SecurityConfigurer<O, B>> getConfigurers() {
+		List<SecurityConfigurer<O, B>> result = new ArrayList<>();
+		for (List<SecurityConfigurer<O, B>> configs : this.configurers.values()) {
+			result.addAll(configs);
+		}
+		return result;
+	}
+}
+```
