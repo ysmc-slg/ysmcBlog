@@ -1,1 +1,0 @@
-import{c as a,o as r,F as s,a as e,b as t}from"./app.16714792.js";import{_ as o}from"./plugin-vue_export-helper.5a098b48.js";const n={},c=e("h1",{id:"mysql",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#mysql","aria-hidden":"true"},"#"),t(" Mysql")],-1),l=e("p",null,"dsf",-1);function _(d,i){return r(),a(s,null,[c,l],64)}var m=o(n,[["render",_]]);export{m as default};
