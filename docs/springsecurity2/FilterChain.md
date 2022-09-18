@@ -452,7 +452,18 @@ public abstract class AbstractConfiguredSecurityBuilder<O, B extends SecurityBui
 }
 ```
 
+1. 首先声明了一个 `configurers` 变量，用来保存所有的配置类， key是配置类Class对象，值是一个List集合中放着配置类。
+2. apply 方法有两个，参数类型略有差异，主要功能基本一致，都是向 configurers 变量中添加配置类，具体的添加过程则是调用 add 方法。
+3. add 方法用来将所有的配置类保存 configurers 中，在添加的过程中，如果 allowConfigurersOfSameType 变量为 true，则表示允许相同类型的配置类存在，也就是 List 集合中可以存在多个相同类型的配置类。默认情况下，如果是普通配置类，allowConfigurersOfSameType 是 false，所以List集合中的配置类始终只有一个配置类；如果在 AuthenticationManagerBuilder 中设置 allowConfigurersOfSameType 为true，此时相同类型的配置类可以有多个
+4. `getConfigurers(Class<C>)` 方法可以从configurers中返回某一个配置类对应的所有实例。
+5. removeConfigurers方法可以从configurers中移除某一个 配置类对应的所有实例，并返回被移除掉的配置类实例集合。
+6. getConfigurer方法也是获取配置类实例，但是只获取集合 中第一项。
+7. removeConfigurer方法可以从configurers中移除某一个配 置类对应的所有配置类实例，并返回被移除掉的配置类实例中的第一 项。
+8. getConfigurers方法是一个私有方法，主要是把所有的配置 类实例放到一个集合中返回。在配置类初始化和配置的时候，会调用到 该方法
 
+这些就是AbstractConfiguredSecurityBuilder中关于 configurers的所有操作。 
+
+接下来就是AbstractConfiguredSecurityBuilder中的doBuild方 法了，这是核心的构建方法，我们一起来看一下与之相关的方法：
 
 ```java
 @Override
