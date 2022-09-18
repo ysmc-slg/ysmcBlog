@@ -454,6 +454,69 @@ public abstract class AbstractConfiguredSecurityBuilder<O, B extends SecurityBui
 
 
 
+```java
+@Override
+protected final O doBuild() throws Exception {
+	synchronized (configurers) {
+		buildState = BuildState.INITIALIZING;
+
+		beforeInit();
+		init();
+
+		buildState = BuildState.CONFIGURING;
+
+		beforeConfigure();
+		configure();
+
+		buildState = BuildState.BUILDING;
+
+		O result = performBuild();
+
+		buildState = BuildState.BUILT;
+
+		return result;
+	}
+}
+
+protected void beforeInit() throws Exception {
+}
+
+protected void beforeConfigure() throws Exception {
+}
+
+protected abstract O performBuild() throws Exception;
+
+@SuppressWarnings("unchecked")
+private void init() throws Exception {
+	Collection<SecurityConfigurer<O, B>> configurers = getConfigurers();
+
+	for (SecurityConfigurer<O, B> configurer : configurers) {
+		configurer.init((B) this);
+	}
+
+	for (SecurityConfigurer<O, B> configurer : configurersAddedInInitializing) {
+		configurer.init((B) this);
+	}
+}
+
+@SuppressWarnings("unchecked")
+private void configure() throws Exception {
+	Collection<SecurityConfigurer<O, B>> configurers = getConfigurers();
+
+	for (SecurityConfigurer<O, B> configurer : configurers) {
+		configurer.configure((B) this);
+	}
+}
+```
+
+1. 在doBuild方法中，一边更新构建状态，一边执行构建方 法。构建方法中，beforeInit是一个空的初始化方法，如果需要在初始 化之前做一些准备工作，可以通过重写该方法实现。
+2. init方法是所有配置类的初始化方法，在该方法中，遍历所 有的配置类，并调用其init方法完成初始化操作。
+3. beforeConfigure方法可以在configure方法执行之前做一些 准备操作。该方法默认也是一个空方法。
+4. configure方法用来完成所有配置类的配置，在configure方 法中，遍历所有的配置类，分别调用其configure方法完成配置。
+5. performBuild方法用来做最终的构建操作，前面的准备工作 完成后，最后在performBuild方法中完成构建，这是一个抽象方法， 具体的实现则在不同的配置类中。
+
+这些就是AbstractConfiguredSecurityBuilder中最主要的几个方 法，其他一些方法比较简单，这里就不一一赘述了。
+
 #### ProviderManagerBuilder
 
 ProviderManagerBuilder继承自SecurityBuilder接口，并制定 了构建的对象是AuthenticationManager，代码如下：
