@@ -1,0 +1,1 @@
+const e={key:"v-21ba2ec8",path:"/database/mysql/",title:"Mysql",lang:"zh-CN",frontmatter:{description:"Mysql",sidebarDepth:2},excerpt:"",headers:[],filePathRelative:"database/mysql/README.md",git:{updatedTime:1663493669e3,contributors:[{name:"zxq",email:"zxq_slg@163.com",commits:7},{name:"ysmc",email:"494786209@qq.com",commits:2}]}};export{e as data};
