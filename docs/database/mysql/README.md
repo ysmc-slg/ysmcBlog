@@ -4,4 +4,5 @@ sidebarDepth: 2
 ---
 
 # Mysql
-dsf
+
+首先将 [sql脚本](https://img.zxqs.top/atguigudb.sql) 导入数据库
