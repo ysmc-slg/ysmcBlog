@@ -8,7 +8,9 @@ module.exports = {
       "sidebarDepth": 1,
       "children": [
         "README.md",
-        "multitable.md"
+        "multitable.md",
+        "limit.md",
+        "function.md"
       ]
     }
   ],
