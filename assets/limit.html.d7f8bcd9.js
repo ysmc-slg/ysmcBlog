@@ -1,0 +1,1 @@
+const t={key:"v-7de93274",path:"/database/mysql/limit.html",title:"\u5206\u9875",lang:"zh-CN",frontmatter:{description:"\u5206\u9875",autoPrev:"multitable"},excerpt:"",headers:[],filePathRelative:"database/mysql/limit.md",git:{updatedTime:1663642916e3,contributors:[{name:"ysmc",email:"494786209@qq.com",commits:1}]}};export{t as data};

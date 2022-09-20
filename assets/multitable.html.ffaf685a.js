@@ -1,1 +1,0 @@
-const t={key:"v-9e5c0008",path:"/database/mysql/multitable.html",title:"\u591A\u8868\u67E5\u8BE2",lang:"zh-CN",frontmatter:{description:"\u591A\u8868\u67E5\u8BE2",autoPrev:"README"},excerpt:"",headers:[],filePathRelative:"database/mysql/multitable.md",git:{updatedTime:1663493669e3,contributors:[{name:"ysmc",email:"494786209@qq.com",commits:2}]}};export{t as data};
