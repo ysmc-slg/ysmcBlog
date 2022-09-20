@@ -120,7 +120,169 @@ SELECT NULLIF('hello','hi') FROM DUAL;
 ### 获取日期、时间
 
 ```sql
--- curdate()，current_date() 返回当前日期，只包含 年、月、日
-SELECT CURDATE() FROM DUAL;
+-- 1. curdate()，current_date() 返回当前日期，只包含 年、月、日
+SELECT CURDATE(),current_date() FROM DUAL;
+
+-- 2. curtime()，current_time() 返回当前时间，只包含时、分秒
+SELECT CURTIME(),CURRENT_TIME() FROM DUAL;
+
+-- 3. now()/SYSDATE()/CURRENT_TIMESTAMP()/LOCALTIME()/LOCALTIMESTAMP() 返回当前系统日期和时间
+SELECT NOW(),SYSDATE(),CURRENT_TIMESTAMP() FROM DUAL;
+
+-- 4. utc_date() 返回 UTC（世界标准时间）日期
+SELECT UTC_DATE() FROM DUAL;
+
+-- 5. utc_date() 返回 UTC（世界标准时间）时间
+SELECT UTC_TIME() FROM DUAL;
 ```
 
+### 日期与时间戳的转换
+
+```sql
+-- 1. unix_timestamp() 以UNIX时间戳的形式返回当前时间。
+SELECT UNIX_TIMESTAMP() FROM DUAL;
+
+-- 2. unix_timestamp(date) 将时间date以UNIX时间戳的形式返回。
+SELECT UNIX_TIMESTAMP(NOW()) FROM DUAL;
+SELECT UNIX_TIMESTAMP('2022-9-20 12:19:23') FROM DUAL;
+
+-- 3. FROM_UNIXTIME(timestamp) 将UNIX时间戳的时间转换为普通格式的时间
+SELECT FROM_UNIXTIME(1663647563) FROM DUAL;
+```
+
+### 月份、星期、星期数、天数等函数
+
+```sql
+-- 1. year(date)/month(date)/day(date) 返回具体的日期值
+SELECT YEAR(NOW()),MONTH(NOW()),DAY(NOW()) FROM DUAL;
+
+-- 2. hour(time)/minute(time)/second(time) 返回具体的是时间值
+SELECT HOUR(NOW()),minute(NOW()),SECOND(NOW()) FROM DUAL;
+
+-- 3. monthname(date) 返回月份（英文）：January
+SELECT MONTHNAME(NOW()) FROM DUAL;
+
+-- 4. dayname(date) 返回星期几：Monday，Tuesday...Sunday
+SELECT DAYNAME(NOW()) FROM DUAL;
+
+-- 5. quarter(date) 返回日期对应的季度，范围为 1~4
+SELECT QUARTER(NOW()) FROM DUAL;
+
+-- 6. weekday(date) 返回周几，注意周一是0，周二是1，... 周日是6
+SELECT WEEKDAY(NOW()) FROM DUAL;
+
+-- 7. week(date)，weekofyear(date) 返回一年中的第几周
+SELECT WEEK(NOW()),WEEKOFYEAR(NOW()) FROM DUAL;
+SELECT WEEK('2022-9-20 12:23:45'),WEEKOFYEAR('2022-9-17 11:23:45') FROM DUAL;
+
+-- 8. dayofyear(now()) 返回日期是一年中的第几天
+SELECT DAYOFYEAR(NOW()) FROM DUAL;
+
+-- 9. DAYOFMONTH(date) 返回日期位于所在月份的第几天
+SELECT DAYOFMONTH(NOW()) FROM DUAL;
+
+-- 10. 返回周几，注意：周日是1，周一是2，。。。周六是7
+select DAYOFWEEK(now()) FROM DUAL;
+```
+
+### extract 函数
+
+extract(type from date) 返回指定日期中特定的部分，type 指定返回的值。
+
+extract(type from date) 函数中 `type` 的取值与含义：
+
+| type 值 | 描述 |
+| ------ | ----- |
+| MICROSECOND | 毫秒 |
+| SECOND | 秒 |
+| HOUR | 小时 |
+| DAY | 天 |
+| WEEK | 一年中的第几个星期 |
+| MONTH | 一年中的第几个月 |
+| QUARTER | 一年中的第几个季度 |
+| YEAR | 年份 |
+| SECOND_MICROSECOND | 得到的是秒+毫秒 |
+| MINUTE_MICROSECOND | 得到的是分+秒+毫秒 |
+| MINUTE_SECOND | 得到的是分+秒 |
+| HOUR_MICROSECOND | 得到的是小时+分+秒+毫秒 |
+| HOUR_SECOND | 得到的是小时+分+秒 |
+| HOUR_MINUTE | 得到的是小时+分 |
+| DAY_MICROSECOND | 得到的是小时+分+秒+毫秒 |
+| DAY_SECOND | 得到的是小时+分+秒 |
+| DAY_MINUTE | 得到的是小时+分 |
+| DAY_HOUR | 得到的是小时 |
+| YEAR_MONTH | 得到的是年+月 |
+
+### 计算日期和时间的函数
+
+| 函数 | 说明 |
+| ------ | ----- |
+| DATE_ADD(datetime,INTERVAL expr type) | 返回给定日期时间差 INTERVAL 时间段的日期时间 |
+| DATE_SUB(date,INTERVAL expr type) | 返回与date相差INTERVAL时间间隔的日期 |
+
+上述函数中 type 的取值：
+
+| 间隔类型 | 含义 |
+| ------ | ----- |
+| HOUR | 小时 |
+| MINUTE | 分钟 |
+| SECOND | 秒 |
+| YEAR | 年 |
+| QUARTER | 季度 |
+| MONTH | 月 |
+| DAY | 日 |
+| YEAR_MONTH | 年和月 |
+| DAY_HOUR | 日和小时 |
+| DAY_MINUTE | 日和分钟 |
+| DAY_SECOND | 日和秒 |
+| HOUR_MINUTE | 小时和分钟 |
+| HOUR_SECOND | 小时和秒 |
+| MINUTE_SECOND | 分钟和秒 |
+
+案例：
+
+```sql
+SELECT DATE_ADD('2021-01-21 02:01:01',INTERVAL '1' HOUR) FROM DUAL;
+SELECT DATE_ADD('2021-01-21 02:01:01',INTERVAL '1' DAY) FROM DUAL;
+SELECT DATE_ADD('2021-01-21 02:01:01',INTERVAL '1 2' YEAR_MONTH) FROM DUAL;
+
+SELECT DATE_SUB('2021-01-21 02:01:01',INTERVAL '1' HOUR) FROM DUAL;
+SELECT DATE_SUB('2021-01-21 02:01:01',INTERVAL '1' DAY) FROM DUAL;
+SELECT DATE_SUB('2021-01-21 02:01:01',INTERVAL '1 1' DAY_HOUR) AS col3 FROM DUAL;
+```
+
+注意：
+
+**在使用两种条件时，中间要加空格**
+
+
+
+| 函数 | 说明 |
+| ------ | ----- |
+| ADDTIME(time1,time2) | 返回time1加上time2的时间。当time2为一个数字时，代表的是秒 ，可以为负数 |
+| SUBTIME(time1,time2) | 返回time1减去time2后的时间。当time2为一个数字时，代表的是秒 ，可以为负数 |
+| DATEDIFF(date1,date2) | 返回date1-date2 的日期间隔天数 |
+| TIMEDIFF(time1,time2) | 返回date1-date2的时间间隔 |
+|FROM_DAYS(N)| 返回从0000年1月1日起，N天以后的日期|
+|TO_DAYS(date)| 返回日期date距离0000年1月1日的天数|
+|LAST_DAY(date)| 返回date所在月份的最后一天的日期|
+|MAKEDATE(year,n)| 针对给定年份与所在年份中的天数返回一个日期|
+|MAKETIME(hour,minute,second)| 将给定的小时、分钟和秒组合成时间并返回|
+|PERIOD_ADD(time,n)| 返回time加上n后的时间|
+
+举例：
+
+```sql
+SELECT 
+  ADDTIME(NOW(),20),
+  SUBTIME(NOW(),30),
+  SUBTIME(NOW(),'1:1:3'),
+  DATEDIFF(NOW(),'2021-10-01'), 
+  TIMEDIFF(NOW(),'2021-10-25 22:10:10'),
+  FROM_DAYS(366),TO_DAYS('0000-12-25'), 
+  LAST_DAY(NOW()),
+  MAKEDATE(YEAR(NOW()),12),
+  MAKETIME(10,21,23),
+  PERIOD_ADD(20200101010101, 10) 
+FROM DUAL;
+```
