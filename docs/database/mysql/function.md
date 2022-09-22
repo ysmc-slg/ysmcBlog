@@ -263,6 +263,7 @@ SELECT DATE_SUB('2021-01-21 02:01:01',INTERVAL '1 1' DAY_HOUR) AS col3 FROM DUAL
 | SUBTIME(time1,time2) | 返回time1减去time2后的时间。当time2为一个数字时，代表的是秒 ，可以为负数 |
 | DATEDIFF(date1,date2) | 返回date1-date2 的日期间隔天数 |
 | TIMEDIFF(time1,time2) | 返回date1-date2的时间间隔 |
+| PERIOD_DIFF(period1, period2) | 返回两个时间相差的月份数，period1-period2，两个参数的格式 是 YYMM或YYYYMM |
 |FROM_DAYS(N)| 返回从0000年1月1日起，N天以后的日期|
 |TO_DAYS(date)| 返回日期date距离0000年1月1日的天数|
 |LAST_DAY(date)| 返回date所在月份的最后一天的日期|
@@ -286,3 +287,42 @@ SELECT
   PERIOD_ADD(20200101010101, 10) 
 FROM DUAL;
 ```
+
+### 日期的格式化和解析
+
+| 函数 | 说明 |
+| ------ | ----- |
+| date_format(date,fmt) | 将日期转化成字符串 |
+| time_format(time,fmt) | 将时间转换成字符串 |
+| get_format(date_type,format_type) | 返回不同标准的日期显示格式 |
+| str_to_date(str,fmt) | 将字符串转化成日期 |
+
+上述 `非get_format` 函数中 fmt 参数常用的格式符：
+
+| 格式符 | 说明 | 格式符 | 说明 |
+| ------ | ----- |------ | ----- |
+| %Y | 4位数字年份 | %y | 两位数字年份 |
+| %M | 月份（英文） | %m | 两位数字月份（01，02，03...） |
+| %b | 缩写的月名（jan,Feb） | %c | 数字月份（1，2，3...） |
+| %D | 日（英文形式 1st,2nd,3rd）| %d | 日（01,02,03...） |
+| %e | 日（1,2,3,4,5...）|  |  |
+| %H | 小时（24小时制） | %h | 小时（12小时制） |
+| %i | 分钟（01，02，03） | %s | 秒（00,01,…59） |
+| %W | 一周中的星期名称（Sunday...） | %a | 一周中的星期缩写（Sun,Mon...） |
+| %w | 数字表示每周的第几天（0表示周日） |  |
+| %j | 表示一年中的第几天（001，002...）| %U | 以数字表示年中的第几周，（1,2,3。。）其中Sunday为周中第一天 |
+
+GET_FORMAT函数中date_type和format_type参数取值如下：
+
+![GET_FORMAT](http://img.zxqs.top/20220922142249.png)
+
+```sql
+SELECT DATE_FORMAT(NOW(), '%H:%i:%s');
+SELECT TIME_FORMAT(CURTIME(),'%H:%i:%s') FROM DUAL;
+SELECT STR_TO_DATE('09/01/2009','%m/%d/%Y') FROM DUAL;
+SELECT STR_TO_DATE('2014-04-22 15:47:06','%Y-%m-%d %H:%i:%s') FROM DUAL;
+-- 美国标准
+SELECT GET_FORMAT(DATE, 'USA');
+```
+
+流程处理函数可以根据不同的条件，执行不同的处理流程，可以在SQL语句中实现不同的条件选择。
