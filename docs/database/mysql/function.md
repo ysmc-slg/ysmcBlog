@@ -1,9 +1,9 @@
 ---
-description: 函数
+description: 单行函数
 autoPrev: limit
 ---
 
-# 函数
+# 单行函数
 
 ## 常用数值函数
 
@@ -326,3 +326,68 @@ SELECT GET_FORMAT(DATE, 'USA');
 ```
 
 流程处理函数可以根据不同的条件，执行不同的处理流程，可以在SQL语句中实现不同的条件选择。
+
+MySQL 中的流程处理函数主要包括 if()，ifnull，和 case() 函数。
+
+| 函数 | 说明 |
+| ------ | ----- |
+| if(value,value1,value2) | 如果value 的值为 true，返回 value1，否则返回 value2 |
+| ifnull(value1，,value2) | 如果 value1 不为 null，返回value1，否则返回value2 |
+| CASE WHEN 条件1 THEN 结果1 WHEN 条件2 THEN 结果2 .... [ELSE resultn] END | 相当于Java的if...else if...else... |
+| CASE expr WHEN 常量值1 THEN 值1 WHEN 常量值1 THEN 值1 .... [ELSE 值n] END | 相当于Java的switch...case... |
+
+```sql
+-- IF(VALUE,VALUE1,VALUE2)
+SELECT last_name,salary,IF(salary >= 6000,'高工资','低工资') "details" FROM employees;
+
+-- ifnull(value1，,value2):看做是if(value,value1,value2)的特殊情况
+SELECT last_name,commission_pct,IFNULL(commission_pct,0) "details" FROM employees;
+```
+
+`case when` 有两种方式：
+
+1. 简单 case 函数 
+  ```text
+     case 列名
+     when 条件值1 then 选项值1
+     when 条件值2 then 选项值2
+     ......
+     else 默认值
+     end
+  ```
+  ```sql
+  SELECT employee_id,last_name,department_id,salary,
+  CASE department_id 
+    WHEN 10 THEN salary * 1.1
+	WHEN 20 THEN salary * 1.2
+	WHEN 30 THEN salary * 1.3
+	ELSE salary * 1.4 END "details"
+  FROM employees;
+  ```
+2. case 搜索函数
+  ```text
+  case
+  when 列明=条件值1 then 选项值1
+  when 列明=条件值2 then 选项值2
+  ......
+  else 默认值
+  end
+  ```
+  ```sql
+  SELECT employee_id,last_name,department_id,salary,
+  CASE WHEN department_id = 10 THEN salary * 1.1
+	WHEN department_id = 20 THEN salary * 1.2
+	WHEN department_id = 30 THEN salary * 1.3
+	ELSE salary * 1.4 
+    END "details"
+  FROM employees;
+  ```
+
+::: tip 注意
+
+简单Case函数的写法相对比较简洁，但是和Case搜索函数相比，功能方面会有些限制，比如写判断式。
+
+还有一个需要注意的问题，Case函数只返回第一个符合条件的 值，剩下的Case部分将会被自动忽略。
+
+:::
+   
