@@ -446,6 +446,6 @@ Vue3 中定义钩子函数：
 </style>
 ```
 
-在 <script></script> 中加上 `setup`。
+在 `<script></script>` 中加上 `setup`。
 
 现在，就直接在 script 节点中，增加 setup 属性，然后 script 节点中定义的变量名、方法名等等，默认就会自动返回，我们只需要定义即可。
