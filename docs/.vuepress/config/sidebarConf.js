@@ -257,7 +257,8 @@ module.exports = {
         "cache.md",
         "slot.md",
         "Vuex.md",
-        "router.md"
+        "router.md",
+        "vue3Difference.md"
       ]
     }
   ],
