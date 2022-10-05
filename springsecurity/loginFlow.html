@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="generator" content="VuePress 2.0.0-beta.27">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="icon" href="/favicon.ico"><link rel="manifest" href="/manifest.json"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"><meta name="theme-color" content="#ffffff"><meta name="google-site-verification" content=""><title>SpringSecurity 登录流程 | 余生慢尝</title><meta name="description" content="SpringSecurity 登录流程">
-    <link rel="modulepreload" href="/assets/app.58232894.js"><link rel="modulepreload" href="/assets/loginFlow.html.09ac10b0.js"><link rel="modulepreload" href="/assets/plugin-vue_export-helper.5a098b48.js"><link rel="modulepreload" href="/assets/loginFlow.html.59b83cdc.js">
+    <link rel="modulepreload" href="/assets/app.d51fc79e.js"><link rel="modulepreload" href="/assets/loginFlow.html.41c248eb.js"><link rel="modulepreload" href="/assets/plugin-vue_export-helper.5a098b48.js"><link rel="modulepreload" href="/assets/loginFlow.html.59b83cdc.js">
     <link rel="stylesheet" href="/assets/style.bde21de7.css">
   </head>
   <body>
@@ -149,6 +149,6 @@
 	successHandler<span class="token punctuation">.</span><span class="token function">onAuthenticationSuccess</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> response<span class="token punctuation">,</span> authResult<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre></div><p>在这里有一段很重要的代码，就是 SecurityContextHolder.getContext().setAuthentication(authResult); ，登录成功的用户信息被保存在这里，也就是说，在任何地方，如果我们想获取用户登录信息，都可以从 SecurityContextHolder.getContext() 中获取到，想修改，也可以在这里修改。</p><p>最后大家还看到有一个 successHandler.onAuthenticationSuccess，这就是我们在 SecurityConfig 中配置登录成功回调方法，就是在这里被触发的。</p><!--]--></div><footer class="page-meta"><div class="meta-item edit-link"><a class="nav-link external meta-item-label" href="https://github.com/ysmc-slg/ysmcBlog/edit/master/docs/springsecurity/loginFlow.md" rel="noopener noreferrer" target="_blank" aria-label="编辑文档！"><!--[--><!--]--> 编辑文档！ <span><svg class="icon outbound" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><!--[--><span class="sr-only">open in new window</span><!--]--></span><!--[--><!--]--></a></div><div class="meta-item last-updated"><span class="meta-item-label">上次更新: </span><span class="meta-item-info">2022/6/16 16:43:52</span></div><div class="meta-item contributors"><span class="meta-item-label">贡献者: </span><span class="meta-item-info"><!--[--><!--[--><span class="contributor" title="email: 494786209@qq.com">ysmc</span><!----><!--]--><!--]--></span></div></footer><!----><!--[--><!--]--></main><!--]--></div><!----><!----><!--]--></div>
-    <script type="module" src="/assets/app.58232894.js" defer></script>
+    <script type="module" src="/assets/app.d51fc79e.js" defer></script>
   </body>
 </html>
