@@ -407,4 +407,45 @@ Vue3 中定义钩子函数：
 
 :::
 
+## setup
 
+以上代码中，每定义一个变量或者方法都要 `return`，我们可以对以上代码进行简化：
+
+```vue
+<template>
+    <div>
+        <div>{{age}}</div>
+        <div>{{book.name}}</div>
+        <div>{{book.author}}</div>
+        <div>{{name}}</div>
+        <div>{{author}}</div>
+        <button @click="updateBookInfo">更新图书信息</button>
+    </div>
+</template>
+
+<!--直接在 script 节点中定义 setup 属性，然后，script 节点就像以前 jquery 写法一样-->
+<script setup>
+
+    import {ref, reactive, toRefs} from 'vue';
+
+    const age = ref(99);
+    const book = reactive({
+        name: "三国演义",
+        author: '罗贯中'
+    });
+    function updateBookInfo(){
+        //修改书名，注意，在 vue3 中，现在方法中访问变量，不再需要 this
+        book.name = '三国演义123';
+    }
+    //展开的变量
+    const {name, author} = toRefs(book);
+</script>
+
+<style scoped>
+
+</style>
+```
+
+在 <script></script> 中加上 `setup`。
+
+现在，就直接在 script 节点中，增加 setup 属性，然后 script 节点中定义的变量名、方法名等等，默认就会自动返回，我们只需要定义即可。
