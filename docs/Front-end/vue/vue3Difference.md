@@ -270,4 +270,55 @@ Vue3 中定义钩子函数：
 
 另外还有一点，就是定义的变量入 age、msg 等 ，在 HTML 节点中，直接使用 age、msg，但是如果是在方法中操作这些变量，则一定要使用 age.value 或者 msg.value 去操作这些变量。
 
+## watch 函数
+
+```vue
+<template>
+    <div>
+        <div>hello 01!</div>
+        <h1>{{msg}}</h1>
+        <input type="text" v-model="msg">
+        <button @click="doLogin('zhangsan','123')">登录</button>
+        <div>{{currentTime}}</div>
+    </div>
+</template>
+
+<script>
+
+    import {ref} from 'vue';
+    //使用钩子函数时，首先导入钩子函数
+    //计算属性的使用，也需要首先导入计算属性
+    import {watch} from 'vue';
+
+    export default {
+        name: "My02",
+        setup() {
+            //注意，直接这样写，这个变量不是响应式数据
+            // let msg = "hello vue3";
+            let msg = ref("hello vue3");
+            let age = ref(99);
+            const doLogin=(username,password)=>{
+                console.log(username);
+                console.log(password);
+                age.value++;
+                msg.value = 'hello javaboy!';
+            }
+
+            watch(age,(newValue,oldValue)=>{
+                console.log("newValue", newValue);
+                console.log("oldValue", oldValue);
+            })
+            //注意，计算属性需要在 return 中返回
+            return {msg,doLogin,currentTime,age};
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>
+```
+
+1. 先从 vue 中导入 watch 函数。
+2. 在 setup 中去监控变量，第一个参数是要监控的变量，第二个参数则是一个回调函数，回调函数的参数就是所监控变量值的变化。
 
