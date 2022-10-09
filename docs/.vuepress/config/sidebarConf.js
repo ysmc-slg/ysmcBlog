@@ -10,7 +10,9 @@ module.exports = {
         "README.md",
         "multitable.md",
         "limit.md",
-        "function.md"
+        "function.md",
+        "aggregateFunction.md",
+        "subquery.md"
       ]
     }
   ],
