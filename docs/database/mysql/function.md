@@ -325,6 +325,8 @@ SELECT STR_TO_DATE('2014-04-22 15:47:06','%Y-%m-%d %H:%i:%s') FROM DUAL;
 SELECT GET_FORMAT(DATE, 'USA');
 ```
 
+## 流程处理函数
+
 流程处理函数可以根据不同的条件，执行不同的处理流程，可以在SQL语句中实现不同的条件选择。
 
 MySQL 中的流程处理函数主要包括 if()，ifnull，和 case() 函数。

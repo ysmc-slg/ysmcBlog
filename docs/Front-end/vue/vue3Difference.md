@@ -2,7 +2,7 @@
 description: Vue3 和 Vue2 的差异
 autoPrev: router
 ---
-
+# Vue3 和 Vue2 差异
 ## 定义变量
 
 Vue2 中，定义变量，可以按照如下方式：
