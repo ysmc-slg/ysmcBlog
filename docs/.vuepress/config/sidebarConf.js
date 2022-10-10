@@ -12,7 +12,9 @@ module.exports = {
         "limit.md",
         "function.md",
         "aggregateFunction.md",
-        "subquery.md"
+        "subquery.md",
+        "view.md",
+        "storedProcedure.md"
       ]
     }
   ],

@@ -13,7 +13,26 @@ module.exports = [
     text: '数据库',
     children: [
       { text: 'Redis', link: '/database/redis/' },
-      { text: 'Mysql', link: '/database/mysql/' },
+      { text: 'Mysql', link: '/database/mysql/',
+        children: [
+          {
+            text: '高级部分',
+            link: '/ssm/ssm-senior/spring/'
+          }
+        ]
+      },
+      { 
+        text: 'Mysql高级部分',
+        children: [
+          {
+            text: 'Spring',
+            link: '/ssm/ssm-senior/spring/'
+          },{
+            text: 'SpringMVC',
+            link: '/ssm/ssm-senior/springmvc/'
+          },
+        ]
+      }
     ]
   },
   {
