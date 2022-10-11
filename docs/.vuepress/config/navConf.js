@@ -17,20 +17,8 @@ module.exports = [
         children: [
           {
             text: '高级部分',
-            link: '/ssm/ssm-senior/spring/'
+            link: '/database/mysql/senior/'
           }
-        ]
-      },
-      { 
-        text: 'Mysql高级部分',
-        children: [
-          {
-            text: 'Spring',
-            link: '/ssm/ssm-senior/spring/'
-          },{
-            text: 'SpringMVC',
-            link: '/ssm/ssm-senior/springmvc/'
-          },
         ]
       }
     ]
