@@ -20,8 +20,8 @@ module.exports = {
   ],
   "/database/mysql/senior/": [
     {
-      "text": "MYSQLsenior",
-      "title": "MYSQLsenior",
+      "text": "MYSQL高级",
+      "title": "MYSQL高级",
       "collapsable": false,
       "sidebarDepth": 1,
       "children": [
