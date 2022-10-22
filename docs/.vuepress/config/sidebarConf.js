@@ -7,7 +7,7 @@ module.exports = {
       "collapsable": false,
       "sidebarDepth": 1,
       "children": [
-        "README.md",
+        "README.md", 
         "multitable.md",
         "limit.md",
         "function.md",
@@ -15,6 +15,17 @@ module.exports = {
         "subquery.md",
         "view.md",
         "storedProcedure.md"
+      ]
+    }
+  ],
+  "/database/mysql/senior/": [
+    {
+      "text": "MYSQLsenior",
+      "title": "MYSQLsenior",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md",
       ]
     }
   ],

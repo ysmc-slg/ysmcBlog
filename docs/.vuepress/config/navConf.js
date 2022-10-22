@@ -2,7 +2,7 @@
 
 module.exports = [
   {
-    text: '首页',
+    text: '首页', 
     link: '/'
   },
   // {
