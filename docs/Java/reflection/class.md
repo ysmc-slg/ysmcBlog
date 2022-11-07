@@ -16,27 +16,236 @@ autoPrev: README
 * 每个类的实例都会记得自己是由哪个 Class 实例所生成
 * 通过Class可以完整地得到一个类中的所有被加载的结构
 
-## Class类的常用方法
-|方法名|功能说明|
-|:-----|:-----|
-|static Class forName(String reference)|根据类的全路径名，返回一个 Class类|
-|Object newInstance()|返回该Class对象的一个实例|
-|getName()|返回此Class对象所表示的实体`全路径名`|
-|Class getSuperclass()|返回当前Class对象的父类的Class对象|
-|Class [] getInterfaces()|获取当前Class对象的接口|
-|ClassLoader getClassLoader()|返回该类的类加载器|
-|Constructor[] getConstructors()|返回一个包含某些Constructor对象的数组|
-|Field[] getDeclaredFields()|返回Field对象的一个数组|
-|Method getMethod(String name,Class … paramTypes)|返回一个Method对象，此对象的形参类型为paramType|
+## 获取字节码文件对象的几种方式
 
-## 反射的应用举例
-案例：读取配置配置文件中的配置，通过反射调用类中的方法。
+* 对象.getClass()
+* 类名.class
+* Class.forName(String className) 全限定名
+* ClassLoader.loadClass(String name)
+
+
+```java
+public class Demo {
+    public static void main(String[] args) throws ClassNotFoundException {
+        // - 对象.getClass()
+        Stu stu = new Stu();
+        Class<? extends Stu> c1 = stu.getClass();
+        //- 类名.class
+        Class<Stu> c2 = Stu.class;
+
+        System.out.println(c1 == c2);
+
+        //- Class.forName(String className)  全限定名
+        Class<?> c3 = Class.forName("_23reflect.com.cskaoyan._02cls.Stu");
+        System.out.println(c1 == c3);
+        //- ClassLoader.loadClass(String name)
+        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+        Class<?> c4 = systemClassLoader.loadClass("_23reflect.com.cskaoyan._02cls.Stu");
+
+        System.out.println(c1 == c4);
+    }
+}
+
+
+class Stu{
+
+}
+```
+
+## 获取构造方法
+
+**获取所有构造方法**
+
+|返回值|方法|详情|
+| ---- | --------------------- | --------- |
+| Constructor[] | getConstructors()  | 只能获取被public修饰的构造方法 |
+| Constructor[] | getDeclaredConstructors()  | 获取所有构造方法 |
+
+**获取指定构造方法**
+
+|返回值|方法|详情|
+| ---- | --------------------- | --------- |
+| Constructor<T> | getConstructor(Class<?>... parameterTypes)  | 获取指定的 public 构造方法，参数是一个 Class 类（String.class ...） |
+| Constructor<T> | getDeclaredConstructor(Class<?>... parameterTypes)  | 获取指定的构造方法 |
+
+**使用Constructor创建对象**
+
+```java
+// 通过反射获取构造方法
+public class Demo {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        // 获取字节码文件对象
+        Class<?> personCls = Class.forName("_23reflect.com.cskaoyan.bean.Person");
+
+        System.out.println("获取所有的public的构造方法");
+        // Constructor[] getConstructors()
+        Constructor<?>[] constructors = personCls.getConstructors();
+        for (Constructor constructor : constructors) {
+            System.out.println(constructor);
+        }
+        System.out.println("获取所有的构造方法------");
+
+        //Constructor[] getDeclaredConstructors()
+        Constructor<?>[] declaredConstructors = personCls.getDeclaredConstructors();
+        for (Constructor constructor : declaredConstructors) {
+            System.out.println(constructor);
+        }
+        System.out.println("获取指定的public的构造方法------");
+
+        // Constructor<T> getConstructor(Class<?>... parameterTypes)
+        Constructor<?> constructor = personCls.getConstructor(String.class, int.class, boolean.class);
+        System.out.println(constructor);
+
+        System.out.println("获取指定的构造方法------");
+
+        //Constructor<T> getDeclaredConstructor(Class<?>... parameterTypes)
+        Constructor<?> declaredConstructor = personCls.getDeclaredConstructor(String.class, int.class);
+        System.out.println(declaredConstructor);
+
+        // **使用Constructor创建对象**
+        Object o = constructor.newInstance("zs", 20, true);
+        System.out.println(o);
+
+        // void setAccessible(boolean flag)
+        // 忽略java语法检查
+        declaredConstructor.setAccessible(true);
+        Object o1 = declaredConstructor.newInstance("ls", 21);
+        System.out.println(o1);
+
+
+    }
+}
+```
+
+## 通过反射获取成员变量
+
+**获取所有成员变量**
+
+|返回值|方法|详情|
+| ---- | --------------------- | --------- |
+| Field[] | getFields()  | 获取所有被 public 修饰的成员变量 |
+| Field[] | getDeclaredFields()  | 获取所有成员变量 |
+
+**获取指定成员变量**
+
+|返回值|方法|详情|
+| ---- | --------------------- | --------- |
+| Field | getField(String name)  | 获取指定被public修改的变量 |
+| Field | getDeclaredField(String name)  | 获取指定成员变量 |
+```java
+public class Demo2 {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchFieldException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        // **通过反射获取所有成员变量**
+        Class<?> personCls = Class.forName("_23reflect.com.cskaoyan.bean.Person");
+
+        System.out.println("通过反射获取所有的public成员变量");
+        // Field[] getFields()
+        Field[] fields = personCls.getFields();
+        for (Field field : fields) {
+            System.out.println(field);
+        }
+        //Field[] getDeclaredFields()
+        System.out.println("通过反射获取所有成员变量");
+        Field[] declaredFields = personCls.getDeclaredFields();
+
+        for (Field field : declaredFields) {
+            System.out.println(field);
+        }
+
+        // **获取指定成员变量**
+        System.out.println("通过反射获取指定的public成员变量");
+        //Field getField(String name)
+        Field nameField = personCls.getField("name");
+        System.out.println(nameField);
+        //Field getDeclaredField(String name)
+        System.out.println("通过反射获取指定的成员变量");
+        Field ageField = personCls.getDeclaredField("age");
+        System.out.println(ageField);
+
+    }
+}
+```
+## 通过反射获取成员方法
+**获取所有成员方法**
+
+|返回值|方法|详情|
+| ---- | --------------------- | --------- |
+| Method[] | getMethods()  | 获取所有被 public 修饰的成员方法 |
+| Method[] | getDeclaredMethods()  | 获取所有成员方法 |
+
+**获取指定的成员方法**
+
+|返回值|方法|详情|
+| ---- | --------------------- | --------- |
+| Method | getMethods(String name, Class<?>... parameterTypes)  | 获取指定的，被 public 修饰的成员方法，参数可以有多个，是 Class 类 |
+| Method | getDeclaredMethods(String name, Class<?>... parameterTypes)  | 获取指定的成员方法，参数可以有多个，是 Class 类 |
+
+**利用Method调用对象的方法**
+
+```java
+Object invoke(Object obj, Object... args)
+```
+
+第一个参数为调用的对象，args是一个可变参数，是调用方法需要的参数
+
+```java
+public class Demo3 {
+    public static void main(String[] args) throws Exception {
+        Class<?> personCls = Class.forName("_23reflect.com.cskaoyan.bean.Person");
+
+        System.out.println("**获取所有public成员方法**");
+        // Method[] getMethods()
+        Method[] methods = personCls.getMethods();
+        for (Method method : methods) {
+            System.out.println(method);
+        }
+        //Method[] getDeclaredMethods()
+        System.out.println("**获取所有的成员方法**");
+
+        Method[] declaredMethods = personCls.getDeclaredMethods();
+        for (Method method : declaredMethods) {
+            System.out.println(method);
+        }
+
+        System.out.println("**获取指定的public成员方法**");
+        // Method getMethod(String name, Class<?>... parameterTypes)
+        Method eatMethod1 = personCls.getMethod("eat");
+        System.out.println(eatMethod1);
+        //Method getDeclaredMethod(String name, Class<?>... parameterTypes)
+        Method eatMethod2 = personCls.getDeclaredMethod("eat", String.class);
+        System.out.println(eatMethod2);
+
+        //**利用Method调用对象的方法**
+        // Object invoke(Object obj, Object... args)
+        Constructor<?> declaredConstructor = personCls.getDeclaredConstructor();
+        Object o = declaredConstructor.newInstance();
+        eatMethod1.invoke(o);
+
+        eatMethod2.setAccessible(true);
+        eatMethod2.invoke(o, "apple");
+
+    }
+}
+```
+## Properties
+`Properties` 类表示了一个持久的属性集。`Properties`  可保存在流中或从流中加载。属性列表中每个键及其对应值都是一个字符串。
+
+**成员方法**
+
+|返回值|方法|详情|
+| ---- | --------------------- | --------- |
+| void | load(InputStream inStream) | 从输入流中读取属性列表（键和元素对）。 |
+| void | load(Reader reader)  | 按简单的面向行的格式从输入字符流中读取属性列表（键和元素对）。 |
+| String | getProperty(String key)  | 用指定的键在此属性列表中搜索属性 |
+
+**案例：读取配置配置文件中的配置，通过反射调用类中的方法。**
 
 re.properties
 ```properties
 classpath=top.zxqs.Cat
 method=hello
 ```
+
 ```java
 public void test(){
   Properties properties = new Properties();
@@ -122,25 +331,66 @@ getField() 方法不能获取`私有(private)`的成员变量
 
 :::
 
+## 其他API
 
-## 获取Class实例的方法
+|返回值|方法|详情|
+| ---- | --------------------- | --------- |
+| String | getName() | 获取全类名 |
+| String | getSimpleName  | 获取类名 |
+| Class<?> | getSuperclass()  | 获取父类 | 
+| Class<?>[] | getInterfaces()  | 获取实现的接口 |
+| ClassLoade | getClassLoader()  | 获取类加载器 |
+| Class<?> | getSuperclass()  | 获取父类 |
+| Class<?> | getSuperclass()  | 获取父类 |
 
-1. 若已知具体的类，通过类的class属性获取，该方法最为安全可靠，程序性能最高 
-   
-   `Class clazz = String.class;`
-2. 已知某个类的实例，调用该实例的getClass()方法获取Class对象
-   
-   `Class clazz = cat.getClass();`
+```java
+public class Demo2 {
+    public static void main(String[] args) throws Exception{
+        Class<?> personCls = Class.forName("_23reflect.com.cskaoyan.bean.Person");
+        //Class<?> personCls = Class.forName("java.io.OutputStream");
+        // 获取全类名
+        String name = personCls.getName();
+        System.out.println(name);
+        // 获取简单名
+        String simpleName = personCls.getSimpleName();
+        System.out.println(simpleName);
 
-3. 已知一个类的全类名
+        // 获取父类
+        Class<?> superclass = personCls.getSuperclass();
+        System.out.println(superclass.getSimpleName());
 
-   `Class clazz = Class.forName("java.lang.String");`
+        // 获取实现的接口
+        Class<?>[] interfaces = personCls.getInterfaces();
+        for (Class i : interfaces) {
+            System.out.println(i);
+        }
 
-4. 其他方式
+        // 获取类加载器
+        ClassLoader classLoader = personCls.getClassLoader();
+        System.out.println(classLoader);
 
-   `ClassLoader cl = this.getClass().getClassLoader();`
+        Field nameField = personCls.getDeclaredField("name");
+        // 获取权限修饰符
+        int modifiers = nameField.getModifiers();
+        System.out.println(modifiers);
+        // static String toString(int mod)
+        //          返回描述指定修饰符中的访问修饰符标志的字符串
+        String s = Modifier.toString(modifiers);
+        System.out.println(s);
 
-   `lass clazz4 = cl.loadClass(“类的全类名”);`
+        Method eatMethod = personCls.getDeclaredMethod("eat", String.class);
+        // 方法的返回值
+        Class<?> returnType = eatMethod.getReturnType();
+        System.out.println(returnType);
+		// 方法参数
+        Class<?>[] parameterTypes = eatMethod.getParameterTypes();
+        for (Class p : parameterTypes) {
+            System.out.println(p);
+        }
+
+    }
+}
+```
 
 ## 哪些类型可以有Class对象
 
