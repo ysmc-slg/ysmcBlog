@@ -301,7 +301,7 @@ public class User {
 </property>
 ```
 
-**4. Properties 注入**
+
 
 ```java
 public class User {
