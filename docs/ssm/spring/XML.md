@@ -109,7 +109,7 @@ public class TestOkHttp {
 
 这个 `Bean` 有一个特点，`OkHttpClient` 和 `Request` 两个实例都不是直接 `new` 出来的，在调用 `Bulider` 方法过程中，都会给他设置一些默认的参数。这种情况，我们可以使用 <div style="color:red">静态工厂注入</div> 或者 <div style="color:red">实例工厂注入</div>来给 `OkHttpClient` 提供一个实例。
 
-**1. 静态工厂注入**
+1. **静态工厂注入**
 
 首先提供一个 `OkHttpClient` 静态工厂：
 
@@ -158,7 +158,7 @@ public class TestOkHttp {
 }
 ```
 
- **2. 实例工厂注入**
+2. **实例工厂注入**
 
 实例工厂就是工厂方法是一个实例方法，这样，工厂类必须实例化之后才可以调用工厂方法
 
@@ -186,7 +186,7 @@ public class OkHttpFactory {
 
 ## 复杂属性注入
 
-**1. 对象注入**
+1. **对象注入**
 
 我们经常遇到，一个对象里面引用了另一个对象。这时我们应该怎样注入呢？代码如下：
 ```java
@@ -235,7 +235,7 @@ public class Cat {
 </bean>
 ```
 
-**2. 数组和集合注入**
+2. **数组和集合注入**
 
 ```java
 public class User {
@@ -280,7 +280,7 @@ Cat对象代码不变。
 
 当然，`array` 或者 `list` 节点中也可以是对象。节点中既可以通过 `ref` 使用外部定义好的 `Bean`，也可以直接在 `list` 或者 `array` 节点中定义 `bean`
 
-**3. Map 注入**
+3. **Map 注入**
 
 ```java
 public class User {
@@ -301,7 +301,7 @@ public class User {
 </property>
 ```
 
-
+4. **Properties 注入**
 
 ```java
 public class User {
