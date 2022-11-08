@@ -280,7 +280,7 @@ Cat对象代码不变。
 
 当然，`array` 或者 `list` 节点中也可以是对象。节点中既可以通过 `ref` 使用外部定义好的 `Bean`，也可以直接在 `list` 或者 `array` 节点中定义 `bean`
 
-3. **Map 注入**
+3. **`Map` 注入**
 
 ```java
 public class User {
@@ -301,7 +301,7 @@ public class User {
 </property>
 ```
 
-4. **Properties 注入**
+4. **`Properties` 注入**
 
 ```java
 public class User {
