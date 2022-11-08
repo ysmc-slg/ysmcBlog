@@ -65,8 +65,8 @@ class Stu{
 
 |返回值|方法|详情|
 | ---- | --------------------- | --------- |
-| Constructor<T> | getConstructor(Class<?>... parameterTypes)  | 获取指定的 public 构造方法，参数是一个 Class 类（String.class ...） |
-| Constructor<T> | getDeclaredConstructor(Class<?>... parameterTypes)  | 获取指定的构造方法 |
+| `Constructor<T>` | getConstructor(Class<?>... parameterTypes)  | 获取指定的 public 构造方法，参数是一个 Class 类（String.class ...） |
+| `Constructor<T>` | getDeclaredConstructor(Class<?>... parameterTypes)  | 获取指定的构造方法 |
 
 **使用Constructor创建对象**
 
@@ -337,11 +337,11 @@ getField() 方法不能获取`私有(private)`的成员变量
 | ---- | --------------------- | --------- |
 | String | getName() | 获取全类名 |
 | String | getSimpleName  | 获取类名 |
-| Class<?> | getSuperclass()  | 获取父类 | 
-| Class<?>[] | getInterfaces()  | 获取实现的接口 |
-| ClassLoade | getClassLoader()  | 获取类加载器 |
-| Class<?> | getSuperclass()  | 获取父类 |
-| Class<?> | getSuperclass()  | 获取父类 |
+| `Class<?>` | getSuperclass()  | 获取父类 | 
+| `Class<?>[]` | getInterfaces()  | 获取实现的接口 |
+| `ClassLoade` | getClassLoader()  | 获取类加载器 |
+| `Class<?>` | getSuperclass()  | 获取父类 |
+| `Class<?>` | getSuperclass()  | 获取父类 |
 
 ```java
 public class Demo2 {
@@ -382,7 +382,7 @@ public class Demo2 {
         // 方法的返回值
         Class<?> returnType = eatMethod.getReturnType();
         System.out.println(returnType);
-		// 方法参数
+		    // 方法参数
         Class<?>[] parameterTypes = eatMethod.getParameterTypes();
         for (Class p : parameterTypes) {
             System.out.println(p);
