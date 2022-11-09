@@ -337,5 +337,16 @@ module.exports = {
         "FilterChain.md"
       ]
     }
+  ],
+  "/utils/stringutils": [
+    {
+      "text": "springsecurity2",
+      "title": "springsecurity2",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
+      ]
+    }
   ]
 };

@@ -97,12 +97,18 @@ module.exports = [
   },
 
   {
-    text: '常用工具',
+    text: '常用文档',
     children: [
       { text: 'elementUI', link: 'https://element.eleme.cn/#/zh-CN/component/table', icon: ':tada:'},
       { text: 'Vue文档', link: 'https://cn.vuejs.org/v2/guide/' },
       { text: 'momentjs', link: 'http://momentjs.cn/docs/', icon: ':tada:'},
       { text: 'EasyPoi文档', link: 'http://easypoi.mydoc.io/'}
+    ]
+  },
+  {
+    text: '开发工具类',
+    children: [
+      { text: 'StringUtils', link: '/utils/stringutils/' }
     ]
   }
 ];
