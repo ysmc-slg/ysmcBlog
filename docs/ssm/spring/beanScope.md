@@ -60,6 +60,54 @@ public class UserDao {
 }
 ```
 
+**扩展：**
+
+spring 框架下 ，无论是controller 还是 service 还是 dao 层，程序默认都是单例的，既然是单例就会有线程安全问题。
+
+在spring框架下 `不要使用非静态的成员变量` 否则会发生数据混乱，因为controller等默认是作用域为 `singleton（单例）` 所以不同请求获取的成员变量也是同一个，在不同的方法操作同一个成员变量就会造成数据混乱
+
+解决方法也很简单：
+1. 不要再 Controller 等中定义非静态的成员变量
+2. 必须定义成员变量时，通过注解@Scope(“prototype”)，将其设置为多例模式。
+3. 使用 ThreadLocal 变量
+
+@Scope(“prototype”) 上面就是，下面代码为使用 ThreadLocal
+
+```java
+@RestController
+@RequestMapping("/quartz")
+public class QuartzController {
+    int i=0;
+    ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>(){
+        @Override
+        // 初始化默认值
+        protected Integer initialValue() {
+            return i;
+        }
+    };
+
+    @GetMapping("/test1")
+    public void test() {
+        System.out.println(i);
+        Integer x = threadLocal.get();
+        threadLocal.set(++x);
+        System.out.println(x);
+
+    }
+
+    @GetMapping("/test2")
+    public void test2() {
+        System.out.println(i);
+        Integer x = threadLocal.get();
+
+        threadLocal.set(++x);
+        System.out.println(x);
+    }
+}
+```
+
+此时在方法中操作 `x` 不会修改 `i`的值 
+
 ## 混合配置
 混合配置就是 `Java配置` + `XML配置`。混用的话，可以在 `Java配置` 中引入 `XML` 配置。
 

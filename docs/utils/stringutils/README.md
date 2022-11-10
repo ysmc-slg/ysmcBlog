@@ -123,3 +123,110 @@ System.out.println(StringUtils.endsWith("abcdef", "def"));
 //判断结尾是否相同，不区分大小写
 System.out.println(StringUtils.endsWithIgnoreCase("abcdef", "Def"));
 ```
+
+**字符串截取**
+
+```java
+//从指定位置开始截取到最后，从0开始包含头。null返回null.""返回""
+System.out.println(StringUtils.substring("人生自古谁无死", 2));  //自古谁无死
+//截取指定区间的字符，包含头不包含尾
+System.out.println(StringUtils.substring("留取丹心照汗青", 2, 4));  //丹心
+//从左截取指定长度的字符串，从1开始
+System.out.println(StringUtils.left("说点什么好呢", 3));  // 说点什
+//从右截取指定长度的字符串，从1开始
+System.out.println(StringUtils.right("说点什么好呢", 3)); // 么好呢
+// 从指定位置截取，截取字符长度为2，包含头尾
+System.out.println(StringUtils.mid("说点什么好呢", 3, 2));  // 么好
+//截取到等于指定字符为止，不包含指定字符
+System.out.println(StringUtils.substringBefore("说点什么好呢", "好")); // 说点什么
+//从左往右查，过滤掉第二个参数之前的数据，保留之后的数据
+System.out.println(StringUtils.substringAfter("说点什么好呢", "点")); // 什么好呢
+// 从右往左差，过滤掉第二个参数之前的数据，保留之后的数据
+System.out.println(StringUtils.substringBeforeLast("说点什么好点呢", "点"));  //说点什么好
+//这个截取同上是从右往左。保留第二个参数之前的数据
+System.out.println(StringUtils.substringAfterLast("说点什么好点呢？", "点"));  // 呢？
+// 截取 参数2 第一次出现和第二次出现中间的字符串
+System.out.println(StringUtils.substringBetween("南非2010世界杯在南非，在南非", "南非")); // 2010世界杯在
+```
+
+**移除，删除**
+```java
+//删除所有空格符
+System.out.println(StringUtils.deleteWhitespace(" s 中 你 4j"));
+//移除开始部分的相同的字符
+System.out.println(StringUtils.removeStart("www.baidu.com", "www."));
+//移除开始部分的相同的字符,不区分大小写
+System.out.println(StringUtils.removeStartIgnoreCase("www.baidu.com", "WWW"));
+//移除后面相同的部分
+System.out.println(StringUtils.removeEnd("www.baidu.com", ".com"));
+//移除后面相同的部分，不区分大小写
+System.out.println(StringUtils.removeEndIgnoreCase("www.baidu.com", ".COM"));
+//移除所有相同的部分
+System.out.println(StringUtils.remove("www.baidu.com/baidu", "bai"));
+//移除结尾字符为"\n", "\r", 或者 "\r\n".
+System.out.println(StringUtils.chomp("abcrabc\r"));
+//去掉末尾最后一个字符.如果是"\n", "\r", 或者 "\r\n"也去除
+System.out.println(StringUtils.chop("wwe.baidu"));
+```
+
+**添加，增加**
+
+```java
+
+//复制参数一的字符串，参数二为复制的次数
+System.out.println(StringUtils.repeat("ba", 3));
+//复制参数一的字符串，参数三为复制的次数。参数二为复制字符串中间的连接字符串
+System.out.println(StringUtils.repeat("ab", "ou", 3));
+//如何字符串长度小于参数二的值，末尾加空格补全。(小于字符串长度不处理返回)
+System.out.println(StringUtils.rightPad("海川", 4));
+//字符串长度小于二参数，末尾用参数三补上，多于的截取(截取补上的字符串)
+System.out.println(StringUtils.rightPad("海川", 4, "河流啊"));
+//同上在前面补全空格
+System.out.println(StringUtils.leftPad("海川", 4));
+//字符串长度小于二参数，前面用参数三补上，多于的截取(截取补上的字符串)
+System.out.println(StringUtils.leftPad("海川", 4, "大家好"));
+//字符串长度小于二参数。在两侧用空格平均补全（测试后面补空格优先）
+System.out.println(StringUtils.center("海川", 3));
+//字符串长度小于二参数。在两侧用三参数的字符串平均补全（测试后面补空格优先）
+System.out.println(StringUtils.center("海川", 5, "流"));
+//只显示指定数量(二参数)的字符,后面以三个点补充(参数一截取+三个点=二参数)
+System.out.println(StringUtils.abbreviate("中华人民共和国", 5));
+//2头加点这个有点乱。本例结果: ...ijklmno
+System.out.println(StringUtils.abbreviate("abcdefghijklmno", 12, 10));
+//保留指定长度，最后一个字符前加点.本例结果: ab.f
+System.out.println(StringUtils.abbreviateMiddle("abcdef", ".", 4));
+```
+
+**替换**
+
+```java
+//替换指定的字符，只替换第一次出现的
+System.out.println(StringUtils.replaceOnce("www.baidu.com/baidu", "baidu", "hao123"));
+//替换所有出现过的字符
+System.out.println(StringUtils.replace("www.baidu.com/baidu", "baidu", "hao123"));
+//也是替换，最后一个参数表示替换几个
+System.out.println(StringUtils.replace("www.baidu.com/baidu", "baidu", "hao123", 1));
+//这个有意识，二三参数对应的数组，查找二参数数组一样的值，替换三参数对应数组的值。本例:baidu替换为taobao。com替换为net
+System.out.println(StringUtils.replaceEach("www.baidu.com/baidu", new String[]{"baidu", "com"}, new String[]{"taobao", "net"}));
+//同上，未发现不同
+System.out.println(StringUtils.replaceEachRepeatedly("www.baidu.com/baidu", new String[]{"baidu", "com"}, new String[]{"taobao", "net"}));
+//这个更好，不是数组对应，是字符串参数二和参数三对应替换.(二三参数不对应的话，自己看后果)
+System.out.println(StringUtils.replaceChars("www.baidu.com", "bdm", "qo"));
+//替换指定开始(参数三)和结束(参数四)中间的所有字符
+System.out.println(StringUtils.overlay("www.baidu.com", "hao123", 4, 9));
+```
+
+**转换,刷选**
+
+```java
+//转换第一个字符为大写.如何第一个字符是大写原始返回
+System.out.println(StringUtils.capitalize("Ddf"));
+//转换第一个字符为大写.如何第一个字符是大写原始返回
+System.out.println(StringUtils.uncapitalize("DTf"));
+//反向转换，大写变小写，小写变大写
+System.out.println(StringUtils.swapCase("I am Jiang, Hello"));
+//将字符串倒序排列
+System.out.println(StringUtils.reverse("中国人民"));
+//根据特定字符(二参数)分隔进行反转
+System.out.println(StringUtils.reverseDelimited("中:国:人民", ':'));
+```
