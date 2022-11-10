@@ -1,0 +1,1 @@
+const t={key:"v-23513774",path:"/utils/stringutils/",title:"",lang:"zh-CN",frontmatter:{description:"StringUtils \u5DE5\u5177\u7C7B"},excerpt:"",headers:[],filePathRelative:"utils/stringutils/README.md",git:{updatedTime:1668081674e3,contributors:[{name:"ysmc",email:"494786209@qq.com",commits:2}]}};export{t as data};
