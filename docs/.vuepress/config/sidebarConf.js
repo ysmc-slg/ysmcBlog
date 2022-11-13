@@ -166,7 +166,8 @@ module.exports = {
         "beanScope.md",
         "Aware.md",
         "AOP.md",
-        "spel.md"
+        "spel.md",
+        "transaction.md"
       ]
     }
   ],
