@@ -738,7 +738,7 @@ NEVER 表示以非事务方式运行，如果当前存在事务，则抛出异�
 Existing transaction found for transaction marked with propagation 'never'
 ```
 
-### 回滚桂枝
+### 回滚规则
 
 默认情况下，事务只有遇到运行期异常（RuntimeException 的子类）以及 Error 时才会回滚，在遇到检查型（Checked Exception）异常时不会回滚。 
 
