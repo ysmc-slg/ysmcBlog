@@ -1,6 +1,6 @@
 ---
 title: 存储引擎
-autoPrev: transaction
+autoPrev: logicStructure
 ---
 # 存储引擎
 

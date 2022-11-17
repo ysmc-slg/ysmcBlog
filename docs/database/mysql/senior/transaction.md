@@ -1,6 +1,6 @@
 ---
 title: MySQL 事务隔离级别
-autoPrev: README
+autoPrev: index
 ---
 
 # MYSQL 事务隔离级别
