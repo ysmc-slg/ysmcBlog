@@ -26,7 +26,9 @@ module.exports = {
       "sidebarDepth": 1,
       "children": [
         "README.md",
-        "transaction.md"
+        "transaction.md",
+        "engines.md",
+        "index.md"
       ]
     }
   ],
