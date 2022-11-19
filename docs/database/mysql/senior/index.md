@@ -1,6 +1,6 @@
 ---
 title: 索引的创建与设计原则
-autoPrev: engines
+autoPrev: indexDataStructure
 ---
 
 # 索引的创建与设计原则
