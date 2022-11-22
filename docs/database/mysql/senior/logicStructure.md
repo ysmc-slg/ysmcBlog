@@ -1,6 +1,6 @@
 ---
 title: 逻辑架构
-autoPrev: README
+autoPrev: role
 ---
 
 # 逻辑架构
