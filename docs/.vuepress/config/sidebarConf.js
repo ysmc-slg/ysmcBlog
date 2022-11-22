@@ -25,10 +25,11 @@ module.exports = {
       "collapsable": false,
       "sidebarDepth": 1,
       "children": [
-        "README.md",
+        "role.md",
+        "logicStructure",
         "engines.md",
+        "indexDataStructure",
         "index.md",
-        "logicStructure.md",
         "transaction.md",
       ]
     }

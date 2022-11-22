@@ -136,7 +136,8 @@ public class LogAspect {
 
 前置，后置通知很好理解，主要讲一下返回通知。
 
-返回通知：即`目标方法有返回值的时候才会触发`，<div style="color:red">该注解中的 `returning` 属性表示目标方法返回值的变量名，这个需要和下面`returning` 方法中的第二个参数一一对应，同时`returning`方法中参数的类型也要和目标方法的返回值类型一致</div>，否则拦截不到，如果想拦截所有(包括返回值为 void )，`returning` 方法中的参数返回值可以为 Object，此时返回值为 `void` 的返回的r是 `null`
+返回通知：即`目标方法有返回值的时候才会触发`，<div style="color:red">该注解中的 `returning` 属性表示目标方法返回值的变量名，这个需要和下面`returning` 方法中的第二个参数一一对应，同时`returning`方法中参数的类型也要和目标方法的返回值类型一致</div>，否则拦截不到，如果想拦截所有(包括返回值为 void )，`returning` 方法中的参数返回值可以为 Object，此时返回值为 `void` 的返回的r是 `null`。
+
 
 
 接下来是异常通知和环绕通知。
@@ -323,6 +324,8 @@ public class LogAspect2 {
 
 ```
 
+
+
 XML 配置 AOP
 
 定义通知/增强，只是单纯定义自己的行为即可，不在需要注解：
@@ -414,6 +417,156 @@ public class JavaMain {
 }
 ```
 
+### 通知方法的参数
+
+**1. JoinPoint**
+
+提供访问当前被通知方法的目标对象、代理对象、方法参数等数据，`任何通知方法的第一个参数都可以是 JoinPoint（环绕通知是ProceedingJoinPoint，JoinPoint子类）`，具体方法如下：
+
+::: tip
+
+String toString();                     //连接点所在位置的相关信息  
+
+String toShortString();                //连接点所在位置的简短相关信息
+
+String toLongString();                 //连接点所在位置的全部相关信息  
+
+Object getThis();                      //返回AOP代理对象  
+
+Object getTarget();                    //返回目标对象，就是注解所在的类的实例  
+
+Object[] getArgs();                    //返回被通知方法参数列表，也就是注解所在方法的参数  
+
+Signature getSignature();              //返回当前连接点签名，就是返回值+ 方法名，void top.zxqs.aop_demo.LogController.test2()  
+
+SourceLocation getSourceLocation();    //返回连接点方法所在类文件中的位置  
+
+String getKind();                      //连接点类型  
+
+StaticPart getStaticPart();            //返回连接点静态部分  
+
+:::
+
+最主要的是 `getTarget` 和 `getSignature`
+
+```java
+@Aspect
+@Component
+public class LogAspect {
+
+    @Pointcut("@annotation(Log)")
+    public void pointCut(){
+
+    }
+
+    @Before(value = "pointCut()")
+    public void doBefore(JoinPoint joinPoint) throws NoSuchMethodException {
+
+        System.out.println("joinPoint.toString() = " + joinPoint.toString());
+        System.out.println("joinPoint.toShortString() = " + joinPoint.toShortString());
+        System.out.println("joinPoint.toLongString() = " + joinPoint.toLongString());
+        System.out.println("joinPoint.getThis() = " + joinPoint.getThis().toString());
+        System.out.println("joinPoint.getTarget() = " + joinPoint.getTarget());
+        System.out.println("joinPoint.getArgs() = " + joinPoint.getArgs().toString());
+        System.out.println("joinPoint.getSignature() = " + joinPoint.getSignature());
+        System.out.println("joinPoint.getSourceLocation() = " + joinPoint.getSourceLocation());
+        System.out.println("joinPoint.getKind() = " + joinPoint.getKind());
+        System.out.println("joinPoint.getStaticPart() = " + joinPoint.getStaticPart());
+
+        System.out.println("---------------------------------------------------------------");
+
+        Signature signature = joinPoint.getSignature();
+        System.out.println("signature.getName() = " + signature.getName());
+        System.out.println("signature.toLongString() = " + signature.toLongString());
+        System.out.println("signature.getDeclaringTypeName() = " + signature.getDeclaringTypeName());
+        System.out.println("signature.getDeclaringType() = " + signature.getDeclaringType());
+        System.out.println("signature.toShortString() = " + signature.toShortString());
+        System.out.println("signature.getModifiers() = " + signature.getModifiers());
+
+        System.out.println("---------------------------------------------------------------");
+
+
+        // 获取方法上的注解 @Log(title = "测试2",businessType = "查询2")
+        MethodSignature signature1 = (MethodSignature) joinPoint.getSignature();
+        Method method = signature1.getMethod();
+        Log log = method.getAnnotation(Log.class);
+        // 获取注解的参数
+        String title = log.title();
+
+        System.out.println(title);
+
+        Object[] args = joinPoint.getArgs();
+
+        for(Object object: args){
+            System.out.println(object);
+        }
+
+
+    }
+}
+```
+
+测试代码：
+
+
+```java
+@RestController
+public class LogController {
+
+    @Log(title = "测试",businessType = "查询")
+    @RequestMapping("/test")
+    public void test(String username,int age){
+    }
+
+    @Log(title = "测试2",businessType = "查询2")
+    @RequestMapping("/test2")
+    public void test2(String username,int age){
+    }
+}
+```
+
+结果：
+
+```test
+joinPoint.toString() = execution(void top.zxqs.aop_demo.LogController.test(String,int))
+joinPoint.toShortString() = execution(LogController.test(..))
+joinPoint.toLongString() = execution(public void top.zxqs.aop_demo.LogController.test(java.lang.String,int))
+joinPoint.getThis() = top.zxqs.aop_demo.LogController@1bc6d990
+joinPoint.getTarget() = top.zxqs.aop_demo.LogController@1bc6d990
+joinPoint.getArgs() = [Ljava.lang.Object;@578ffc0e
+joinPoint.getSignature() = void top.zxqs.aop_demo.LogController.test(String,int)
+joinPoint.getSourceLocation() = org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint$SourceLocationImpl@5948088f
+joinPoint.getKind() = method-execution
+joinPoint.getStaticPart() = execution(void top.zxqs.aop_demo.LogController.test(String,int))
+---------------------------------------------------------------
+signature.getName() = test
+signature.toLongString() = public void top.zxqs.aop_demo.LogController.test(java.lang.String,int)
+signature.getDeclaringTypeName() = top.zxqs.aop_demo.LogController
+signature.getDeclaringType() = class top.zxqs.aop_demo.LogController
+signature.toShortString() = LogController.test(..)
+signature.getModifiers() = 1
+---------------------------------------------------------------
+测试
+zhangsan
+18
+```
+
+**2. ProceedingJoinPoint**
+
+用于环绕通知，使用proceed()方法来执行目标方法：
+
+::: tip
+
+ public Object proceed() throws Throwable;  
+ public Object proceed(Object[] args) throws Throwable;  
+
+:::
+
+### AOP 失效的场景
+
+1. 只能通过public修饰方法，不能用private等修饰
+2. 如果同一个类中，没有注解的方法调用有注解的方法，aop也会失效。因为 aop 是通过动态代理来实现的，所以要通过动态代理去调用aop方法。
+   首先要添加 `@EnableAspectJAutoProxy(exposeProxy = true)` 注解暴露该代理对象，然后使用 `AopContext.currentProxy()` 获取该类的代理对象
 
 
 
