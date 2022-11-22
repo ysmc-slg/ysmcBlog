@@ -26,10 +26,11 @@ module.exports = {
       "sidebarDepth": 1,
       "children": [
         "README.md",
-        "engines.md",
-        "index.md",
         "logicStructure.md",
-        "transaction.md",
+        "engines.md",
+        "indexDataStructure.md",
+        "index.md",
+        "transaction.md"
       ]
     }
   ],
