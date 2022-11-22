@@ -28,6 +28,7 @@ module.exports = {
         "role.md",
         "logicStructure",
         "engines.md",
+        "InnoDBRowFormat.md",
         "indexDataStructure",
         "index.md",
         "transaction.md",
