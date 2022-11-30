@@ -34,7 +34,12 @@ public class JavaMain {
 
 如果 `scope` 的值为 `prototype`，表示这个 `Bean` 在`Spring` 容器中不是单例，多次获取将拿到多个不同的实例。
 
+`singleton` 在容器创建是就已经将bean注入了，`prototype` 在`getbean` 是才会创建。
+
 除了 `singleton` 和 `prototype` 之外，还有两个取值，`request` 和 `session`。这两个取值在 `web` 环境下有效。
+
+`request`：一个请求对应一个 bean
+`session`：一个会话对应一个 bean
 
 这是在 `XML` 中的配置，我们也可以在 Java 中配置。 
 

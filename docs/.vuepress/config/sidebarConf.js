@@ -173,7 +173,8 @@ module.exports = {
         "Aware.md",
         "AOP.md",
         "spel.md",
-        "transaction.md"
+        "transaction.md",
+        "proxy.md",
       ]
     }
   ],
