@@ -1,6 +1,6 @@
 ---
 title: 索引的数据结构
-autoPrev: InnoDBRowFormat
+autoPrev: dataPage
 ---
 
 # 索引的数据结构

@@ -141,14 +141,9 @@ AND e.salary > t_dept_avg_sal.avg_sal
 
 ### EXISTS 与 NOT EXISTS
 
-* 关联子查询通常也会和 EXISTS操作符一起来使用，用来检查在子查询中是否存在满足条件的行。
-* 如果在子查询中不存在满足条件的行：
-  *  条件返回 false
-  *  继续在子查询中查找
-* 如果在子查询中存在满足条件的行：
-  * 不在子查询中继续查找
-  * 条件返回 true
-* NOT EXISTS关键字表示如果不存在某种条件，则返回TRUE，否则返回FALSE。
+`EXISTS` 用来判断查询结果是否存在，当存在查询劫夺时返回 true，否则返回 false。
+
+`NOT EXISTS` 关键字表示如果不存在某种条件，则返回TRUE，否则返回FALSE。
 
 ```sql
 -- 查询公司管理者的employee_id，last_name，job_id，department_id信息
@@ -170,3 +165,11 @@ WHERE NOT EXISTS (
 		);
 
 ```
+
+带 `exists` 的查询是先执行外层查询，然后再执行内存查询，外层查询的值决定了内层查询的结果，内层查询的执行次数由外层查询的结果数决定（`小表驱动大表`）。
+
+上述查询语句的处理过程为：
+
+1. 先查询外层表 `employees` 的第一行，根据 `employee_id` 值来处理内层查询
+2. 用外层的值来执行内层查询，如果符合条件的数据，则 `exists` 返回true，否则返回 false。然后返回符合 `employee_id` 的数据。
+3. 继续遍历外层查询，知道处理完所有行
