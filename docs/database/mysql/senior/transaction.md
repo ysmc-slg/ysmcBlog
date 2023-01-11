@@ -1,6 +1,6 @@
 ---
 title: MySQL 事务隔离级别
-autoPrev: index
+autoPrev: singleTableAccess
 ---
 
 # MYSQL 事务隔离级别
