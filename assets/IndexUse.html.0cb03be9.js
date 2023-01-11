@@ -1,1 +1,0 @@
-const e={key:"v-aeb988a6",path:"/database/mysql/senior/IndexUse.html",title:"\u7D22\u5F15\u7684\u4F7F\u7528",lang:"zh-CN",frontmatter:{title:"\u7D22\u5F15\u7684\u4F7F\u7528",autoPrev:"index"},excerpt:"",headers:[],filePathRelative:"database/mysql/senior/IndexUse.md",git:{updatedTime:1673423331e3,contributors:[{name:"ysmc",email:"494786209@qq.com",commits:4}]}};export{e as data};
