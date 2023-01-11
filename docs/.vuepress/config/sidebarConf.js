@@ -30,8 +30,11 @@ module.exports = {
         "engines.md",
         "InnoDBRowFormat.md",
         "dataPage.md",
-        "indexDataStructure",
+        "indexDataStructure", 
         "index.md",
+        "IndexUse.md",
+        "dataDirectory.md",
+        "singleTableAccess.md",
         "transaction.md",
       ]
     }
