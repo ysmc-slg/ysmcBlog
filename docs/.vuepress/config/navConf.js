@@ -55,6 +55,10 @@ module.exports = [
       { 
         text: '异步管理器', 
         link: '/solution/asyncManager/' 
+      },
+      { 
+        text: '导入多出和上传下载', 
+        link: '/solution/excelAndUpload/' 
       }
     ],
     

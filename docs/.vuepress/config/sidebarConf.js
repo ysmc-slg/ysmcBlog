@@ -322,6 +322,17 @@ module.exports = {
       ]
     }
   ],
+  "/solution/excelAndUpload/": [
+    {
+      "text": "excelAndUpload",
+      "title": "excelAndUpload",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
+      ]
+    }
+  ],
   // "/springsecurity/": [
   //   {
   //     "text": "springsecurity",
