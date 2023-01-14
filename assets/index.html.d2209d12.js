@@ -1,0 +1,1 @@
+const t={key:"v-41b13dda",path:"/solution/validator/",title:"",lang:"zh-CN",frontmatter:{description:"\u4F7F\u7528 Validator \u505A\u8868\u5355\u6821\u9A8C"},excerpt:"",headers:[],filePathRelative:"solution/validator/README.md",git:{updatedTime:1673710673e3,contributors:[{name:"ysmc",email:"494786209@qq.com",commits:1}]}};export{t as data};
