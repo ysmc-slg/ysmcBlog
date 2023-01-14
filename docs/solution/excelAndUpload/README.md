@@ -371,6 +371,92 @@ public class ResourcesConfig implements WebMvcConfigurer {
 拦截 `/profile` 路径，映射到本地目录，最后的 `/` 必须加，所有系统都这样写。
 
 
+## 前端
+
+```js
+// 通用下载方法
+download(url, params, filename) {
+        axios.post(url, params, {
+        // 对参数进行处理，将参数转成乱码
+        transformRequest: [(params) => { return this.tansParams(params) }],
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        responseType: 'blob'
+    }).then((res) => {
+            if(res.status === 200){
+                const content = res.data;
+                console.log(content)
+                const blob = new Blob([content]);
+                if('download' in document.createElement('a')){
+                    //非IE下载
+                    const a = document.createElement('a');
+                    a.download = filename;
+                    a.style.display = 'none';
+                    a.href = window.URL.createObjectURL(blob);
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(a.href);
+                    document.body.removeChild(a);
+                }else{
+                    //IE10+下载
+                    if(typeof window.navigator.msSaveBlob !== 'undefined'){
+                        window.navigator.msSaveBlob(blob, _this.selected);
+                    }else{
+                        let URL = window.URL || window.webkitURL;
+                        let downloadUrl = URL.createObjectURL(blob);
+                        window.location = downloadUrl;
+                    }
+                }
+            }
+        // downloadLoadingInstance.close();
+    }).catch((r) => {
+        console.error(r)
+        // ElMessage.error('下载文件出现错误，请联系管理员！')
+        // downloadLoadingInstance.close();
+    })
+},
+
+tansParams(params) {
+    let result = ''
+    for (const propName of Object.keys(params)) {
+        const value = params[propName];
+        var part = encodeURIComponent(propName) + "=";
+        if (value !== null && value !== "" && typeof (value) !== "undefined") {
+            if (typeof value === 'object') {
+                for (const key of Object.keys(value)) {
+                    if (value[key] !== null && value[key] !== "" && typeof (value[key]) !== 'undefined') {
+                        let params = propName + '[' + key + ']';
+                        var subPart = encodeURIComponent(params) + "=";
+                        result += subPart + encodeURIComponent(value[key]) + "&";
+                    }
+                }
+            } else {
+                result += part + encodeURIComponent(value) + "&";
+            }
+        }
+    }
+    return result
+}
+```
+
+**注意：**
+
+`Content-Type` 为 `application/x-www-form-urlencoded` 则表示传递参数的格式为 `&key=value&key2=value2`，一旦使用了 `application/x-www-form-urlencoded` 就必须使用 `encodeURIComponent()` 对参数进行编码，这就是`tansParams`函数做的事。
+
+为什么要使用encodeuricomponent？
+
+1. encodeuricomponent
+
+   可把字符串作为 URI 组件进行编码。
+
+   该方法不会对 ASCII 字母和数字进行编码，也不会对这些 ASCII 标点符号进行编码： - _ . ! ~ * ’ ( ) 。
+
+   其他字符（比如 ：;/?&=+$,# 这些用于分隔 URI 组件的标点符号），都是由一个或多个十六进制的转义序列替换的。
+
+2. encodeuricomponent什么时候使用：
+   
+   用于url作为参数传递的场景中使用url当作参数传递的时候，当参数出现空格这样的特殊字段，后台只可以读取到空格前的内容，后面内容丢失，造成数据读取失败，但是如果用encodeURIComponent()，则这些特殊字符进行转义，这样后台就可以成功读取了，所以encodeURIComponent()用于url作为参数传递的场景中使用。
+
+
 
 
 
