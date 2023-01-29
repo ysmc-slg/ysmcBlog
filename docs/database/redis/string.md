@@ -34,4 +34,29 @@ set <key> <value>
 append <key> <value>
 ```
 
+使用 append 命令是，如果 key 已经存在，则直接在对应的 value 后追加值，否则就创建新的键值对。
+
+![image-20230129164414629](https://img.zxqs.top/20230129164423.png)
+
+### decr
+
+```text
+decr <key>
+```
+
+可以实现对 value 的减1操作（前提 value 是一个数字），如果 value 不是数字，会报错，如果 value 不存在，则会给一个默认的值 0，在默认值的基础上减一
+
+![image-20230129164912496](https://img.zxqs.top/20230129164913.png)
+
+### decrby
+
+```text
+decrby <key> <num>
+```
+和 decr 类似，但是可以自己设置步长，该命令第二个参数就是步长。就是直接减去多少
+
+![image-20230129165223088](https://img.zxqs.top/20230129165224.png)
+
+
+
 
