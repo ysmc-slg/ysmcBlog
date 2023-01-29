@@ -57,6 +57,95 @@ decrby <key> <num>
 
 ![image-20230129165223088](https://img.zxqs.top/20230129165224.png)
 
+### getrange
+
+```text
+getrange <key> <start> <end>
+```
+
+getrange 可以用来返回 key 对应的 value 的子串，这有点类似于Java 里边的 substring。这个命令第二个和第三个参数就是截取的起始和终止位置，其中，-1 表示最后一个字符串，-2 表示倒数第二个字符串，以此类推...
+
+![image-20230129224625483](https://img.zxqs.top/image-20230129224625483.png)
+
+### getset
+
+```text
+getset <key> <value>
+```
+
+![image-20230129224746793](https://img.zxqs.top/image-20230129224746793.png)
+
+获取并更新某一个 key。
+
+### incr、incrby
+
+和 `decr、decrby` 相反，自增
+
+### incrbyfloat
+
+和 incrby 类似，但是自增的步长可以设置为浮点数。
+
+### mget 和 mset
+
+```text
+mset <key> <value> <key> <value>...
+mget <key> <key> <key>...
+```
+
+![image-20230129225217362](https://img.zxqs.top/image-20230129225217362.png)
+
+批量获取和批量存储。
+
+### setex
+
+```text
+setex <key> <second> <value>
+```
+
+在给 key 设置 value 的同时，还设置过期时间。
+
+### ttl 
+
+```text
+ttl <key>
+```
+
+查看 key 的有限期限，-1为未设置过期时间，-2为过期。
+
+![image-20230129225947052](https://img.zxqs.top/image-20230129225947052.png)
+
+### psetex
+
+```text
+setex <key> <millisecond> <value>
+```
+
+和 setex 类似，只不过这里的时间单位是毫秒。
+
+### setnx
+
+```text
+setnx <key> <value>
+```
+
+默认情况下， set 命令会覆盖已经存在的 key，setnx 则不会。
+
+
+### msetnx
+
+批量设置
+
+### setrange
+
+```text
+setrange <key> <index> <value>
+```
+
+对指定位置的数据进行替换，如果 `index` 超过字符长度，中间使用 0 进行填充，案例如下：
+
+![image-20230129231208101](https://img.zxqs.top/image-20230129231208101.png)
+
+
 
 
 
