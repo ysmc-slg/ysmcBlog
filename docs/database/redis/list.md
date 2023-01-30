@@ -27,40 +27,87 @@ List的数据结构为，快速链表quickList。
 Redis将链表和ziplist结合起来组成了quicklist。也就是将多个ziplist使用双向指针串起来使用。这样既满足了快速的插入删除性能，又不会出现太大的空间冗余。
 
 ## 常用命令
-```redis
-从 左边/右边 插入一个或多个值
-lpush/rpush <key> <value1> <value2> <value3>
-```
-![20210526143530.png](/blogImg/20210526143530.png)
 
-```redis
-// 从左边/右边吐出一个值。值在键在，值光键亡。
-lpop/rpop <key>     
-    
-// 从<key1>列表右边吐出一个值，插到<key2>列表左边。
-rpoplpush  <key1><key2> 
-```
-![20210526144109.png](/blogImg/20210526144109.png)
+**lpush**
 
-```redis
-// 按照索引下标获得元素(从左到右)
-// lrange mylist 0 -1   0左边第一个，-1右边第一个，（0 -1表示获取所有）
-lrange <key> <start> <stop>
-    
-// 获得列表长度
-index <key>    
+```text
+lpush <key> <value> [value...]
 ```
-```redis
-// 在<value>的 前面/后面 插入<newvalue>插入值
-linsert key before/after <value> <newvalue>
-    
-// 从左边删除n个value(从左到右)
-lrem <key> <n> <value>
-```
-![20210526145446.png](/blogImg/20210526145446.png)
+将所有指定的值 `从左到右` 插入到存于 key 的列表的头部。如果 key 不存在，那么在进行 push 操作前会创建一个空列表。如果 key 对应的值不是一个 list 的话，那么会返回一个错误。
 
-```redis
-// 将列表key，下标为index的值替换成value
+**lrange**
+
+```text
+lrange <key> <start> <end>
+```
+返回列表指定区间内的元素。-1 表示全部元素。
+
+![image-20230130125756386](https://img.zxqs.top/20230130125757.png)
+
+**rpush**
+
+```text
+rpush <key> <value> [value...]
+```
+
+`从右向左` 将数据插入，和 `lpush` 相反。
+
+![image-20230130130406927](https://img.zxqs.top/20230130130408.png)
+
+**rpop**
+
+```text
+rpop <key>
+```
+移除并返回列表的尾元素。
+
+**lpop**
+
+```text
+lpop <key>
+```
+移除并返回列表的头元素。
+
+![image-20230130130834206](https://img.zxqs.top/20230130130835.png)
+
+**lset**
+
+```text
 lset <key> <index> <value>
 ```
-![20210526145728.png](/blogImg/20210526145728.png)
+替换下标 index 的值为 value。
+
+![image-20230130143555114](https://img.zxqs.top/20230130143556.png)
+
+**lindex**
+
+```text
+lindex <key> <index>
+```
+
+返回列表中，下标为 index 的元素。
+
+![image-20230130131203462](https://img.zxqs.top/20230130131204.png)
+
+**ltrim**
+
+```text
+ltrim <key> <start> <end>
+```
+
+ltrim 可以对一个列表进行修剪。其实就是对列表进行截取，返回在范围中的数据
+
+![image-20230130142354220](https://img.zxqs.top/20230130142355.png)
+
+**linsert**
+
+```text
+linsert <key> <before>/<after> <value> <newvalue>
+```
+
+在指定的值，前面或后面插入一个值。
+
+![image-20230130143203251](https://img.zxqs.top/20230130143204.png)
+
+
+

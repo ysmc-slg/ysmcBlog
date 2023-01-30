@@ -67,6 +67,17 @@ getrange 可以用来返回 key 对应的 value 的子串，这有点类似于Ja
 
 ![image-20230129224625483](https://img.zxqs.top/image-20230129224625483.png)
 
+
+### setrange
+
+```text
+setrange <key> <index> <value>
+```
+
+对指定位置的数据进行替换，如果 `index` 超过字符长度，中间使用 0 进行填充，案例如下：
+
+![image-20230129231208101](https://img.zxqs.top/image-20230129231208101.png)
+
 ### getset
 
 ```text
@@ -135,15 +146,7 @@ setnx <key> <value>
 
 批量设置
 
-### setrange
 
-```text
-setrange <key> <index> <value>
-```
-
-对指定位置的数据进行替换，如果 `index` 超过字符长度，中间使用 0 进行填充，案例如下：
-
-![image-20230129231208101](https://img.zxqs.top/image-20230129231208101.png)
 
 
 
