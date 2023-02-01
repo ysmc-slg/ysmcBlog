@@ -60,6 +60,7 @@ module.exports = {
         "masterSlave.md",
         "sentinel.md",
         "springbootredis.md",
+        "distributedLock.md"
       ]
     }
   ],
