@@ -109,5 +109,12 @@ linsert <key> <before>/<after> <value> <newvalue>
 
 ![image-20230130143203251](https://img.zxqs.top/20230130143204.png)
 
+**blpop/brpop**
+
+```text
+// 移出并获取列表的第一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。
+blpop <key> <timeout>
+```
+
 
 
