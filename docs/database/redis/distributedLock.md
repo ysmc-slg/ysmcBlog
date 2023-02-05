@@ -3,6 +3,8 @@ description: redis实现分布式锁
 autoPrev: springbootredis
 ---
 
+# redis实现分布式锁
+
 问题场景：
 
 ::: tip
