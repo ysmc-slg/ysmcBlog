@@ -75,12 +75,228 @@ loadmodule /root/redis-5.0.7/RedisBloom/redisbloom.so
 
 最下面这一句，配置完成后，以后只需要 redis-server redis.conf 来启动 Redis 即可。
 
-## 基本用法
+## 基本命令
 
 主要是两类命令，添加和判断是否存在。
 
-* bf.add\bf.madd 添加和批量添加
-* bf.exists\bf.mexists 判断是否存在和批量判断
+* BF.ADD	      添加一个元素到布隆过滤器
+* BF.EXISTS	    判断元素是否在布隆过滤器
+* BF.INFO	      返回有关布隆过滤器的信息
+* BF.INSERT	    将多个元素添加到过滤器。如果键不存在，它会创建一个新的过滤器。
+* BF.MADD	      添加多个元素到布隆过滤器
+* BF.MEXISTS	  判断多个元素是否在布隆过滤器
+* BF.RESERVE	  创建一个布隆过滤器。设置误判率和容量
+* BF.SCANDUMP	  开始增量保存 Bloom 过滤器。
+* BF.LOADCHUNK	恢复之前使用BF.SCANDUMP 保存的布隆过滤器。
+
+
+## 在项目中使用
+
+在项目中使用（springboot项目）一般有两种方法，使用 `Redisson` 和使用 `lua` 脚本，我们分别来看一下：
+
+**使用redisson**
+
+首先引入依赖：
+
+```pom
+<dependency>
+    <groupId>org.redisson</groupId>
+    <artifactId>redisson</artifactId>
+    <version>3.8.2</version>
+</dependency>
+```
+创建配置文件
+
+```java
+@Configuration
+public class BloomFilterConfig {
+    @Bean
+    public Config redissionConfig() {
+        Config config = new Config();
+        SingleServerConfig singleServerConfig = config.useSingleServer();
+        singleServerConfig.setAddress("redis://192.168.96.128:6379");
+        singleServerConfig.setPassword("123456");
+
+        return config;
+    }
+
+    @Bean
+    public RedissonClient redissonClient() {
+        return Redisson.create(redissionConfig());
+    }
+}
+```
+
+创建 Redisson 工具类
+
+```java
+@Component
+public class RedisUtil {
+	@Autowired
+	RedissonClient redissonClient;
+
+   /**
+	 * 布隆过滤器初始化
+	 * 
+	 * @param bloomFilterName 过滤器名称
+	 */
+	public void bloomFilterInit(String bloomFilterName) {
+		RBloomFilter<String> bloomFilter = redissonClient.getBloomFilter(bloomFilterName);
+    // 初始化，设置数组的长度和期望的误判率，误判率越低，布隆过滤器计算时间越长， 误差率，例如：0.001,表示误差率为0.1%
+		bloomFilter.tryInit(100000L, 0.000001);
+	}
+	
+	/**
+	 * 布隆过滤器添加数据
+	 * 
+	 * @param bloomFilterName 过滤器名称
+	 * @param value           要添加的值
+	 */
+	public void bloomFilterAdd(String bloomFilterName, Object value) {
+		RBloomFilter<Object> bloomFilter = redissonClient.getBloomFilter(bloomFilterName);
+		bloomFilter.add(value);
+	}
+	
+	/**
+	 * 布隆过滤器数据统计
+	 * 
+	 * @param bloomFilterName
+	 * @param value
+	 */
+	public boolean bloomFilterContains(String bloomFilterName, Object value) {
+		RBloomFilter<Object> bloomFilter = redissonClient.getBloomFilter(bloomFilterName);
+		return bloomFilter.contains(value);
+	}
+}
+```
+
+测试：
+
+```java
+@RestController
+public class BloomFilterTest {
+  @Autowired
+  RedisUtil redisUtil;
+
+  @GetMapping("/filterTest")
+  public void add() {
+      redisUtil.bloomFilterInit("k1");
+      redisUtil.bloomFilterAdd("k1","123");
+
+  }
+
+  @GetMapping("/filterTest2")
+  public Boolean mightContain(String params) {
+
+      return redisUtil.bloomFilterContains("k1", params);
+  }
+}
+```
+
+**使用lua脚本**
+
+这里我将 `lua脚本` 写到文件中，你也可以写在代码中。
+
+在 `resources` 目录下，创建redis目录，并新建两个文件，分别为 `bloomFilterAdd.lua`、`bloomFilterExists.lua` 内容如下：
+
+`bloomFilterAdd.lua`
+
+```text
+return redis.call("bf.add",KEYS[1],ARGV[1])
+```
+
+`bloomFilterExists.lua`
+
+```text
+return redis.call("bf.exists",KEYS[1])
+```
+
+创建配置文件，读取 lua 脚本的信息
+
+```java
+@Configuration
+public class BloomFilterConfig {
+  /**
+    * expectedInsertions：期望添加的数据个数,这个值的设置相当重要，如果设置的过小很容易导致饱和而导致误报率急剧上升，如果设置的过大，也会对内存造成浪费，所以要根据实际情况来定
+    * fpp：期望的误判率，期望的误判率越低，布隆过滤器计算时间越长， 误差率，例如：0.001,表示误差率为0.1%
+    *
+    * @return 返回true，表示可能存在，返回false一定不存在
+    */
+  @Bean
+  public static BloomFilter<String> bloomFilter() {
+      BloomFilter<String> filter = BloomFilter.create(Funnels.stringFunnel(Charset.forName("utf-8")), 1000, 0.00001);
+      return filter;
+  }
+
+  @Bean
+  public DefaultRedisScript<Long> addRedisScript() {
+      DefaultRedisScript<Long> defaultRedisScript = new DefaultRedisScript<>();
+      defaultRedisScript.setResultType(Long.class);
+      defaultRedisScript.setScriptSource(new ResourceScriptSource(new
+              ClassPathResource("redis/bloomFilterAdd.lua")));
+      return defaultRedisScript;
+  }
+
+  @Bean
+  public DefaultRedisScript<Boolean> existsRedisScript() {
+      DefaultRedisScript<Boolean> defaultRedisScript = new DefaultRedisScript<>();
+      defaultRedisScript.setResultType(Boolean.class);
+      defaultRedisScript.setScriptSource(new ResourceScriptSource(new
+              ClassPathResource("redis/bloomFilterExists.lua")));
+      return defaultRedisScript;
+  }
+
+}
+
+```
+
+测试：
+
+```java
+@RestController
+public class BloomFilterTest {
+
+  @Autowired
+  RedisTemplate redisTemplate;
+  @Autowired
+  @Qualifier("addRedisScript")
+  DefaultRedisScript addRedisScript;
+
+  @Autowired
+  @Qualifier("existsRedisScript")
+  DefaultRedisScript existsRedisScript;
+
+  @Autowired
+  RedisUtil redisUtil;
+
+  @GetMapping("/filterTest")
+  public void add() {
+
+      /**
+        * 参数1：执行的lua脚本信息
+        * 参数2：key，可以有多个
+        * 参数3：其他参数，是一个可变参数
+        */
+      Object k1 = redisTemplate.execute(addRedisScript, Arrays.asList("k1"), "123");
+
+      System.out.println(k1);
+  }
+
+  @GetMapping("/filterTest2")
+  public boolean mightContain(String param) {
+
+      return (boolean) redisTemplate.execute(existsRedisScript, Arrays.asList("k1"), param);
+  }
+
+}
+```
+
+## 应用场景
+
+* 网页爬虫url去重
+* 垃圾邮件过滤
+* 缓存穿透
+
 
 
 
