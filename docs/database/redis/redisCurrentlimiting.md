@@ -118,7 +118,7 @@ loadmodule /root/redis-5.0.7/redis-cell/libredis_cell.so
  CL.THROTTLE  ysmc  10  6 60 1
                ▲     ▲  ▲  ▲ ▲
                |     |  |  | └───── apply 1 token (default if omitted) (本次申请一个token)
-               |     |  └──┴─────── 5 tokens / 60 seconds  (60秒添加6个token到令牌桶中)
+               |     |  └──┴─────── 6 tokens / 60 seconds  (60秒添加6个token到令牌桶中)
                |     └───────────── 10 max_burst    (最大的突发请求，不是令牌桶的最大容量)
                └─────────────────── key "ysmc" (限流key)
 ```
@@ -126,7 +126,7 @@ loadmodule /root/redis-5.0.7/redis-cell/libredis_cell.so
 输出参数值含义
 
 ```text
-127.0.0.1:6379> cl.throttle ysmc 10 5 60 1
+127.0.0.1:6379> cl.throttle ysmc 10 6 60 1
 1) (integer) 0                    # 当前请求是否被允许，0表示允许，1表示不允许
 2) (integer) 11                    # 令牌桶的最大容量，令牌桶中令牌数的最大值(max_burst + 1)
 3) (integer) 10                   # 令牌桶中当前的令牌数
