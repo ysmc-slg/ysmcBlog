@@ -144,6 +144,168 @@ BITFIELD name overflow fail incrby u2 6 1
 致命错误：jemalloc/jemalloc.h：没有那个文件或目录
 
 
+## springboot 使用
+
+```java
+// 添加 bit
+Boolean aBoolean = connection.setBit(key.getBytes(), offset, value);
+
+// 根据key获取值，返回值是一个 字符串
+String key1 = stringRedisTemplate.opsForValue().get("key");
+
+// 获取所有1的个数
+long count = (long)redisTemplate.execute((RedisCallback<Long>) connection -> connection.bitCount(key.getBytes()));
+
+// 从 0 开始，截取 4 个无符号位，返回值十进制数
+List<Long> list = redisTemplate.opsForValue().bitField(key, BitFieldSubCommands.create().get(BitFieldSubCommands.BitFieldType.unsigned(4)).valueAt(0));
+```
+
+下面我们通过一个 `签到` 案例来具体了解一下：
+
+代码如下：
+
+```java
+@RestController
+@RequestMapping("/sign")
+public class SignController {
+
+    DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("yyyyMM");
+
+    @Autowired
+    RedisTemplate redisTemplate;
+
+    // key的格式：sign_用户ID_月份
+    public String getKey(){
+        long userId = 1;
+        LocalDate now = LocalDate.now();
+        // 月份
+        String month = now.format(monthFormatter);
+
+        String key = "sign" + "_" + userId + "_" + month;
+
+        return key;
+    }
+
+    /**
+     * 签到，每一天占一个bit位，为了方便测试，day从前端传递
+     * @param day
+     * @return
+     */
+    @PostMapping
+    public String sign(int day,boolean isSign){
+//        LocalDateTime now = LocalDateTime.now();
+//        int day = now.getDayOfMonth() - 1;
+        // setBit返回原始值,返回true表示已签过
+        Boolean aBoolean = redisTemplate.opsForValue().setBit(getKey(), day, isSign);
+        if(aBoolean){
+            return "请勿重复签到";
+        }
+        return "签到成功";
+    }
+
+    /**
+     * 当月总签到次数
+     * @return
+     */
+    @GetMapping("/monthTotalCount")
+    public long monthTotalCount(){
+        String key = getKey();
+        long count = (long) redisTemplate.execute((RedisCallback<Long>) connection -> connection.bitCount(key.getBytes()));
+        return count;
+    }
+
+    /**
+     * 本月连续签到的天数
+     * @return
+     */
+    @GetMapping("/continuousDays")
+    public int continuousDays(){
+        String key = getKey();
+        LocalDateTime dateTime = LocalDateTime.now();
+        int day = dateTime.getDayOfMonth();
+        int signCount = 0;
+        long mask = 0b1;
+        // 获取本月第一天到今天的数据
+        List<Long> signList = redisTemplate.opsForValue().bitField(key, BitFieldSubCommands.create().get(BitFieldSubCommands.BitFieldType.unsigned(day)).valueAt(0));
+
+        if (signList != null && signList.size() > 0) {
+            long sign = signList.get(0) == null ? 0 : signList.get(0);
+            for (int i = 0; i < day; i++) {
+                //判断低位为0表示没有签到
+                if ((sign & mask) == 0) {
+                    //第一次遍历时，如果当天没有签到，结果也是0，但是这天我们不需要计算
+                    if (i > 0) break;
+                } else {
+                    signCount++;
+                }
+                //右移1位
+                sign >>= 1;
+            }
+        }
+
+        return signCount;
+    }
+
+    /**
+     当月签到日历
+    */
+    @GetMapping("currentMonthSign")
+    public Result currentMonthSign() {
+        String key = getKey();
+        Map<String, Long> signMap = new TreeMap<>();
+        LocalDate localDate = LocalDate.now();
+        long mask = 0b1;
+        //用bitfield命令取出第一天到当月最后一天的数据
+        List<Long> signList = (List<Long>) redisTemplate.execute(new RedisCallback<List<Long>>() {
+            @Override
+            public List<Long> doInRedis(RedisConnection connection) throws DataAccessException {
+                return connection.bitField(key.getBytes(), BitFieldSubCommands.create().get(BitFieldSubCommands.BitFieldType.unsigned(localDate.lengthOfMonth())).valueAt(0));
+            }
+        });
+        if (CollectionUtil.isNotEmpty(signList)) {
+            long sign = signList.get(0) == null ? 0 : signList.get(0);
+            // 获取当月有几天，然后遍历
+            for (int i = localDate.lengthOfMonth(); i > 0; i--) {
+                //从最后一天往前算，withDayOfMonth方法返回一个LocalDate，年月是当月，日是指定的参数
+                LocalDate d = localDate.withDayOfMonth(i);
+                //放入时间和最后一位签到记录
+                signMap.put(dateFormatter.format(d), sign & mask);
+                //右移1位
+                sign >>= 1;
+            }
+        }
+        return resultOk(signMap);
+    }
+}
+```
+
+签到方法中，为了方便测试，`day` 和 `是否签到` 都是前端传递的，项目中不要这样做。
+
+这里着重说一下 `本月连续签到的天数`，首先通过 `bitField` 获取本月从开始到当前时间的数据，返回值是一个集合，集合中只有一个值，就是我们存入的数值，只不过转成了 `十进制`。
+
+然后将返回的结果与 `1` 进行 `位与（&）`操作，& 两边都是数字的话，要先把运算符两侧的数转化为二进制数再进行运算。
+
+为什么与 1 进行运算呢？
+
+假如 `sign` 的值是 `65310` 做位运算转为二进制 `1111111100011110`，1的二进制是`1（高位补0）`。
+
+`i=0` 时 `sign & mask` 的值是0，这是当天没有签到的情况。
+
+然后 `sign` 右移一位变成 `0111111110001111`，与 `1` 做位运算，结果是 `0000000000000001`，不等于0，然后 `signCount+1`，`sign` 右移一位变成 `0011111111000111`
+
+以此类推直到 `sign` 最高位是0时，位运算结果为0，此时连续签到中断，结束遍历。
+
+
+`当月签到日历`和上面一样就不再多说。
+
+
+
+
+
+
+
+
+
 
 
 

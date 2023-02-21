@@ -1,6 +1,6 @@
 ---
 description: rediscluster
-autoPrev: geoHash
+autoPrev: Pipeline
 ---
 
 # Redis 集群
