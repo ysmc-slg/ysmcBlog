@@ -1,6 +1,6 @@
 ---
 description: rabbitmq高级之消息应答
-autoPrev: outtime 
+autoPrev: delayedQueue 
 ---
 
 # rabbitmq高级之消息应答
