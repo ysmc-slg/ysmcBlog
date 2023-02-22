@@ -1,6 +1,6 @@
 ---
 description: rabbitmq高级之消息应答
-autoPrev: pattern
+autoPrev: outtime 
 ---
 
 # rabbitmq高级之消息应答

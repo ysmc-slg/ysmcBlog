@@ -5,7 +5,7 @@ autoPrev: persistence
 
 # rabbitmq高级之消息分发
 
-## 消息顺序性
+## 消息顺序性 
 
 RabbitMq没有属性设置消息的顺序性，所以在没有前提的情况下说RabbitMq消息的消费具有顺序性是错误的，理想情况下，没有重复消费前提下，生产者发送 msg1、msg2、msg3，那么消费者消费顺序也是msg1、msg2、msg3。
 
