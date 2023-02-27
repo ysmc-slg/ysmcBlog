@@ -28,7 +28,8 @@ module.exports = [
     children: [
       { text: 'java基础', link: '/java/basics/' },
       { text: 'Java8新特性', link: '/java/jdk8/' },
-      { text: 'java反射', link: '/java/reflection/' }
+      { text: 'java反射', link: '/java/reflection/' },
+      { text: '序列化', link: '/java/json/' }
     ],
     
   },
