@@ -267,11 +267,17 @@ COMMIT;
 比方说我们的表 hero 现在只包含一条记录：
 
 mysql> SELECT * FROM hero;
+
 +--------+--------+---------+
+
 | number | name | country |
+
 +--------+--------+---------+
+
 | 1 | 刘备 | 蜀 |
+
 +--------+--------+---------+
+
 1 row in set (0.07 sec)
 
 假设插入该记录的 `事务id` 为 80，那么此刻该条记录的示意图如下所示：
@@ -308,11 +314,17 @@ mysql> SELECT * FROM hero;
 在 MySQL 中， `READ COMMITTED` 和 `REPEATABLE READ` 隔离级别的的一个非常大的区别就是`它们生成ReadView的时机不同`。我们还是以表 hero 为例来，假设现在表 hero 中只有一条由 `事务id` 为 80 的事务插入的一条记录：
 
 mysql> SELECT * FROM hero;
+
 +--------+--------+---------+
+
 | number | name | country |
+
 +--------+--------+---------+
+
 | 1 | 刘备 | 蜀 |
+
 +--------+--------+---------+
+
 1 row in set (0.07 sec)
 
 接下来看一下 READ COMMITTED（读已提交） 和 REPEATABLE READ（可重复读）所谓的 `生成 ReadView 的时机不同`到底不同在那里。
