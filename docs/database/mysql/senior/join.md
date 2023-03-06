@@ -1,5 +1,5 @@
 ---
-title: 单表访问方法
+title: 连接的原理
 autoPrev: singleTableAccess
 ---
 
@@ -7,3 +7,4 @@ autoPrev: singleTableAccess
 
 ## 连接的过程
 
+123

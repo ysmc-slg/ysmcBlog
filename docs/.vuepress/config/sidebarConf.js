@@ -35,6 +35,7 @@ module.exports = {
         "IndexUse.md",
         "dataDirectory.md",
         "singleTableAccess.md",
+        "join.md",
         "transaction.md",
       ]
     }
