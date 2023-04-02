@@ -376,6 +376,17 @@ module.exports = {
       ]
     }
   ],
+  "/git/": [
+    {
+      "text": "git",
+      "title": "git",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
+      ]
+    }
+  ],
   "/utils/stringutils": [
     {
       "text": "springsecurity2",

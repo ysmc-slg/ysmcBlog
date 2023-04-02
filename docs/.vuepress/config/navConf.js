@@ -102,6 +102,10 @@ module.exports = [
   },
 
   {
+    text: 'Git',link: '/git/'
+  },
+
+  {
     text: '常用文档',
     children: [
       { text: 'elementUI', link: 'https://element.eleme.cn/#/zh-CN/component/table', icon: ':tada:'},
