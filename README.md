@@ -7,7 +7,7 @@ https://app.travis-ci.com/dashboard
 
 只需要git提交代码就会自动发版，如果报错需要重新设置token
 
-![123](https://img.zxqs.top/image-20240803182955662.png)
+![image-20240803190553227](https://img.zxqs.top/image-20240803190553227.png)
 
 ![image-20240803185622947](https://img.zxqs.top/image-20240803185622947.png)
 
