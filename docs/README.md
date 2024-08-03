@@ -1,7 +1,7 @@
 ---
 home: true
 heroImage: /lizhi.png
-heroText: 我自横刀向天笑，去留肝胆两昆仑。
+heroText: 我自横刀向天笑，去留肝胆两昆仑123123。
 tagline: 文档、笔记、博客
 actionText: 进入笔记 →
 #  actionLink: /view/preface/
