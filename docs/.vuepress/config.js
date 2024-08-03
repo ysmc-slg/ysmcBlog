@@ -23,7 +23,7 @@ module.exports = {
   head: headConf,
   plugins: pluginConf,
   themeConfig: {
-    logo: '/hero.jpg',
+    logo: '/lizhi.png',
     lastUpdatedText: '上次更新',
     contributorsText: '贡献者',
     docsRepo: 'ysmc-slg/ysmcBlog',
