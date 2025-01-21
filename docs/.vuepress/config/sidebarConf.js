@@ -389,8 +389,19 @@ module.exports = {
   ],
   "/utils/stringutils": [
     {
-      "text": "springsecurity2",
-      "title": "springsecurity2",
+      "text": "stringutils",
+      "title": "stringutils",
+      "collapsable": false,
+      "sidebarDepth": 1,
+      "children": [
+        "README.md"
+      ]
+    }
+  ],
+  "/utils/customCopyUtil": [
+    {
+      "text": "对象复制",
+      "title": "对象复制",
       "collapsable": false,
       "sidebarDepth": 1,
       "children": [

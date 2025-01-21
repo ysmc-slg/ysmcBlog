@@ -117,7 +117,8 @@ module.exports = [
   {
     text: '开发工具类',
     children: [
-      { text: 'StringUtils', link: '/utils/stringutils/' }
+      { text: 'StringUtils', link: '/utils/stringutils/' },
+      {text: '对象复制', link: '/utils/customCopyUtil/' }
     ]
   }
 ];
